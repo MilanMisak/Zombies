@@ -1,7 +1,10 @@
 from django.conf.urls import patterns, url
 
-urlpatterns = patterns('',
+urlpatterns = patterns('game.views',
     url(r'^$',
-        'game.views.index',
+        'index',
+    ),
+    url(r'^game$',
+        'game',
     ),
 )
