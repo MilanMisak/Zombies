@@ -1,4 +1,7 @@
-from django.http import HttpResponse
+from django.shortcuts import render_to_response
 
 def index(request):
-    return HttpResponse('I\'m a pretty butterfly')
+    return render_to_response('game/index.html')
+
+def game(request):
+    return render_to_response('game/game.html')
