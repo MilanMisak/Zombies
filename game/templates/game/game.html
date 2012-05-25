@@ -2,12 +2,29 @@
 <html>
 <head>
     <title>Zombies</title>
-    <script src="/static/js/paper.js"></script>
+    <script type = "text/javascript" src="/static/js/paper.js"></script>
+    <script type = "text/javascript">
+        paper.install(window);
+        window.onload = function() {
+            paper.setup('canvas');
+
+      
+        var path = new Path.Rectangle([75, 75], [100, 100]);
+        path.strokeColor = 'black';
+
+        view.onFrame = function(event) {
+            // On each frame, rotate the path by 3 degrees:
+            path.rotate(3);
+        }
+ }
+    </script>
 </head>
 
 <body>
 
 <p>Game</p>
+
+<canvas id="canvas" resize></canvas>
 
 </body>
 
