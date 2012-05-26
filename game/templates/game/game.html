@@ -8,41 +8,96 @@
         window.onload = function() {
             paper.setup('canvas');
 
+	eyeStyle = {
+	    strokeColor: '#green',
+	    strokeWidth: 5,
+	    strokeCap: 'round'
+	};
+	var size = 5;
+        
+
         flipVerticalMatrix = new Matrix(-1, 0, 0, 1, 0, 0);
 
         var raster = new Raster('snail');
         raster.position = view.center;
-        raster.direction = 1;
+
+	var rightEye = new Path();
+	rightEye.style = eyeStyle;
+	for (var i = 0; i < size; i++)
+	    rightEye.add(new Point(130, (size - (i + 1))-15).add(view.center));
+	var rightStart = new Point(rightEye.segments[0].point);
+
+        rightEyeball = new Path.Circle(rightEye.segments[0].point, 10);
+        rightEyeball.fillColor = 'black';       
+
+
+        var leftEye = new Path();
+	leftEye.style = eyeStyle;
+	for (var i = 0; i < size; i++)
+	    leftEye.add(new Point(100, (size - (i + 1))-15).add(view.center));
+	var leftStart = new Point(leftEye.segments[0].point);
+        
+        leftEyeball = new Path.Circle(leftEye.segments[0].point, 10);
+        leftEyeball.fillColor = 'black';       
+
+        var group = new Group([raster, rightEye, rightEyeball, leftEye, leftEyeball]);
+        group.direction = 1;
+        group.scale(0.2)
         
 	var destination = view.center;
          
         view.onFrame = function(event) {
+
+            rightEye.segments[0].point = rightStart.add(new Point(Math.random() * -20 + 50, Math.random() * -150 + 10));
+	    for (var i = 0; i < size - 3; i++) {
+		var nextSegment = rightEye.segments[i + 1];
+		var position = rightEye.segments[i].point;
+		var angle = (position.subtract(nextSegment.point)).angle;
+		var vector = new Point({ angle: angle, length: 35 });
+		nextSegment.point = position.subtract(vector);
+	    }
+	    
+            leftEye.segments[0].point = leftStart.add(new Point(Math.random() * -50 + 20, Math.random() * -150 + 10));
+	    for (var i = 0; i < size - 3; i++) {
+		var nextSegment = leftEye.segments[i + 1];
+		var position = leftEye.segments[i].point;
+		var angle = (position.subtract(nextSegment.point)).angle;
+		var vector = new Point({ angle: angle, length: 35 });
+		nextSegment.point = position.subtract(vector);
+	    }
+	    rightEye.smooth();
+	    leftEye.smooth();
+
+            rightEyeball.position = rightEye.segments[0].point;
+            leftEyeball.position = leftEye.segments[0].point;
+
+
             // Each frame, move the path 1/30th of the difference in position
 	    // between it and the destination.
 	  
 	    // The vector is the difference between the position of
 	    // the text item and the destination point:
 	    var vector = new Point();
-            vector = destination.subtract(raster.position);
+            vector = destination.subtract(group.position);
 	    
 	    // We add 1/30th of the vector to the position property
 	    // of the text item, to move it in the direction of the
 	    // destination point:
-	    raster.position = raster.position.add(vector.divide(20));
+	    group.translate(vector.divide(10));
 	    
 	    // If the distance between the path and the destination is less
 	    // than 5, we define a new random point in the view to move the
 	    // path to:y
 	    if (vector.length < 5) {
 		destination.x = Math.random() * (view._element.width - 200);
-                direction = destination.x - raster.position.x;
-		if (direction > 0 && raster.direction < 0) {
+                direction = destination.x - group.position.x;
+		if (direction > 0 && group.direction < 0) {
                     flip();
-                } else if (direction < 0 && raster.direction >= 0) {
+                } else if (direction < 0 && group.direction >= 0) {
                     flip();
                 }
-                raster.direction = direction;
-             }                  
+                group.direction = direction;
+             }
 	}
         
         
@@ -54,10 +109,10 @@
             //destination = event.point;
         }
         function flip() {
-            pos = raster.position;
-            raster.position = (0,0)
-            raster.transform(flipVerticalMatrix, null);
-            raster.position = pos;
+            pos = group.position;
+            group.translate(pos.multiply(-1));
+            group.transform(flipVerticalMatrix, null);
+            group.translate(pos);
         }
  }
     </script>
@@ -69,7 +124,7 @@
 
 <canvas id="canvas" resize></canvas>
 
-<img src="/static/img/snail-right.png" id="snail" height="42" width="42" />
+<img src="/static/img/snail_teeth.png" id="snail" height="42" width="42" style="visibility:hidden" />
 
 </body>
 
