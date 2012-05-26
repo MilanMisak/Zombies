@@ -8,13 +8,56 @@
         window.onload = function() {
             paper.setup('canvas');
 
-      
-        var path = new Path.Rectangle([75, 75], [100, 100]);
-        path.strokeColor = 'black';
+        flipVerticalMatrix = new Matrix(-1, 0, 0, 1, 0, 0);
 
+        var raster = new Raster('snail');
+        raster.position = view.center;
+        raster.direction = 1;
+        
+	var destination = view.center;
+         
         view.onFrame = function(event) {
-            // On each frame, rotate the path by 3 degrees:
-            path.rotate(3);
+            // Each frame, move the path 1/30th of the difference in position
+	    // between it and the destination.
+	  
+	    // The vector is the difference between the position of
+	    // the text item and the destination point:
+	    var vector = new Point();
+            vector = destination.subtract(raster.position);
+	    
+	    // We add 1/30th of the vector to the position property
+	    // of the text item, to move it in the direction of the
+	    // destination point:
+	    raster.position = raster.position.add(vector.divide(20));
+	    
+	    // If the distance between the path and the destination is less
+	    // than 5, we define a new random point in the view to move the
+	    // path to:y
+	    if (vector.length < 5) {
+		destination.x = Math.random() * (view._element.width - 200);
+                direction = destination.x - raster.position.x;
+		if (direction > 0 && raster.direction < 0) {
+                    flip();
+                } else if (direction < 0 && raster.direction >= 0) {
+                    flip();
+                }
+                raster.direction = direction;
+             }                  
+	}
+        
+        
+        tool.onMouseDown = function(event) {
+            //pos = raster.position;
+            //raster.position = (0,0)
+            //raster.transform(flipVerticalMatrix, null);
+            //raster.position = event.point;
+            //destination = event.point;
+        }
+        function flip() {
+            pos = raster.position;
+            raster.position = (0,0)
+            raster.transform(flipVerticalMatrix, null);
+            raster.position = pos;
         }
  }
     </script>
@@ -25,6 +68,8 @@
 <p>Game</p>
 
 <canvas id="canvas" resize></canvas>
+
+<img src="/static/img/snail-right.png" id="snail" height="42" width="42" />
 
 </body>
 
