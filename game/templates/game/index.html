@@ -9,6 +9,7 @@
     <link href='http://fonts.googleapis.com/css?family=Chango' rel='stylesheet' type='text/css'>
     <script type = "text/javascript" src="/static/js/paper.js"></script>
     <script type = "text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
+    <script type = "text/javascript" src="/static/js/index.js"></script>
 </head>
 
 <body>
@@ -33,9 +34,7 @@
 
             {% if form.player_name.errors %}
                 <script>
-                $('#login_form').animate(
-                {'margin-top': '35px'}
-                );
+                moveLoginForm();
                 </script>
                 {% for error in form.player_name.errors %}
                     <p class="error">{{ error|escape }}</p>
@@ -43,8 +42,12 @@
             {% endif %}
 
             <br>
-            <a class="btn btn-danger" href="javascript:document.getElementById('login_form').submit()"><i class="icon-edit icon-white"></i>&nbsp;Create a Game</a>
-            <a class="btn btn-danger" href="#"><i class="icon-user icon-white"></i>&nbsp;Join a Game</a>
+            <a class="btn btn-danger" id="btn_create_game" href="#">
+                <i class="icon-edit icon-white"></i>&nbsp;Create a Game
+            </a>
+            <a class="btn btn-danger" id="btn_join_game" href="#">
+                <i class="icon-user icon-white"></i>&nbsp;Join a Game
+            </a>
         </form>
     </div>
 </div>
