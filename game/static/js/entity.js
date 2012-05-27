@@ -48,13 +48,18 @@ entitySetup = function() {
 		
 		/* The place the entity is moving to. */
 		this.destination = view.center;
+		
+		this.moving = true;
 
 		/* Function to move the entity every frame. */
 		this.move = function() {
-		
+			if (!this.moving)
+				return;
 			/* The vector is the difference between the position of the item
 			   and it's destination. */ 
 			var vector = new Point(this.destination.subtract(this.item.position));
+			if (vector.size < 5)
+				this.moving = false;
 			  
 			/* Move the item 1/10th of the distance towards the destination. */ 
 			this.item.translate(vector.divide(10)); 
