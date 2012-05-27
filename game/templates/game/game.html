@@ -3,6 +3,7 @@
 <head>
     <title>Zombies</title>
     <script type = "text/javascript" src="/static/js/paper.js"></script>
+	<script type = "text/javascript" src="/static/js/entity.js"></script>
     <script type = "text/javascript">
         paper.install(window);
         window.onload = function() {
@@ -15,10 +16,9 @@
 	var size = 3;
         
 
-        flipVerticalMatrix = new Matrix(-1, 0, 0, 1, 0, 0);
 
-        var raster = new Raster('snail');
-        raster.position = view.center;
+    /*var raster = new Raster('snail');
+    raster.position = view.center;
 
 	var rightEye = new Path();
 	rightEye.style = eyeStyle;
@@ -41,65 +41,20 @@
 
         var things = new Symbol(new Group([raster, rightEye, rightEyeball, leftEye, leftEyeball]));
         var group = new Group([things.place(Point.random().multiply(view.size))]);
-	for (var i = 0; i < 1000; i++)
+	for (var i = 0; i < 100; i++)
             group.addChild(things.place(Point.random().multiply(view.size.multiply(10))));
         
         group.direction = 1;
         group.scale(0.2)
         
-	var destination = view.center;
+	var destination = view.center;*/
+
+	//var snail = snail.place(view.center);
+    view.draw();
          
         view.onFrame = function(event) {
-
-            rightEye.segments[0].point = rightStart.add(new Point(Math.random() * -20 + 50, Math.random() * -150 + 10));
-	    for (var i = 0; i < size - 2; i++) {
-		var nextSegment = rightEye.segments[i + 1];
-		var position = rightEye.segments[i].point;
-		var angle = (position.subtract(nextSegment.point)).angle;
-		var vector = new Point({ angle: angle, length: 35 });
-		nextSegment.point = position.subtract(vector);
-	    }
-	    
-            leftEye.segments[0].point = leftStart.add(new Point(Math.random() * -50 + 20, Math.random() * -150 + 10));
-	    for (var i = 0; i < size - 2; i++) {
-		var nextSegment = leftEye.segments[i + 1];
-		var position = leftEye.segments[i].point;
-		var angle = (position.subtract(nextSegment.point)).angle;
-		var vector = new Point({ angle: angle, length: 35 });
-		nextSegment.point = position.subtract(vector);
-	    }
-
-            rightEyeball.position = rightEye.segments[0].point;
-            leftEyeball.position = leftEye.segments[0].point;
-
-
-            // Each frame, move the path 1/30th of the difference in position
-	    // between it and the destination.
-	  
-	    // The vector is the difference between the position of
-	    // the text item and the destination point:
-	    var vector = new Point();
-            vector = destination.subtract(group.position);
-	    
-	    // We add 1/30th of the vector to the position property
-	    // of the text item, to move it in the direction of the
-	    // destination point:
-	    group.translate(vector.divide(10));
-	    
-	    // If the distance between the path and the destination is less
-	    // than 5, we define a new random point in the view to move the
-	    // path to:y
-	    if (vector.length < 5) {
-		destination.x = Math.random() * (view._element.width - 200);
-                direction = destination.x - group.position.x;
-		if (direction > 0 && group.direction < 0) {
-                    flip();
-                } else if (direction < 0 && group.direction >= 0) {
-                    flip();
-                }
-                group.direction = direction;
-             }
-	}
+		}
+		//snailUpdate();
         
         
         tool.onMouseDown = function(event) {
@@ -107,7 +62,7 @@
             //raster.position = (0,0)
             //raster.transform(flipVerticalMatrix, null);
             //raster.position = event.point;
-            //destination = event.point;
+            snail.destination = event.point;
         }
         function flip() {
             pos = group.position;
