@@ -1,27 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Zombies</title>
-    <link rel="stylesheet" href="/static/css/reset.css">
-    <link rel="stylesheet" href="/static/css/960.css">
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/css/welcome.css">
+{% extends 'game/base.html' %}
+
+{% block extra_css %}
     <link href='http://fonts.googleapis.com/css?family=Chango' rel='stylesheet' type='text/css'>
-    <script type = "text/javascript" src="/static/js/paper.js"></script>
-    <script type = "text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
+{% endblock %}
+
+{% block extra_js %}
     <script type = "text/javascript" src="/static/js/index.js"></script>
-</head>
+{% endblock %}
 
-<body>
-
-<div class="container_12">
-
-<div class="grid_12" id="headline">
-    <h1>Snails</h1>
-    <p>&ldquo;The best game of 2012&rdquo; -- anonymous</p>
-</div>
-
-<div class="grid_10 prefix_1 suffix_1" id="content_box">
+{% block content %}
     <canvas class="grid_4 alpha">
     </canvas>
     
@@ -29,6 +16,7 @@
 
     <div class="grid_5 omega" id="form_box">
         <form action="/" method="post" id="login_form">{% csrf_token %}
+            {{ form.create_game.as_hidden }}
             {{ form.player_name.label_tag }}<br>
             {{ form.player_name }}
 
@@ -50,10 +38,4 @@
             </a>
         </form>
     </div>
-</div>
-
-</div>
-
-</body>
-
-</html>
+{% endblock %}
