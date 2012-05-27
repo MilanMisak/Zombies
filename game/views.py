@@ -9,11 +9,14 @@ def index(request):
         if form.is_valid():
             request.session['player_name'] = form.cleaned_data['player_name']
             request.session['create_game'] = form.cleaned_data['create_game']
-            return redirect('/game')
+            return redirect('/create-game')
     else:
         form = LoginForm(initial={'player_name': request.session.get('player_name', '')})
 
     return render_to_response('game/index.html', {'form': form}, RequestContext(request))
+
+def create_game(request):
+    return render_to_response('game/create_game.html')
 
 def game(request):
     return render_to_response('game/game.html')
