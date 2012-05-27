@@ -11,9 +11,8 @@
 	eyeStyle = {
 	    strokeColor: '#green',
 	    strokeWidth: 5,
-	    strokeCap: 'round'
 	};
-	var size = 5;
+	var size = 3;
         
 
         flipVerticalMatrix = new Matrix(-1, 0, 0, 1, 0, 0);
@@ -40,7 +39,11 @@
         leftEyeball = new Path.Circle(leftEye.segments[0].point, 10);
         leftEyeball.fillColor = 'black';       
 
-        var group = new Group([raster, rightEye, rightEyeball, leftEye, leftEyeball]);
+        var things = new Symbol(new Group([raster, rightEye, rightEyeball, leftEye, leftEyeball]));
+        var group = new Group([things.place(Point.random().multiply(view.size))]);
+	for (var i = 0; i < 1000; i++)
+            group.addChild(things.place(Point.random().multiply(view.size.multiply(10))));
+        
         group.direction = 1;
         group.scale(0.2)
         
@@ -49,7 +52,7 @@
         view.onFrame = function(event) {
 
             rightEye.segments[0].point = rightStart.add(new Point(Math.random() * -20 + 50, Math.random() * -150 + 10));
-	    for (var i = 0; i < size - 3; i++) {
+	    for (var i = 0; i < size - 2; i++) {
 		var nextSegment = rightEye.segments[i + 1];
 		var position = rightEye.segments[i].point;
 		var angle = (position.subtract(nextSegment.point)).angle;
@@ -58,15 +61,13 @@
 	    }
 	    
             leftEye.segments[0].point = leftStart.add(new Point(Math.random() * -50 + 20, Math.random() * -150 + 10));
-	    for (var i = 0; i < size - 3; i++) {
+	    for (var i = 0; i < size - 2; i++) {
 		var nextSegment = leftEye.segments[i + 1];
 		var position = leftEye.segments[i].point;
 		var angle = (position.subtract(nextSegment.point)).angle;
 		var vector = new Point({ angle: angle, length: 35 });
 		nextSegment.point = position.subtract(vector);
 	    }
-	    rightEye.smooth();
-	    leftEye.smooth();
 
             rightEyeball.position = rightEye.segments[0].point;
             leftEyeball.position = leftEye.segments[0].point;
