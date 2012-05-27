@@ -8,69 +8,33 @@
         paper.install(window);
         window.onload = function() {
             paper.setup('canvas');
+			entitySetup();
 
-	eyeStyle = {
-	    strokeColor: '#green',
-	    strokeWidth: 5,
-	};
-	var size = 3;
         
+			var destination = view.center;
 
-
-    /*var raster = new Raster('snail');
-    raster.position = view.center;
-
-	var rightEye = new Path();
-	rightEye.style = eyeStyle;
-	for (var i = 0; i < size; i++)
-	    rightEye.add(new Point(130, (size - (i + 1))-15).add(view.center));
-	var rightStart = new Point(rightEye.segments[0].point);
-
-        rightEyeball = new Path.Circle(rightEye.segments[0].point, 10);
-        rightEyeball.fillColor = 'black';       
-
-
-        var leftEye = new Path();
-	leftEye.style = eyeStyle;
-	for (var i = 0; i < size; i++)
-	    leftEye.add(new Point(100, (size - (i + 1))-15).add(view.center));
-	var leftStart = new Point(leftEye.segments[0].point);
-        
-        leftEyeball = new Path.Circle(leftEye.segments[0].point, 10);
-        leftEyeball.fillColor = 'black';       
-
-        var things = new Symbol(new Group([raster, rightEye, rightEyeball, leftEye, leftEyeball]));
-        var group = new Group([things.place(Point.random().multiply(view.size))]);
-	for (var i = 0; i < 100; i++)
-            group.addChild(things.place(Point.random().multiply(view.size.multiply(10))));
-        
-        group.direction = 1;
-        group.scale(0.2)
-        
-	var destination = view.center;*/
-
-	//var snail = snail.place(view.center);
-    view.draw();
+			var snail = snailSymbol.place(view.center);
+    		view.draw();
          
-        view.onFrame = function(event) {
-		}
+        	view.onFrame = function(event) {
+			}
 		//snailUpdate();
         
         
-        tool.onMouseDown = function(event) {
-            //pos = raster.position;
-            //raster.position = (0,0)
-            //raster.transform(flipVerticalMatrix, null);
-            //raster.position = event.point;
-            snail.destination = event.point;
-        }
-        function flip() {
-            pos = group.position;
-            group.translate(pos.multiply(-1));
-            group.transform(flipVerticalMatrix, null);
-            group.translate(pos);
-        }
- }
+        	tool.onMouseDown = function(event) {
+            	//pos = raster.position;
+            	//raster.position = (0,0)
+            	//raster.transform(flipVerticalMatrix, null);
+            	//raster.position = event.point;
+            	//snail.destination = event.point;
+        	}
+       	 	/*function flip() {
+            	pos = group.position;
+            	group.translate(pos.multiply(-1));
+            	group.transform(flipVerticalMatrix, null);
+            	group.translate(pos);
+        	}*/
+ 		}
     </script>
 </head>
 
