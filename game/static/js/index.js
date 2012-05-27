@@ -13,8 +13,11 @@ var moveLoginForm = function() {
 
 var submitLoginForm = function() {
     if (!$.trim($('#id_player_name').val()).length) {
-        moveLoginForm();
-        $('<p class="error">Yo dawg, tell me your name</p>').insertAfter('#id_player_name');
+        var movedFormYet = $('#login_form').css('margin-top') === '35px';
+        if (!movedFormYet) {
+            moveLoginForm();
+            $('<p class="error">Yo dawg, tell me your name</p>').insertAfter('#id_player_name');
+        }
         return;
     }
     $('#login_form').submit();
