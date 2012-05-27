@@ -1,8 +1,10 @@
 $(document).ready(function() {
     $('#btn_create_game').click(function() {
+        $('#id_create_game').val('True');
         submitLoginForm();
     });
     $('#btn_join_game').click(function() {
+        $('#id_create_game').val('False');
         submitLoginForm();
     });
 });

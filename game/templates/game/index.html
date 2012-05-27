@@ -29,6 +29,7 @@
 
     <div class="grid_5 omega" id="form_box">
         <form action="/" method="post" id="login_form">{% csrf_token %}
+            {{ form.create_game.as_hidden }}
             {{ form.player_name.label_tag }}<br>
             {{ form.player_name }}
 
