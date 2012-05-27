@@ -16,10 +16,11 @@ margin-top: 15px;
 
 #content_box {
 background-color: #eee;
-border: 2px dashed #bbb;
+border: 1px solid #bbb;
 border-radius: 20px;
 -webkit-border-radius: 20px;
 -moz-border-radius: 20px;
+box-shadow: 2px 2px 1px #eee;
 }
 
 #content_box canvas {
