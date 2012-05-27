@@ -1,7 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Zombies</title>
+{% extends 'game/base.html' %}
+
+{% block extra_js %}
     <script type = "text/javascript" src="/static/js/paper.js"></script>
 	<script type = "text/javascript" src="/static/js/entity.js"></script>
     <script type = "text/javascript">
@@ -30,16 +29,10 @@
         	}
  		}
     </script>
-</head>
+{% endblock %}
 
-<body>
+{% block content %}
+<canvas id="canvas" class="grid_12" style="height:600px"></canvas>
 
-<p>Game</p>
-
-<canvas id="canvas" resize></canvas>
-
-<img src="/static/img/snail_teeth.png" id="snail" height="42" width="42" style="visibility:hidden" />
-
-</body>
-
-</html>
+<img src="/static/img/snail_teeth.png" class="grid_1" id="snail" height="42" width="42" style="visibility:hidden; position: absolute; top:1px; left:1px" />
+{% endblock %}

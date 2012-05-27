@@ -5,12 +5,14 @@
 {% endblock %}
 
 {% block content %}
-    <canvas class="grid_4 alpha">
+    <div class="grid_1"><p>&nbsp;</p></div>
+    
+    <canvas class="grid_4" id="index_canvas">
     </canvas>
     
     <div class="grid_1"><p>&nbsp;</p></div>
 
-    <div class="grid_5 omega" id="form_box">
+    <div class="grid_5" id="form_box">
         <form action="/" method="post" id="login_form">{% csrf_token %}
             {{ form.create_game.as_hidden }}
             {{ form.player_name.label_tag }}<br>
@@ -34,4 +36,6 @@
             </a>
         </form>
     </div>
+    
+    <div class="grid_1"><p>&nbsp;</p></div>
 {% endblock %}

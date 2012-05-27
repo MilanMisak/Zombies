@@ -23,7 +23,7 @@ border-radius: 20px;
 box-shadow: 2px 2px 1px #eee;
 }
 
-#content_box canvas {
+#index_canvas {
 border: 1px solid red;
 height: 189px;
 margin: 5px 0px;
