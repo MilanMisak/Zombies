@@ -18,9 +18,13 @@ background-color: #bbb;
 box-shadow: 2px 2px 1px #eee;
 }
 
+#content_box canvas {
+border: 1px solid red;
+height: 189px;
+}
+
 #form_box {
 text-align: center;
-padding: 30px 0px;
 }
 
 #form_box form {
