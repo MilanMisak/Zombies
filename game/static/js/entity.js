@@ -39,16 +39,9 @@ entitySetup = function() {
 
 	snailGroup.scale(0.2);
 
-	/* Creates a group of entities. (used for groups of snails) */
-	function EntityGroup(constructor, noOfEntities) {
-		this = new Group();
-		for (var i = 0; i < noOfEntities; i++)
-			this.addChild(new constructor());
-	}
-	EntityGroup.prototype = new Entity();
 
-	/* Virtual class, adds attributes to an item. */
-	function Entity() {
+	/* Virtual class, adds attributes to an item. (this.item must be defined) */
+	this.Entity = function() {
 		/* 0 = left
 		   1 = right (default) */
 		this.direction = 1;
@@ -61,16 +54,16 @@ entitySetup = function() {
 		
 			/* The vector is the difference between the position of the item
 			   and it's destination. */ 
-			var vector = new Point(destination.subtract(this.position));
+			var vector = new Point(this.destination.subtract(this.item.position));
 			  
 			/* Move the item 1/10th of the distance towards the destination. */ 
-			this.translate(vector.divide(10)); 
+			this.item.translate(vector.divide(10)); 
 		}
 		
 		/* Set the Entity's destination, flip it if necessary. */
 		this.setDestination = function(destination) {
 			this.destination = destination;
-			direction = destination.x - this.position.x;
+			direction = this.destination.x - this.item.position.x;
 			if (direction > 0 && this.direction < 0) {
 				this.flip();
 			} else if (direction < 0 && this.direction >= 0) {
@@ -81,25 +74,34 @@ entitySetup = function() {
 
 		/* Move the Entity to the origin, flip it, then move it back. */ 
 		this.flip = function() {
-			position = this.position;
-			this.translate(position.multiply(-1));
-			this.transform(flipHorizontalMatrix);
-			this.translate(position);
+			position = this.item.position;
+			this.item.translate(this.item.position.multiply(-1));
+			this.item.transform(flipHorizontalMatrix);
+			this.item.translate(position);
 		}
 	}
 
+	/* Creates a group of entities. (used for groups of snails) */
+	this.SnailGroup = function(noOfEntities) {
+		this.item = new Group();
+		for (var i = 0; i < noOfEntities; i++)
+			this.item.addChild(new Snail(Point.random().multiply(100)).item);
+	}
+	SnailGroup.prototype = new Entity();
 
-	function Snail(position) {
-		this = snail.place(position);
-		this.destination = position; 	
+
+	this.Snail = function(position) {
+	    this.item = snailSymbol.place(position);
+		this.destination = position;
 	}
 	Snail.prototype = new Entity();
+	
 
 
 
 
 	/* Animates the snail's eyes */
-	function snailUpdate() {
+	this.snailUpdate = function() {
 		rightEye.segments[0].point = rightStart.add(new Point(Math.random() * -20 + 50, Math.random() * -150 + 10));
 		for (var i = 0; i < size - 2; i++) {
 			var nextSegment = rightEye.segments[i + 1];
@@ -121,5 +123,7 @@ entitySetup = function() {
 		rightEyeball.position = rightEye.segments[0].point;
 		leftEyeball.position = leftEye.segments[0].point;
 	}
+
 }
+
 

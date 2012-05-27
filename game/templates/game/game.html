@@ -10,30 +10,24 @@
             paper.setup('canvas');
 			entitySetup();
 
-        
-			var destination = view.center;
-
-			var snail = snailSymbol.place(view.center);
-    		view.draw();
-         
+			//var snail = new Snail(view.center);
+        	var snail = new SnailGroup(5);
+			var snailmoo = new SnailGroup(5); 
         	view.onFrame = function(event) {
+		    	snailUpdate();
+			    snail.move();
+				snailmoo.move();
 			}
-		//snailUpdate();
         
-        
+        	var click = true;
         	tool.onMouseDown = function(event) {
-            	//pos = raster.position;
-            	//raster.position = (0,0)
-            	//raster.transform(flipVerticalMatrix, null);
-            	//raster.position = event.point;
-            	//snail.destination = event.point;
+				if (click) {
+            		snail.setDestination(event.point);
+				} else {
+					snailmoo.setDestination(event.point);
+				}
+				click = !click;
         	}
-       	 	/*function flip() {
-            	pos = group.position;
-            	group.translate(pos.multiply(-1));
-            	group.transform(flipVerticalMatrix, null);
-            	group.translate(pos);
-        	}*/
  		}
     </script>
 </head>
