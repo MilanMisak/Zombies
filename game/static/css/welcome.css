@@ -16,10 +16,11 @@ margin-top: 15px;
 
 #content_box {
 background-color: #eee;
-border: 2px dashed #bbb;
+border: 1px solid #bbb;
 border-radius: 20px;
 -webkit-border-radius: 20px;
 -moz-border-radius: 20px;
+box-shadow: 2px 2px 1px #eee;
 }
 
 #content_box canvas {
@@ -32,7 +33,7 @@ margin: 5px 0px;
 text-align: center;
 }
 
-#form_box form {
+#login_form {
 margin-top: 50px;
 }
 
@@ -40,6 +41,12 @@ label {
 margin-bottom: -10px;
 }
 
+/* TODO - remove */
 #snail {
 padding: 20px 0px;
+}
+
+.error {
+color: #f00;
+margin-bottom: 0px;
 }

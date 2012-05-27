@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="/static/css/welcome.css">
     <link href='http://fonts.googleapis.com/css?family=Chango' rel='stylesheet' type='text/css'>
     <script type = "text/javascript" src="/static/js/paper.js"></script>
+    <script type = "text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
+    <script type = "text/javascript" src="/static/js/index.js"></script>
 </head>
 
 <body>
@@ -20,22 +22,32 @@
 </div>
 
 <div class="grid_10 prefix_1 suffix_1" id="content_box">
-    <!--<div class="grid_4 alpha" style="border: 1px solid red">
-        <img src="static/img/snail_teeth.png" id="snail">
-    </div>-->
-
     <canvas class="grid_4 alpha">
-
     </canvas>
     
     <div class="grid_1"><p>&nbsp;</p></div>
 
     <div class="grid_5 omega" id="form_box">
-        <form>
-        <label>Player Name:</label><br><input type="text">
-        <br>
-        <a class="btn btn-danger" href="#"><i class="icon-edit icon-white"></i>&nbsp;Create a Game</a>
-        <a class="btn btn-danger" href="#"><i class="icon-user icon-white"></i>&nbsp;Join a Game</a>
+        <form action="/" method="post" id="login_form">{% csrf_token %}
+            {{ form.player_name.label_tag }}<br>
+            {{ form.player_name }}
+
+            {% if form.player_name.errors %}
+                <script>
+                moveLoginForm();
+                </script>
+                {% for error in form.player_name.errors %}
+                    <p class="error">{{ error|escape }}</p>
+                {% endfor %}
+            {% endif %}
+
+            <br>
+            <a class="btn btn-danger" id="btn_create_game" href="#">
+                <i class="icon-edit icon-white"></i>&nbsp;Create a Game
+            </a>
+            <a class="btn btn-danger" id="btn_join_game" href="#">
+                <i class="icon-user icon-white"></i>&nbsp;Join a Game
+            </a>
         </form>
     </div>
 </div>
