@@ -1,26 +1,31 @@
 #headline {
-background-color: #eee;
 text-align: center;
 padding: 50px 0px;
-margin-bottom: 20px;
-box-shadow: 2px 2px 1px #bbb;
+}
+
+#headline p {
+color: #999;
 }
 
 h1 {
-font-size: 5em;
+font-size: 6em;
 font-family: 'Chango', cursive;
 margin-bottom: 20px;
 margin-top: 15px;
 }
 
 #content_box {
-background-color: #bbb;
-box-shadow: 2px 2px 1px #eee;
+background-color: #eee;
+border: 2px dashed #bbb;
+border-radius: 20px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
 }
 
 #content_box canvas {
 border: 1px solid red;
 height: 189px;
+margin: 5px 0px;
 }
 
 #form_box {
@@ -28,7 +33,7 @@ text-align: center;
 }
 
 #form_box form {
-margin-top: 20px;
+margin-top: 50px;
 }
 
 label {
