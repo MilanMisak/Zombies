@@ -1,7 +1,17 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
+from django.template import RequestContext
+
+from game.forms import LoginForm
 
 def index(request):
-    return render_to_response('game/index.html')
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            return redirect('/game')
+    else:
+        form = LoginForm()
+
+    return render_to_response('game/index.html', {'form': form}, RequestContext(request))
 
 def game(request):
     return render_to_response('game/game.html')

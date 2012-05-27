@@ -26,11 +26,19 @@
     <div class="grid_1"><p>&nbsp;</p></div>
 
     <div class="grid_5 omega" id="form_box">
-        <form>
-        <label>Player Name:</label><br><input type="text">
-        <br>
-        <a class="btn btn-danger" href="#"><i class="icon-edit icon-white"></i>&nbsp;Create a Game</a>
-        <a class="btn btn-danger" href="#"><i class="icon-user icon-white"></i>&nbsp;Join a Game</a>
+        <form action="/" method="post" id="login_form">{% csrf_token %}
+            {{ form.player_name.label_tag }}<br>
+            {{ form.player_name }}
+
+            {% if form.player_name.errors %}
+                {% for error in form.player_name.errors %}
+                    <p class="error">{{ error|escape }}</p>
+                {% endfor %}
+            {% endif %}
+
+            <br>
+            <a class="btn btn-danger" href="javascript:document.getElementById('login_form').submit()"><i class="icon-edit icon-white"></i>&nbsp;Create a Game</a>
+            <a class="btn btn-danger" href="#"><i class="icon-user icon-white"></i>&nbsp;Join a Game</a>
         </form>
     </div>
 </div>

@@ -41,6 +41,11 @@ label {
 margin-bottom: -10px;
 }
 
+/* TODO - remove */
 #snail {
 padding: 20px 0px;
+}
+
+.error {
+color: #f00
 }
