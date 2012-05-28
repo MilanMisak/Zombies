@@ -37,7 +37,7 @@ entitySetup = function() {
 	snailGroup = new Group([raster, rightEye, rightEyeball, leftEye, leftEyeball]);
 	snailSymbol = new Symbol(snailGroup);
 
-	snailGroup.scale(0.1);
+	snailGroup.scale(0.15);
 
 
 	/* Virtual class, adds attributes to an item. (this.item must be defined) */
