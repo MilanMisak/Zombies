@@ -11,11 +11,39 @@
 
 			//var snail = new Snail(view.center);
         	var snail = new SnailGroup(5);
-			var snailmoo = new SnailGroup(5); 
+		var snailmoo = new SnailGroup(5);
+
+		var horCount = 0;
+		var verCount = 0;
+		var scaleCount = 0; 
         	view.onFrame = function(event) {
+			if (Key.isDown('i') && (scaleCount < 5)) {
+			    project.activeLayer.scale(1.25);
+			    scaleCount++;
+			}
+			if (Key.isDown('o') && (scaleCount > -5)) {
+			    project.activeLayer.scale(0.8);
+			    scaleCount--;
+			}
+			if (Key.isDown('right') && (horCount < 5)) {
+			    project.activeLayer.translate([-100,0]);
+			    horCount++;
+			}
+			if (Key.isDown('left') && (horCount > -5)) {
+			    project.activeLayer.translate([100,0]);
+			    horCount--;
+			}
+			if (Key.isDown('up') && (verCount < 5)) {
+			    project.activeLayer.translate([0,100]);
+			    verCount++;
+			}
+			if (Key.isDown('down') && (verCount > -5)) {
+			    project.activeLayer.translate([0,-100]);
+			    verCount--;
+			}
 		    	snailUpdate();
-			    snail.move();
-				snailmoo.move();
+			snail.move();
+		        snailmoo.move();
 			}
         
         	var click = true;
