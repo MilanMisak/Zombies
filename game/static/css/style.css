@@ -41,6 +41,19 @@ label {
 margin-bottom: -10px;
 }
 
+#player_list {
+text-align: left;
+}
+
+#player_list ul {
+margin: 10px 30px;
+}
+
+/*#player_list li {
+margin: 0px;
+padding: 2px;
+}*/
+
 /* TODO - remove */
 #snail {
 padding: 20px 0px;

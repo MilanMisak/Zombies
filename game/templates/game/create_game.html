@@ -1,19 +1,7 @@
 {% extends 'game/base.html' %}
 
 {% block extra_js %}
-    <script>
-    $(document).ready(function() {
-        $.getJSON('/players-in-game', function(data) {
-            var items = [];
-
-            $.each(data, function(key, val) {
-                items.push('<p>' + val + '</p>');
-            });
-
-            $('#player_list').html(items.toString());
-        });
-    });
-    </script>
+    <script type = "text/javascript" src="/static/js/create-game.js"></script>
 {% endblock %}
 
 {% block content %}
