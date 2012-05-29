@@ -1,0 +1,22 @@
+{% extends 'game/base.html' %}
+
+{% block extra_js %}
+    <script type = "text/javascript" src="/static/js/join-game.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="grid_4"><p>&nbsp;</p></div>
+
+    <div class="grid_4" style="text-align: center; padding-top: 10px">
+        <p>List of Games:</p>
+        
+        <div id="game_list"></div>
+
+        <p>
+        <br> 
+        <a class="btn btn-danger" id="btn_start_game" href="/game">
+            <i class="icon-ok icon-white"></i>&nbsp;Join the Game
+        </a>
+        </p>
+    </div>
+{% endblock %}
