@@ -8,6 +8,9 @@ $(document).ready(function() {
             });
 
             $('#player_list').html('<ul>' + items.toString() + '</ul>');
+        }).error(function() {
+            alert('The game you joined was cancelled');
+            window.location.replace('/');
         });
     };
 

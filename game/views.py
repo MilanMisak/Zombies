@@ -38,6 +38,9 @@ def index(request):
     return render_to_response('game/index.html', {'form': form}, RequestContext(request))
 
 def create_game(request):
+    if not 'player' in request.session:
+        return redirect('/')
+
     return render_to_response('game/create_game.html')
 
 def players_in_game(request):
@@ -45,9 +48,15 @@ def players_in_game(request):
         return HttpResponseBadRequest()
         
     player = request.session['player']
+    player.save()
 
+    # TODO - really need to check for this?
     try:
         game = player.game
+
+        if game.master() == player:
+            game.save()
+
         players = [str(player) for player in game.players.all()]
 
         json = simplejson.dumps(players)
