@@ -1,16 +1,18 @@
 {% extends 'game/base.html' %}
 
 {% block extra_js %}
-    <script type = "text/javascript" src="/static/js/index.js"></script>
     <script>
-        $(document).ready(function() {
-            $.ajax({
-                url: "/players-in-game/1"
-            }).done(function(data) {
-            
-                alert(data);
+    $(document).ready(function() {
+        $.getJSON('/players-in-game', function(data) {
+            var items = [];
+
+            $.each(data, function(key, val) {
+                items.push('<p>' + val + '</p>');
             });
+
+            $('#player_list').html(items.toString());
         });
+    });
     </script>
 {% endblock %}
 
@@ -20,8 +22,7 @@
     <div class="grid_4" style="text-align: center; padding-top: 10px">
         <p>List of Players:</p>
         
-        <div style="width: 100%;border: 1px solid #bbb; ">
-            <p>TODO</p>
+        <div id="player_list" style="width: 100%;border: 1px solid #bbb; ">
         </div>
 
         <p>

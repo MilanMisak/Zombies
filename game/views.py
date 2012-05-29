@@ -40,9 +40,14 @@ def index(request):
 def create_game(request):
     return render_to_response('game/create_game.html')
 
-def players_in_game(request, game_id):
+def players_in_game(request):
+    if not 'player' in request.session:
+        return HttpResponseBadRequest()
+        
+    player = request.session['player']
+
     try:
-        game = Game.objects.get(pk=game_id)
+        game = player.game
         players = [str(player) for player in game.players.all()]
 
         json = simplejson.dumps(players)
