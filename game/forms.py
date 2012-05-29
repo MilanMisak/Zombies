@@ -6,4 +6,6 @@ class LoginForm(forms.Form):
         label='Player Name:',
         error_messages={'required': 'Yo dawg, tell me your name'})
     create_game = forms.BooleanField(
-        initial=True)
+        initial=True,
+        required=False,
+        widget=forms.HiddenInput())

@@ -13,25 +13,35 @@ def index(request):
         if form.is_valid():
             if 'player' in request.session:
                 player = request.session['player']
-                player.game.delete()
+                if player.game and player.game == player.game.master():
+                    player.game.delete()
                 player.delete()
 
-            game = Game()
-            game.save()
-
             name = form.cleaned_data['player_name']
-            player = Player(name=name, game=game)
-            player.game = game
+            create_game = form.cleaned_data['create_game']
+
+            player = Player(name=name)
+
+            if create_game:
+                game = Game()
+                game.save()
+                player.game = game
+
             player.save()
             
-            game.players.add(player)
-            game.save()
+            if create_game:
+                game.players.add(player)
+                game.save()
 
             request.session['player'] = player
             request.session['player_name'] = name
-            request.session['create_game'] = form.cleaned_data['create_game']
+            #TODO - is it needed?
+            request.session['create_game'] = create_game
 
-            return redirect('/create-game')
+            if form.cleaned_data['create_game'] == True:
+                return redirect('/create-game')
+            else:
+                return redirect('/join-game')
     else:
         form = LoginForm(initial={'player_name': request.session.get('player_name', '')})
 
@@ -42,6 +52,12 @@ def create_game(request):
         return redirect('/')
 
     return render_to_response('game/create_game.html')
+
+def join_game(request):
+    if not 'player' in request.session:
+        return redirect('/')
+
+    return render_to_response('game/join_game.html')
 
 def players_in_game(request):
     if not 'player' in request.session:
