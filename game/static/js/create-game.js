@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    var updatePlayerList = function () {
+    var updatePlayerList = function() {
         $.getJSON('/players-in-game', function(data) {
             var items = [];
 

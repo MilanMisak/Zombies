@@ -9,6 +9,8 @@ class Player(models.Model):
         return self.name
 
 class Game(models.Model):
+    def master(self):
+        return self.players.all()[0]
 
     def __unicode__(self):
         return str(self.players.all().count())
