@@ -2,6 +2,16 @@
 
 {% block extra_js %}
     <script type = "text/javascript" src="/static/js/index.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "/players-in-game/1"
+            }).done(function(data) {
+            
+                alert(data);
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block content %}

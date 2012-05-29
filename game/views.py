@@ -1,4 +1,6 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render_to_response, redirect
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import RequestContext
 from django.utils import simplejson
 
@@ -39,8 +41,14 @@ def create_game(request):
     return render_to_response('game/create_game.html')
 
 def players_in_game(request, game_id):
-    json = simplejson.dumps(['Player'])
-    return HttpResponse(json, mimetype='application/json')
+    try:
+        game = Game.objects.get(pk=game_id)
+        players = [str(player) for player in game.players.all()]
+
+        json = simplejson.dumps(players)
+        return HttpResponse(json, mimetype='application/json')
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest()
 
 def game(request):
     return render_to_response('game/game.html')

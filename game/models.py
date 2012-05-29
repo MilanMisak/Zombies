@@ -6,7 +6,7 @@ class Player(models.Model):
     game = models.ForeignKey('Game', related_name='players')
     
     def __unicode__(self):
-        return name
+        return self.name
 
 class Game(models.Model):
 
