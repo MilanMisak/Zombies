@@ -6,12 +6,17 @@ $(document).ready(function() {
             $.each(data, function(key, val) {
                 items.push('<li>' +
                 '<span>' + val + '</span>' +
-                '<a class="btn btn-danger" id="btn_start_game" href="/join/' + key + '">' +
+                '<a class="btn btn-danger btn_join_game" data-game-id="' + key + '">' +
                 'Join</a>' +
                 '</li>');
             });
 
             $('#game_list').html('<ul>' + items.toString() + '</ul>');
+
+            $('.btn_join_game').click(function() {
+                alert('You just joined the game with ID: ' + $(this).attr('data-game-id'));
+                $(this).addClass('disabled');
+            });
         });
     };
 
