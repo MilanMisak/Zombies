@@ -66,7 +66,7 @@ def players_in_game(request):
         return HttpResponseBadRequest()
         
     player = request.session['player']
-    player.save()
+    player.save() # check-in
 
     # TODO - really need to check for this?
     try:

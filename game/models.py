@@ -10,7 +10,7 @@ class Player(models.Model):
         return self.name
 
 class Game(models.Model):
-    last_checked_in = models.DateField(auto_now=True)
+    last_checked_in = models.DateTimeField(auto_now=True)
     
     def master(self):
         return self.players.all()[0]
