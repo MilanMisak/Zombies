@@ -18,9 +18,9 @@ class Game(models.Model):
     last_checked_in = models.DateTimeField(auto_now=True)
    
     @staticmethod
-    def get_str_list_of_games():
+    def get_dict_of_games():
         time = datetime.now() - timedelta(seconds=10)
-        return [str(game) for game in Game.objects.filter(last_checked_in__gte=time)]
+        return {game.pk : str(game) for game in Game.objects.filter(last_checked_in__gte=time)}
 
     def master(self):
         return self.players.all()[0]

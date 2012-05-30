@@ -5,9 +5,8 @@ $(document).ready(function() {
 
             $.each(data, function(key, val) {
                 items.push('<li>' +
-                '<span style="display: inline-block; width: 270px">' + val +
-                '</span>' +
-                '<a class="btn btn-danger" id="btn_start_game" href="/game">' +
+                '<span>' + val + '</span>' +
+                '<a class="btn btn-danger" id="btn_start_game" href="/join/' + key + '">' +
                 'Join</a>' +
                 '</li>');
             });

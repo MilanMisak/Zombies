@@ -56,11 +56,17 @@ font-weight: bold;
 width: 100%;
 border: 1px solid #bbb; 
 text-align: left;
+margin-bottom: 20px;
 }
 
 #game_list ul {
 margin: 10px 30px;
 font-weight: bold;
+}
+
+#game_list ul span {
+display: inline-block;
+width: 270px;
 }
 
 .error {

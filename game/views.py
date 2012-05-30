@@ -81,7 +81,7 @@ def games(request):
     player = request.session['player']
     player.check_in()
 
-    json = simplejson.dumps(Game.get_str_list_of_games())
+    json = simplejson.dumps(Game.get_dict_of_games())
     return HttpResponse(json, mimetype='application/json')
 
 def game(request):
