@@ -16,4 +16,4 @@ class Game(models.Model):
         return self.players.all()[0]
 
     def __unicode__(self):
-        return str(self.players.all().count())
+        return "{0!s}'s game".format(self.master())

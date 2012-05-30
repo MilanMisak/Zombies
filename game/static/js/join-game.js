@@ -1,19 +1,16 @@
 $(document).ready(function() {
-/*    var updatePlayerList = function() {
-        $.getJSON('/players-in-game', function(data) {
+    var updateGameList = function() {
+        $.getJSON('/games', function(data) {
             var items = [];
 
             $.each(data, function(key, val) {
                 items.push('<li>' + val + '</li>');
             });
 
-            $('#player_list').html('<ul>' + items.toString() + '</ul>');
-        }).error(function() {
-            alert('The game you joined was cancelled');
-            window.location.replace('/');
+            $('#game_list').html('<ul>' + items.toString() + '</ul>');
         });
     };
 
-    updatePlayerList();
-    setInterval(updatePlayerList, 1000);*/
+    updateGameList();
+    setInterval(updateGameList, 1000);
 });
