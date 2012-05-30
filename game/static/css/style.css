@@ -52,6 +52,17 @@ margin: 10px 30px;
 font-weight: bold;
 }
 
+#game_list {
+width: 100%;
+border: 1px solid #bbb; 
+text-align: left;
+}
+
+#game_list ul {
+margin: 10px 30px;
+font-weight: bold;
+}
+
 .error {
 color: #f00;
 margin-bottom: 0px;

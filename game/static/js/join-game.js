@@ -4,7 +4,12 @@ $(document).ready(function() {
             var items = [];
 
             $.each(data, function(key, val) {
-                items.push('<li>' + val + '</li>');
+                items.push('<li>' +
+                '<span style="display: inline-block; width: 270px">' + val +
+                '</span>' +
+                '<a class="btn btn-danger" id="btn_start_game" href="/game">' +
+                'Join</a>' +
+                '</li>');
             });
 
             $('#game_list').html('<ul>' + items.toString() + '</ul>');
