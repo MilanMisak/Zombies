@@ -3,7 +3,6 @@ from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import RequestContext
 from django.utils import simplejson
-from datetime import datetime, timedelta
 
 from game.models import Player, Game
 from game.forms import LoginForm
@@ -66,35 +65,23 @@ def players_in_game(request):
         return HttpResponseBadRequest()
         
     player = request.session['player']
-    player.save() # check-in
+    player.check_in()
 
-    # TODO - really need to check for this?
-    try:
-        game = player.game
-
-        if game.master() == player:
-            print 'check in'
-            game.save() # check-in
-
-        players = [str(player) for player in game.players.all()]
-
-        json = simplejson.dumps(players)
-        return HttpResponse(json, mimetype='application/json')
-    except ObjectDoesNotExist:
+    game = player.game
+    if game is None:
         return HttpResponseBadRequest()
+
+    json = simplejson.dumps(game.get_str_list_of_players())
+    return HttpResponse(json, mimetype='application/json')
 
 def games(request):
     if not 'player' in request.session:
         return HttpResponseBadRequest()
         
     player = request.session['player']
-    player.save() # check-in
+    player.check_in()
 
-    time = datetime.now() - timedelta(seconds=10)
-    print time
-    games = [str(game) for game in Game.objects.filter(last_checked_in__gte=time)]
-
-    json = simplejson.dumps(games)
+    json = simplejson.dumps(Game.get_str_list_of_games())
     return HttpResponse(json, mimetype='application/json')
 
 def game(request):
