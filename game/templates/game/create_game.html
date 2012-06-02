@@ -1,7 +1,7 @@
 {% extends 'game/base.html' %}
 
 {% block extra_js %}
-    <script type = "text/javascript" src="/static/js/index.js"></script>
+    <script type = "text/javascript" src="/static/js/create-game.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -10,14 +10,11 @@
     <div class="grid_4" style="text-align: center; padding-top: 10px">
         <p>List of Players:</p>
         
-        <div style="width: 100%;border: 1px solid #bbb; ">
-            <p>TODO</p>
-        </div>
+        <div id="player_list"></div>
 
         <p>
         <br> 
-
-        <a class="btn btn-danger" id="btn_start_game" href="#">
+        <a class="btn btn-danger" id="btn_start_game" href="/game">
             <i class="icon-ok icon-white"></i>&nbsp;Start the Game
         </a>
         </p>

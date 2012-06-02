@@ -41,9 +41,32 @@ label {
 margin-bottom: -10px;
 }
 
-/* TODO - remove */
-#snail {
-padding: 20px 0px;
+#player_list {
+width: 100%;
+border: 1px solid #bbb; 
+text-align: left;
+}
+
+#player_list ul {
+margin: 10px 30px;
+font-weight: bold;
+}
+
+#game_list {
+width: 100%;
+border: 1px solid #bbb; 
+text-align: left;
+margin-bottom: 20px;
+}
+
+#game_list ul {
+margin: 10px 30px;
+font-weight: bold;
+}
+
+#game_list ul span {
+display: inline-block;
+width: 270px;
 }
 
 .error {
