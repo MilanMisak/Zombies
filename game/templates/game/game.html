@@ -1,68 +1,68 @@
 {% extends 'game/base.html' %}
 
 {% block extra_js %}
-    <script type = "text/javascript" src="/static/js/paper.js"></script>
-	<script type = "text/javascript" src="/static/js/entity.js"></script>
-    <script type = "text/javascript">
-        paper.install(window);
-        window.onload = function() {
-            paper.setup('canvas');
-			entitySetup();
+<script type = "text/javascript" src="/static/js/paper.js"></script>
+<script type = "text/javascript" src="/static/js/entity.js"></script>
+<script type = "text/javascript">
+paper.install(window);
+window.onload = function() {
+    paper.setup('canvas');
+    entitySetup();
 
-		var house = new Raster('house');
-		house.position = view.center;
-		house.scale(0.9);
-        	
-  		var snail = new SnailGroup(5);
-		var snailmoo = new SnailGroup(5);
+    var house = new Raster('house');
+    house.position = view.center;
+    house.scale(0.9);
 
-		var scaleCount = 0; 
-		var weight = 1;
+    var snail = new SnailGroup(5);
+    var snailmoo = new SnailGroup(5);
 
-        	view.onFrame = function(event) {
-			if (Key.isDown('i') && (scaleCount < 5)) {
-			    project.activeLayer.scale(1.25, view.center);
-			    weight *= 0.8;
-			    scaleCount++;
-			}
-			if (Key.isDown('o') && (scaleCount > -5)) {
-			    project.activeLayer.scale(0.8, view.center);
-			    weight *= 1.25;
-			    scaleCount--;
-			}
-			if (Key.isDown('right')) {
-			    scroll(new Point(-100 * weight, 0));
-			}
-			if (Key.isDown('left')) {
-			    scroll(new Point(100 * weight, 0));
-			}
-			if (Key.isDown('up')) {
-			    scroll(new Point(0, 100 * weight));
-			}
-			if (Key.isDown('down')) {
-			    scroll(new Point(0, -100 * weight));
-			}
-		    	snailUpdate();
-			snail.move();
-		        snailmoo.move();
-			}
-        
-        	var click = true;
-        	tool.onMouseDown = function(event) {
-				if (click) {
-            				snail.setDestination(event.point);
-				} else {
-					snailmoo.setDestination(event.point);
-				}
-				click = !click;
-        	}
-		scroll = function(movement) {
-		    if (!project.activeLayer.translate(movement).bounds.contains(view.center)) {
-			project.activeLayer.translate(new Point(0,0).subtract(movement));
-		    }
-		}
- 	}
-    </script>
+    var scaleCount = 0; 
+    var weight = 1;
+
+    view.onFrame = function(event) {
+        if (Key.isDown('i') && (scaleCount < 5)) {
+            project.activeLayer.scale(1.25, view.center);
+            weight *= 0.8;
+            scaleCount++;
+        }
+        if (Key.isDown('o') && (scaleCount > -5)) {
+            project.activeLayer.scale(0.8, view.center);
+            weight *= 1.25;
+            scaleCount--;
+        }
+        if (Key.isDown('right')) {
+            scroll(new Point(-100 * weight, 0));
+        }
+        if (Key.isDown('left')) {
+            scroll(new Point(100 * weight, 0));
+        }
+        if (Key.isDown('up')) {
+            scroll(new Point(0, 100 * weight));
+        }
+        if (Key.isDown('down')) {
+            scroll(new Point(0, -100 * weight));
+        }
+        snailUpdate();
+        snail.move();
+        snailmoo.move();
+    }
+
+    var click = true;
+    tool.onMouseDown = function(event) {
+        if (click) {
+            snail.setDestination(event.point);
+        } else {
+            snailmoo.setDestination(event.point);
+        }
+        click = !click;
+    }
+    scroll = function(movement) {
+        if (!project.activeLayer.translate(movement).bounds.contains(view.center)) {
+            project.activeLayer.translate(new Point(0,0).subtract(movement));
+        }
+    }
+}
+</script>
 {% endblock %}
 
 {% block content %}
