@@ -14,9 +14,13 @@ $(document).ready(function() {
             $('#game_list').html('<ul>' + items.toString() + '</ul>');
 
             $('.btn_join_game').click(function() {
-                alert('You just joined the game with ID: ' + $(this).attr('data-game-id'));
-                $(this).addClass('disabled');
+                var game_id = $(this).attr('data-game-id');
+                $.getJSON('join/' + game_id, function(data) {
+                    $(this).addClass('disabled');
+                });
             });
+        }).error(function() {
+            window.location.replace('/');
         });
     };
 

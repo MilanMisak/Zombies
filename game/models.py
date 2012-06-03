@@ -18,9 +18,13 @@ class Game(models.Model):
     last_checked_in = models.DateTimeField(auto_now=True)
    
     @staticmethod
-    def get_dict_of_games():
+    def get_dict_of_games(player):
+        """
+        A dictionary of games not joined by the given player (PK : string representation).
+        """
         time = datetime.now() - timedelta(seconds=10)
-        return {game.pk : str(game) for game in Game.objects.filter(last_checked_in__gte=time)}
+        exclude_pk = player.game.pk if player.game is not None else -1
+        return {game.pk : str(game) for game in Game.objects.filter(last_checked_in__gte=time).exclude(pk=exclude_pk)}
 
     def master(self):
         return self.players.all()[0]
@@ -29,4 +33,6 @@ class Game(models.Model):
         return [str(player) for player in self.players.all()]
 
     def __unicode__(self):
+        if self.players.count() == 0:
+            return "Noone's game"
         return "{0!s}'s game".format(self.master())

@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import RequestContext
 from django.utils import simplejson
@@ -9,12 +9,12 @@ from game.forms import LoginForm
 
 def index(request):
     # Delete old player and game objects
-    if 'player' in request.session:
-        player = request.session['player']
+    player = get_player(request)
+    if player is not None:
         if player.game and player == player.game.master():
             player.game.delete()
         player.delete()
-        del request.session['player']
+        del request.session['player_pk']
 
     if request.method == "POST":
         form = LoginForm(request.POST)
@@ -36,7 +36,7 @@ def index(request):
                 game.players.add(player)
                 game.save()
 
-            request.session['player'] = player
+            request.session['player_pk'] = player.pk
             request.session['player_name'] = name
 
             if create_game:
@@ -46,26 +46,26 @@ def index(request):
     else:
         form = LoginForm(initial={'player_name': request.session.get('player_name', '')})
 
-    return render_to_response('game/index.html', {'form': form}, RequestContext(request))
+    return render(request, 'game/index.html', {'form': form})
 
 def create_game(request):
-    if not 'player' in request.session:
+    player = get_player(request)
+    if player is None:
         return redirect('/')
 
-    return render_to_response('game/create_game.html')
+    return render(request, 'game/create_game.html')
 
 def join_game(request):
-    if not 'player' in request.session:
+    player = get_player(request)
+    if player is None:
         return redirect('/')
 
-    return render_to_response('game/join_game.html')
+    return render(request, 'game/join_game.html')
 
 def players_in_game(request):
-    if not 'player' in request.session:
+    player = get_player(request)
+    if player is None:
         return HttpResponseBadRequest()
-        
-    player = request.session['player']
-    player.check_in()
 
     game = player.game
     if game is None:
@@ -75,14 +75,39 @@ def players_in_game(request):
     return HttpResponse(json, mimetype='application/json')
 
 def games(request):
-    if not 'player' in request.session:
+    player = get_player(request)
+    if player is None:
         return HttpResponseBadRequest()
-        
-    player = request.session['player']
-    player.check_in()
 
-    json = simplejson.dumps(Game.get_dict_of_games())
+    json = simplejson.dumps(Game.get_dict_of_games(player))
     return HttpResponse(json, mimetype='application/json')
 
+def join(request, game_pk):
+    player = get_player(request)
+    if player is None:
+        return HttpResponseBadRequest()
+   
+    try:
+        game = Game.objects.get(pk=game_pk)
+        player.game = game
+        player.save()
+        return HttpResponse()
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest()
+
 def game(request):
-    return render_to_response('game/game.html')
+    return render(request, 'game/game.html')
+
+def get_player(request):
+    """
+    Retrieves a Player object from the session or returns None if none found.
+    """
+    if not 'player_pk' in request.session:
+        return None
+
+    try:
+        player = Player.objects.get(pk=request.session['player_pk'])
+        player.check_in()
+        return player
+    except ObjectDoesNotExist:
+        return None
