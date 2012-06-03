@@ -9,10 +9,6 @@ window.onload = function() {
     paper.setup('canvas');
     entitySetup();
 
-    var house = new Raster('house');
-    house.position = view.center;
-    house.scale(0.9);
-
     var snail = new SnailGroup(5);
     //var snailmoo = new SnailGroup(5);
     var snailmoo = new Ghost(view.center);
@@ -75,4 +71,5 @@ window.onload = function() {
 <img src="/static/img/houseplan_3floors_white.png" class="grid_1" id="house" height="42" width="42" style="visibility:hidden; position: absolute; top:1px; left:1px" />
 <img src="/static/img/ghost_gun.png" class="grid_1" id="ghost" height="42" width="42" style="visibility:hidden; position: absolute; top:1px; left:1px" />
 <img src="/static/img/ghost_ammobox.png" class="grid_1" id="ghostbox" height="42" width="42" style="visibility:hidden; position: absolute; top:1px; left:1px" />
+<img src="/static/img/ammobox.png" class="grid_1" id="ammobox" height="42" width="42" style="visibility:hidden; position: absolute; top:1px; left:1px" />
 {% endblock %}

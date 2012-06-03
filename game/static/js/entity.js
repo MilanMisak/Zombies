@@ -1,5 +1,9 @@
 
 entitySetup = function() {
+
+    var house = new Raster('house');
+    house.position = view.center;
+    house.scale(0.9);   
     /* Code for the snail symbol */
     var raster = new Raster('snail');
     raster.position = view.center;
@@ -35,14 +39,17 @@ entitySetup = function() {
 
     snailGroup = new Group([raster, rightEye, rightEyeball, leftEye, leftEyeball]);
     snailSymbol = new Symbol(snailGroup);
-
     snailGroup.scale(0.25, 0.175);
 
-    
     ghostSymbol = new Symbol(new Raster('ghost'));
     ghostSymbol.definition.scale(0.25, 0.175);
     ghostBoxSymbol = new Symbol(new Raster('ghostbox'));
     ghostBoxSymbol.definition.scale(0.25, 0.175);
+
+
+    ammoBox = new Raster('ammobox');
+    ammoBox.scale(0.25, 0.175);
+    ammoBox.position = view.center;
 
     /* Virtual class, adds attributes to an item. (this.item must be defined) */
     this.Entity = function() {
@@ -104,21 +111,41 @@ entitySetup = function() {
     Snail.prototype = new Entity();
 
     this.Ghost = function(position) {
-        this.item = ghostSymbol.place(position);
+        this.hat = triangle('red');
+        this.raster = ghostSymbol.place(position);
+	this.hat.position = position.add(new Point(10, -90));
+        this.item = new Group(this.raster, this.hat);
         this.destination = position;
+	this.holdingBox = false;
+
         this.pickUp = function() {
-            var destroy = this.item;
-            this.item = ghostBoxSymbol.place(this.item.position);
+	    if (this.holdingBox)
+	        return;
+            var destroy = this.raster;
+            this.raster = ghostBoxSymbol.place(this.raster.position);
+	    this.item.addChild(this.raster);
             destroy.remove();
-            if (!this.facingRight)
-                this.flip(); 
+	    ammoBox.visible = false;
+	    this.holdingBox = true;
+	    hatDestroy = this.hat;
+	    this.hat = this.hat.clone();
+	    this.item.addChild(this.hat);
+	    hatDestroy.remove(); 
         }
         this.drop = function() {
-            var destroy = this.item;
-            this.item = ghostSymbol.place(this.item.position);
+	    if (!this.holdingBox)
+	        return;
+            var destroy = this.raster;
+            this.raster = ghostSymbol.place(this.raster.position);
+	    this.item.addChild(this.raster);
             destroy.remove(); 
-            if (!this.facingRight)
-                this.flip(); 
+	    ammoBox.position = this.item.position;
+	    ammoBox.visible = true; 
+	    this.holdingBox = false; 
+	    hatDestroy = this.hat;
+	    this.hat = this.hat.clone();
+	    this.item.addChild(this.hat);
+	    hatDestroy.remove(); 
         }
     }
     Ghost.prototype = new Entity();
@@ -146,6 +173,12 @@ entitySetup = function() {
 
         rightEyeball.position = rightEye.segments[0].point;
         leftEyeball.position = leftEye.segments[0].point;
+    }
+
+    this.triangle = function(colour) {
+        var triangle = new Path.RegularPolygon(new Point(80, 70), 3, 50);
+        triangle.fillColor = colour;
+	return triangle;
     }
 
 }
