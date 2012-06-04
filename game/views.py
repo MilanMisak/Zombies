@@ -8,9 +8,9 @@ from game.models import Player, Game
 from game.forms import LoginForm
 
 def index(request):
-    # Delete old player and game objects
     player = get_player(request)
     if player is not None:
+        # Delete old player and game objects
         if player.game and player == player.game.master():
             player.game.delete()
         player.delete()
@@ -71,7 +71,7 @@ def players_in_game(request):
     if game is None:
         return HttpResponseBadRequest()
 
-    json = simplejson.dumps(game.get_str_list_of_players())
+    json = simplejson.dumps(game.get_list_of_players_names())
     return HttpResponse(json, mimetype='application/json')
 
 def games(request):
