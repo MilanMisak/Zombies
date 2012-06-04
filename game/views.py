@@ -65,11 +65,11 @@ def join_game(request):
 def players_in_game(request):
     player = get_player(request)
     if player is None:
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest('NO-PLAYER')
 
     game = player.game
     if game is None:
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest('NO-GAME')
 
     json = simplejson.dumps(game.get_list_of_players_names())
     return HttpResponse(json, mimetype='application/json')
@@ -77,7 +77,7 @@ def players_in_game(request):
 def games(request):
     player = get_player(request)
     if player is None:
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest('NO-PLAYER')
 
     json = simplejson.dumps(Game.get_dict_of_games(player))
     return HttpResponse(json, mimetype='application/json')
@@ -85,7 +85,7 @@ def games(request):
 def join(request, game_pk):
     player = get_player(request)
     if player is None:
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest('NO-PLAYER')
    
     try:
         game = Game.objects.get(pk=game_pk)
