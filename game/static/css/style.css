@@ -59,6 +59,10 @@ text-align: left;
 margin-bottom: 20px;
 }
 
+#game_list p {
+margin: 10px;
+}
+
 #game_list ul {
 margin: 10px 30px;
 font-weight: bold;

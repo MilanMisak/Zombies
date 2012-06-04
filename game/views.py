@@ -62,19 +62,12 @@ def join_game(request):
 
     return render(request, 'game/join_game.html')
 
-def players_in_game(request):
-    player = get_player(request)
-    if player is None:
-        return HttpResponseBadRequest('NO-PLAYER')
+def game(request):
+    return render(request, 'game/game.html')
 
-    game = player.game
-    if game is None:
-        return HttpResponseBadRequest('NO-GAME')
+# AJAX calls
 
-    json = simplejson.dumps(game.get_list_of_players_names())
-    return HttpResponse(json, mimetype='application/json')
-
-def games(request):
+def ajax_games(request):
     player = get_player(request)
     if player is None:
         return HttpResponseBadRequest('NO-PLAYER')
@@ -82,7 +75,20 @@ def games(request):
     json = simplejson.dumps(Game.get_dict_of_games(player))
     return HttpResponse(json, mimetype='application/json')
 
-def join(request, game_pk):
+def ajax_game_info(request):
+    player = get_player(request)
+    if player is None:
+        return HttpResponseBadRequest('NO-PLAYER')
+
+    Game.delete_old()
+    game = player.game
+    if game is None:
+        return HttpResponseBadRequest('NO-GAME')
+
+    json = simplejson.dumps(game.get_list_of_players_names())
+    return HttpResponse(json, mimetype='application/json')
+
+def ajax_join_game(request, game_pk):
     player = get_player(request)
     if player is None:
         return HttpResponseBadRequest('NO-PLAYER')
@@ -93,10 +99,9 @@ def join(request, game_pk):
         player.save()
         return HttpResponse()
     except ObjectDoesNotExist:
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest('NO-GAME')
 
-def game(request):
-    return render(request, 'game/game.html')
+# Utility functions
 
 def get_player(request):
     """

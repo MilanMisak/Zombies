@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    var updatePlayerList = function() {
-        $.getJSON('/players-in-game', function(data) {
+    var updateGameInfo = function() {
+        $.getJSON('/ajax-game-info', function(data) {
             var items = [];
 
             $.each(data, function(key, val) {
@@ -14,6 +14,6 @@ $(document).ready(function() {
         });
     };
 
-    updatePlayerList();
-    setInterval(updatePlayerList, 1000);
+    updateGameInfo();
+    setInterval(updateGameInfo, 1000);
 });

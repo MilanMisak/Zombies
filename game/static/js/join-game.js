@@ -1,8 +1,8 @@
 $(document).ready(function() {
-    var joinedGame = false;
+    var hasJoinedGameYet = false;
 
     var updateGameList = function() {
-        $.getJSON('/games', function(data) {
+        $.getJSON('/ajax-games', function(data) {
             var items = [];
 
             $.each(data, function(key, val) {
@@ -14,22 +14,23 @@ $(document).ready(function() {
             });
 
             $('#game_list').html('<ul>' + items.toString() + '</ul>');
+            if (items.length == 0)
+                $('#game_list').html('<p>No available games</p>');
 
             $('.btn_join_game').click(function() {
                 var game_id = $(this).attr('data-game-id');
-                $.getJSON('join/' + game_id, function(data) {
-                    joinedGame = true;
+                $.getJSON('ajax-join-game/' + game_id, function(data) {
+                    hasJoinedGameYet = true;
                     $(this).addClass('disabled');
                 });
             });
         }).error(function(data, status, xhr) {
-            //alert(data.responseText + ':' + data.statusText);
             window.location.replace('/');
         });
     };
 
-    var updatePlayersList = function() {
-        $.getJSON('/players-in-game', function(data) {
+    var updateGameInfo = function() {
+        $.getJSON('/ajax-game-info', function(data) {
             var items = [];
 
             $.each(data, function(key, val) {
@@ -38,8 +39,9 @@ $(document).ready(function() {
 
             $('#player_list').html('<ul>' + items.toString() + '</ul>');
         }).error(function(xhr, status, data) {
-            if ('NO-GAME' === xhr.responseText && joinedGame) {
-                joinedGame = false;
+            if ('NO-GAME' === xhr.responseText && hasJoinedGameYet) {
+                hasJoinedGameYet = false;
+                $('#player_list').html('');
                 alert('The game you joined was cancelled');
             }
         });
@@ -47,5 +49,5 @@ $(document).ready(function() {
 
     updateGameList();
     setInterval(updateGameList, 1000);
-    setInterval(updatePlayersList, 1000);
+    setInterval(updateGameInfo, 1000);
 });
