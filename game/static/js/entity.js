@@ -3,7 +3,7 @@ entitySetup = function() {
 
     var house = new Raster('house');
     house.position = view.center;
-    house.scale(0.9);   
+    house.scale(1.2, 0.9);   
     /* Code for the snail symbol */
     var raster = new Raster('snail');
     raster.position = view.center;
@@ -93,6 +93,41 @@ entitySetup = function() {
             flipMatrix.translate(position.multiply(-1));
             this.item.transform(flipMatrix);
         }
+
+        this.moveLeft = function() {
+            if (this.room.left == null) 
+                return;
+            
+            this.room = this.room.left;
+            this.setDestination(this.room.position);
+        }
+        
+        this.moveRight = function() {
+            if (this.room.right == null) 
+                return;
+            
+            this.room = this.room.right;
+            this.setDestination(this.room.position);
+        }
+        
+        this.moveUp = function() {
+            if (this.room.up == null) 
+                return;
+            
+            this.moveStairs();
+            this.room = this.room.up;
+        }
+        
+        this.moveDown = function() {
+            if (this.room.down == null) 
+                return;
+            
+            this.moveStairs();
+            this.room = this.room.down;
+        }
+
+        this.moveStairs = function () {
+        }
     }
 
     /* Creates a group of entities. (used for groups of snails) */
@@ -110,42 +145,54 @@ entitySetup = function() {
     }
     Snail.prototype = new Entity();
 
-    this.Ghost = function(position) {
-        this.hat = triangle('red');
+    this.Ghost = function(colour, room) {
+        var position = room.position;
+        this.hat = triangle(colour);
+        this.hat.scale(0.8);
         this.raster = ghostSymbol.place(position);
-	this.hat.position = position.add(new Point(10, -90));
+        this.hat.position = position.add(new Point(13, -80));
         this.item = new Group(this.raster, this.hat);
         this.destination = position;
-	this.holdingBox = false;
+        this.room = room;
+        this.holdingBox = false;
 
+        /* Animation for ghost picking up box */
         this.pickUp = function() {
-	    if (this.holdingBox)
-	        return;
+            if (this.holdingBox)
+                return;
+
             var destroy = this.raster;
             this.raster = ghostBoxSymbol.place(this.raster.position);
-	    this.item.addChild(this.raster);
+            this.item.addChild(this.raster);
             destroy.remove();
-	    ammoBox.visible = false;
-	    this.holdingBox = true;
-	    hatDestroy = this.hat;
-	    this.hat = this.hat.clone();
-	    this.item.addChild(this.hat);
-	    hatDestroy.remove(); 
+
+            hatDestroy = this.hat;
+            this.hat = this.hat.clone();
+            this.item.addChild(this.hat);
+            hatDestroy.remove(); 
+
+            ammoBox.visible = false;
+            this.holdingBox = true;
         }
+
+        /* Animation for ghost dropping box */
         this.drop = function() {
-	    if (!this.holdingBox)
-	        return;
+            if (!this.holdingBox)
+                return;
+
             var destroy = this.raster;
             this.raster = ghostSymbol.place(this.raster.position);
-	    this.item.addChild(this.raster);
-            destroy.remove(); 
-	    ammoBox.position = this.item.position;
-	    ammoBox.visible = true; 
-	    this.holdingBox = false; 
-	    hatDestroy = this.hat;
-	    this.hat = this.hat.clone();
-	    this.item.addChild(this.hat);
-	    hatDestroy.remove(); 
+            this.item.addChild(this.raster);
+            destroy.remove();
+
+            hatDestroy = this.hat;
+            this.hat = this.hat.clone();
+            this.item.addChild(this.hat);
+            hatDestroy.remove(); 
+
+            ammoBox.position = this.item.position.add(new Point(-10, 65));
+            ammoBox.visible = true; 
+            this.holdingBox = false; 
         }
     }
     Ghost.prototype = new Entity();
@@ -153,7 +200,9 @@ entitySetup = function() {
 
     /* Animates the snail's eyes */
     this.snailUpdate = function() {
-        rightEye.segments[0].point = rightStart.add(new Point(Math.random() * -20 + 50, Math.random() * -150 + 10));
+        rightEye.segments[0].point = 
+        rightStart.add(new Point(Math.random() * -20 + 50, Math.random() * -150 + 10));
+        
         for (var i = 0; i < size - 2; i++) {
             var nextSegment = rightEye.segments[i + 1];
             var position = rightEye.segments[i].point;
@@ -162,7 +211,9 @@ entitySetup = function() {
             nextSegment.point = position.subtract(vector);
         }
 
-        leftEye.segments[0].point = leftStart.add(new Point(Math.random() * -50 + 20, Math.random() * -150 + 10));
+        leftEye.segments[0].point = 
+        leftStart.add(new Point(Math.random() * -50 + 20, Math.random() * -150 + 10));
+        
         for (var i = 0; i < size - 2; i++) {
             var nextSegment = leftEye.segments[i + 1];
             var position = leftEye.segments[i].point;
@@ -178,7 +229,37 @@ entitySetup = function() {
     this.triangle = function(colour) {
         var triangle = new Path.RegularPolygon(new Point(80, 70), 3, 50);
         triangle.fillColor = colour;
-	return triangle;
+	    return triangle;
+    }
+
+    this.Room = function(position) {
+        this.position = position;
+        this.up = null;
+        this.down = null;
+        this.left = null;
+        this.right = null;
+
+        this.setUpStairs = function(stairs) {
+            this.up = stairs;	
+        }
+
+        this.setDownStairs = function(stairs) {
+            this.down = stairs;
+        }
+
+        this.setDoorLeadingRight = function(room) {
+            this.right = room;
+        }
+
+        this.setDoorLeadingLeft = function(room) {
+            this.left = room;
+        }   
+    }
+    
+    this.Stairs = function(startPoint, endPoint, endRoom) {
+        this.startPoint = starPoint;
+        this.endPoint = endPoint;
+        this.endRoom = endRoom;
     }
 
 }
