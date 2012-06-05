@@ -4,6 +4,8 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import RequestContext
 from django.utils import simplejson
 
+from random import getrandbits
+
 from game.models import Player, Game
 from game.forms import LoginForm
 
@@ -14,16 +16,16 @@ def index(request):
         if player.game and player == player.game.master:
             player.game.delete()
         player.delete()
+        print request.session['player_pk']
         del request.session['player_pk']
 
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
-
             name = form.cleaned_data['player_name']
             create_game = form.cleaned_data['create_game']
 
-            player = Player(name=name)
+            player = Player(name=name, rand_id=getrandbits(10))
 
             if create_game:
                 game = Game()
@@ -38,6 +40,7 @@ def index(request):
                 game.save()
 
             request.session['player_pk'] = player.pk
+            request.session['player_rand_id'] = player.rand_id
             request.session['player_name'] = name
 
             if create_game:
@@ -74,8 +77,6 @@ def start_game(request):
 
     game.status = 1
     game.save()
-
-    print game.status
 
     return redirect('/game')
 
@@ -124,11 +125,11 @@ def get_player(request):
     """
     Retrieves a Player object from the session or returns None if none found.
     """
-    if not 'player_pk' in request.session:
+    if not 'player_pk' in request.session or not 'player_rand_id' in request.session:
         return None
 
     try:
-        player = Player.objects.get(pk=request.session['player_pk'])
+        player = Player.objects.get(pk=request.session['player_pk'], rand_id=request.session['player_rand_id'])
         player.check_in()
         return player
     except ObjectDoesNotExist:
