@@ -24,8 +24,13 @@ box-shadow: 2px 2px 1px #eee;
 overflow: hidden;
 }
 
-#index_canvas {
+/*#index_canvas {
 border: 1px solid red;
+height: 189px;
+margin: 5px 0px;
+}*/
+
+#index_snail {
 height: 189px;
 margin: 5px 0px;
 }
