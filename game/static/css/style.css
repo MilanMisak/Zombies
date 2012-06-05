@@ -42,9 +42,14 @@ margin-bottom: -10px;
 }
 
 #player_list {
+margin-bottom: 20px;
 width: 100%;
 border: 1px solid #bbb; 
 text-align: left;
+}
+
+#player_list p {
+margin: 10px;
 }
 
 #player_list ul {
@@ -73,10 +78,20 @@ display: inline-block;
 width: 270px;
 }
 
+#game_name {
+font-weight: bold;
+}
+
+#joined_game_info {
+text-align: center;
+padding-top: 10px; 
+}
+
 .error {
 color: #f00;
 margin-bottom: 0px;
 }
+
 .sprite {
 height: 42px;
 width: 42px;

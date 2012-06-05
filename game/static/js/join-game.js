@@ -24,7 +24,7 @@ $(document).ready(function() {
                     $(this).addClass('disabled');
                 });
             });
-        }).error(function(data, status, xhr) {
+        }).error(function(xhr, status, data) {
             window.location.replace('/');
         });
     };
@@ -38,12 +38,15 @@ $(document).ready(function() {
             });
 
             $('#player_list').html('<ul>' + items.toString() + '</ul>');
+            $('#game_name').html('Here should be the game name');
         }).error(function(xhr, status, data) {
             if ('NO-GAME' === xhr.responseText && hasJoinedGameYet) {
+                // No game associated with this player anymore
                 hasJoinedGameYet = false;
-                $('#player_list').html('');
+                $('#game_name').html('');
                 alert('The game you joined was cancelled');
             }
+            $('#player_list').html('<p>No game joined</p>');
         });
     };
 
