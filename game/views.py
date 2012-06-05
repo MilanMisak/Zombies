@@ -87,7 +87,7 @@ def ajax_game_info(request):
     if game is None:
         return HttpResponseBadRequest('NO-GAME')
 
-    json = simplejson.dumps(game.get_list_of_players_names())
+    json = simplejson.dumps([str(game), game.get_list_of_players_names()])
     return HttpResponse(json, mimetype='application/json')
 
 def ajax_join_game(request, game_pk):

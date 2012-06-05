@@ -13,7 +13,7 @@ $(document).ready(function() {
                 '</li>');
             });
 
-            $('#game_list').html('<ul>' + items.toString() + '</ul>');
+            $('#game_list').html('<ul>' + items.join('') + '</ul>');
             if (items.length == 0)
                 $('#game_list').html('<p>No available games</p>');
 
@@ -33,12 +33,12 @@ $(document).ready(function() {
         $.getJSON('/ajax-game-info', function(data) {
             var items = [];
 
-            $.each(data, function(key, val) {
+            $.each(data[1], function(key, val) {
                 items.push('<li>' + val + '</li>');
             });
 
-            $('#player_list').html('<ul>' + items.toString() + '</ul>');
-            $('#game_name').html('Here should be the game name');
+            $('#player_list').html('<ul>' + items.join('') + '</ul>');
+            $('#game_name').html(data[0]);
         }).error(function(xhr, status, data) {
             if ('NO-GAME' === xhr.responseText && hasJoinedGameYet) {
                 // No game associated with this player anymore
