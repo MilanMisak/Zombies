@@ -63,7 +63,24 @@ def join_game(request):
 
     return render(request, 'game/join_game.html')
 
+def start_game(request):
+    player = get_player(request)
+    if player is None:
+        return redirect('/')
+
+    game = player.game
+    if game is None:
+        return redirect('/')
+
+    game.status = 1
+    game.save()
+
+    print game.status
+
+    return redirect('/game')
+
 def game(request):
+    # TODO - Check for a player and game which must be started
     return render(request, 'game/game.html')
 
 # AJAX calls
@@ -85,7 +102,7 @@ def ajax_game_info(request):
     if game is None:
         return HttpResponseBadRequest('NO-GAME')
 
-    json = simplejson.dumps([str(game), game.get_list_of_players_names()])
+    json = simplejson.dumps([str(game), game.status, game.get_list_of_players_names()])
     return HttpResponse(json, mimetype='application/json')
 
 def ajax_join_game(request, game_pk):

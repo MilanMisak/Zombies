@@ -1,5 +1,15 @@
 from django.db import models
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
+
 from datetime import datetime, timedelta
+
+@receiver(pre_delete)
+def pre_delete_callback(sender, instance, **kwargs):
+    """
+    Call back for when a model instance is deleted.
+    """
+    print 'DELETING {}'.format(instance)
 
 class Player(models.Model):
     name            = models.CharField(max_length=50)
@@ -28,6 +38,7 @@ class Player(models.Model):
 
 class Game(models.Model):
     master          = models.OneToOneField(Player, related_name='mastered_game', null=True)
+    status          = models.PositiveSmallIntegerField(default=0) # 0 = not started, 1 = started
     last_checked_in = models.DateTimeField(auto_now=True)
    
     @staticmethod
