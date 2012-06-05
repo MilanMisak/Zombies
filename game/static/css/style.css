@@ -77,3 +77,11 @@ width: 270px;
 color: #f00;
 margin-bottom: 0px;
 }
+.sprite {
+height: 42px;
+width: 42px;
+visibility: hidden;
+position: absolute;
+top: 1px;
+left: 1px;
+}
