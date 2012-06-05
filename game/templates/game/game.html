@@ -42,29 +42,41 @@ window.onload = function() {
 
     floor1Room1.setDoorLeadingRight(floor1Room2);
     
-    floor1Room2.setUpStairs(floor2Room1);
+    stairs1 = new Stairs(floor1Room2.position.add(new Point(130, 0)),
+                         floor2Room1.position.add(new Point(-170, 0)));
+    floor1Room2.setUpStairs(floor2Room1, stairs1);
     floor1Room2.setDoorLeadingLeft(floor1Room1);
     floor1Room2.setDoorLeadingRight(mainRoom);
     
-    floor1Room3.setUpStairs(floor2Room2);
+    stairs2 = new Stairs(floor1Room3.position.add(new Point(130, 0)),
+                         floor2Room2.position.add(new Point(-170, 0)));
+    floor1Room3.setUpStairs(floor2Room2, stairs2);
     floor1Room3.setDoorLeadingLeft(mainRoom);
     floor1Room3.setDoorLeadingRight(floor1Room4);
     
     floor1Room4.setDoorLeadingLeft(floor1Room3);
 
+
     /* Second Floor initialisation. */
-    floor2Room1.setUpStairs(floor3Room1);
-    floor2Room1.setDownStairs(floor1Room2);
+    stairs3 = new Stairs(floor2Room1.position.add(new Point(130, 0)),
+                         floor3Room1.position.add(new Point(-170, 0)));
+    floor2Room1.setUpStairs(floor3Room1, stairs3);
+    floor2Room1.setDownStairs(floor1Room2, stairs1);
     
-    floor2Room2.setDownStairs(floor1Room3);
+    floor2Room2.setDownStairs(floor1Room3, stairs2);
     floor2Room2.setDoorLeadingRight(floor2Room3);
 
-    floor2Room3.setUpStairs(floor3Room5);
+    stairs4 = new Stairs(floor2Room3.position.add(new Point(-130, 0)),
+                         floor3Room5.position.add(new Point(170, 0)));
+    floor2Room3.setUpStairs(floor3Room5, stairs4);
     floor2Room3.setDoorLeadingLeft(floor2Room2);
 
+
     /* Third Floor initialization. */
-    floor3Room1.setUpStairs(floor4Room1);
-    floor3Room1.setDownStairs(floor2Room1);
+    stairs5 = new Stairs(floor3Room1.position.add(new Point(130, 0)),
+                         floor4Room1.position.add(new Point(-170, 0)));
+    floor3Room1.setUpStairs(floor4Room1, stairs5);
+    floor3Room1.setDownStairs(floor2Room1, stairs3);
     floor3Room1.setDoorLeadingRight(floor3Room2);
 
     floor3Room2.setDoorLeadingLeft(floor3Room1);
@@ -73,38 +85,47 @@ window.onload = function() {
     floor3Room3.setDoorLeadingLeft(floor3Room2);
     floor3Room3.setDoorLeadingRight(floor3Room4);
 
-    floor3Room4.setUpStairs(floor4Room4);
+    stairs6 = new Stairs(floor3Room4.position.add(new Point(-130, 0)),
+                         floor4Room4.position.add(new Point(70, 0)));
+    floor3Room4.setUpStairs(floor4Room4, stairs6);
     floor3Room4.setDoorLeadingLeft(floor3Room3);
     floor3Room4.setDoorLeadingRight(floor3Room5);
     
-    floor3Room5.setDownStairs(floor2Room3);
+    floor3Room5.setDownStairs(floor2Room3, stairs4);
     floor3Room5.setDoorLeadingLeft(floor3Room4);
 
+
     /* Fourth Floor initialization. */
-    floor4Room1.setUpStairs(floor5Room1);
-    floor4Room1.setDownStairs(floor3Room1);
+    stairs7 = new Stairs(floor4Room1.position.add(new Point(130, 0)),
+                         floor5Room1.position.add(new Point(-370, 0)));
+    floor4Room1.setUpStairs(floor5Room1, stairs7);
+    floor4Room1.setDownStairs(floor3Room1, stairs5);
     floor4Room1.setDoorLeadingRight(floor4Room2);
 
     floor4Room2.setDoorLeadingLeft(floor4Room1);
     floor4Room2.setDoorLeadingRight(floor4Room3);
 
-    floor4Room3.setUpStairs(floor5Room2);
+    stairs8 = new Stairs(floor4Room3.position.add(new Point(130, 0)),
+                         floor5Room2.position.add(new Point(-370, 0)));
+    floor4Room3.setUpStairs(floor5Room2, stairs8);
     floor4Room3.setDoorLeadingLeft(floor4Room2);
     floor4Room3.setDoorLeadingRight(floor4Room4);
 
-    floor4Room4.setDownStairs(floor3Room4);
+    floor4Room4.setDownStairs(floor3Room4, stairs6);
     floor4Room4.setDoorLeadingLeft(floor4Room3);
 
     /* Fifth Floor initialization. */
-    floor5Room1.setUpStairs(floor6Room1);
-    floor5Room1.setDownStairs(floor4Room1);
+    stairs9 = new Stairs(floor5Room1.position.add(new Point(70, 0)),
+                         floor6Room1.position.add(new Point(20, 0)));
+    floor5Room1.setUpStairs(floor6Room1, stairs9);
+    floor5Room1.setDownStairs(floor4Room1, stairs7);
     floor5Room1.setDoorLeadingRight(floor5Room2);
 
-    floor5Room2.setDownStairs(floor4Room3);
+    floor5Room2.setDownStairs(floor4Room3, stairs8);
     floor5Room2.setDoorLeadingLeft(floor5Room1);
 
     /*Sixth Floor initialization. */
-    floor6Room1.setDownStairs(floor5Room1);
+    floor6Room1.setDownStairs(floor5Room1, stairs9);
 
 
 

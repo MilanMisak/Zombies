@@ -1,6 +1,6 @@
 
 entitySetup = function() {
-
+    	
     var house = new Raster('house');
     house.position = view.center;
     /* Code for the snail symbol */
@@ -55,10 +55,13 @@ entitySetup = function() {
         
         this.facingRight = true;
 
+        this.destinations = new Array();
+  
         /* The place the entity is moving to. */
         this.destination = view.center;
 
         this.moving = true;
+
 
         /* Function to move the entity every frame. */
         this.move = function() {
@@ -67,9 +70,16 @@ entitySetup = function() {
             /* The vector is the difference between the position of the item
                and it's destination. */ 
             var vector = new Point(this.destination.subtract(this.item.position));
-            if (vector.size < 5)
-                this.moving = false;
-
+            
+            if (vector.length < 10) {
+                if (this.destinations.length > 0) {
+                    this.setDestination(this.destinations.shift());
+                } else {
+                    this.moving = false;
+                }
+            }
+            
+            
             /* Move the item 1/10th of the distance towards the destination. */ 
             this.item.translate(vector.divide(10)); 
         }
@@ -82,6 +92,12 @@ entitySetup = function() {
                 this.flip();
                 this.facingRight = !this.facingRight;
             }
+        }
+
+        /* Adds a destination to the entity's queue. */
+        this.pushDestination = function(destination) {
+            this.destinations.push(destination);
+            this.moving = true;
         }
 
         /* Move the Entity to the origin, flip it, then move it back. */ 
@@ -98,7 +114,7 @@ entitySetup = function() {
                 return;
             
             this.room = this.room.left;
-            this.setDestination(this.room.position);
+            this.pushDestination(this.room.position);
         }
         
         this.moveRight = function() {
@@ -106,28 +122,35 @@ entitySetup = function() {
                 return;
             
             this.room = this.room.right;
-            this.setDestination(this.room.position);
+            this.pushDestination(this.room.position);
         }
         
         this.moveUp = function() {
             if (this.room.up == null) 
                 return;
             
-            //this.moveStairs();
+            this.moveUpStairs(this.room.upStairs);
             this.room = this.room.up;
-            this.setDestination(this.room.position);
+            this.pushDestination(this.room.position);
         }
         
         this.moveDown = function() {
             if (this.room.down == null) 
                 return;
             
-            //this.moveStairs();
+            this.moveDownStairs(this.room.downStairs);
             this.room = this.room.down;
-            this.setDestination(this.room.position);
+            this.pushDestination(this.room.position);
         }
 
-        this.moveStairs = function () {
+        this.moveUpStairs = function(stairs) {
+            this.pushDestination(stairs.startPoint);
+            this.pushDestination(stairs.endPoint);
+        }
+        
+        this.moveDownStairs = function(stairs) {
+            this.pushDestination(stairs.endPoint);
+            this.pushDestination(stairs.startPoint);
         }
     }
 
@@ -240,12 +263,14 @@ entitySetup = function() {
         this.left = null;
         this.right = null;
 
-        this.setUpStairs = function(stairs) {
-            this.up = stairs;	
+        this.setUpStairs = function(room, stairs) {
+            this.up = room;
+            this.upStairs = stairs;	
         }
 
-        this.setDownStairs = function(stairs) {
-            this.down = stairs;
+        this.setDownStairs = function(room, stairs) {
+            this.down = room;
+            this.downStairs = stairs;
         }
 
         this.setDoorLeadingRight = function(room) {
@@ -257,10 +282,9 @@ entitySetup = function() {
         }   
     }
     
-    this.Stairs = function(startPoint, endPoint, endRoom) {
-        this.startPoint = starPoint;
+    this.Stairs = function(startPoint, endPoint) {
+        this.startPoint = startPoint;
         this.endPoint = endPoint;
-        this.endRoom = endRoom;
     }
 
 }
