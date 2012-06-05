@@ -14,45 +14,113 @@ window.onload = function() {
     var width = document.getElementById("canvas").width;
     var height = document.getElementById("canvas").height;
 
-    var mainRoom = new Room(view.center.add(new Point(0, 650)));
+    /* Declaration of room positions */
+    var mainRoom = new Room(view.center.add(new Point(0, 753)));
+    var floor1Room1 = new Room(view.center.add(new Point(-1130, 755)));
+    var floor1Room2 = new Room(view.center.add(new Point(-680, 755)));
+    var floor1Room3 = new Room(view.center.add(new Point(680, 755)));
+    var floor1Room4 = new Room(view.center.add(new Point(1130, 755)));
+    var floor2Room1 = new Room(view.center.add(new Point(-680, 450)));
+    var floor2Room2 = new Room(view.center.add(new Point(680, 450)));
+    var floor2Room3 = new Room(view.center.add(new Point(1130, 450)));
+    var floor3Room1 = new Room(view.center.add(new Point(-680, 150)));
+    var floor3Room2 = new Room(view.center.add(new Point(-230, 150)));
+    var floor3Room3 = new Room(view.center.add(new Point(230, 150)));
+    var floor3Room4 = new Room(view.center.add(new Point(680, 150)));
+    var floor3Room5 = new Room(view.center.add(new Point(1130, 150)));
+    var floor4Room1 = new Room(view.center.add(new Point(-680, -150)));
+    var floor4Room2 = new Room(view.center.add(new Point(-230, -150)));
+    var floor4Room3 = new Room(view.center.add(new Point(230, -150)));
+    var floor4Room4 = new Room(view.center.add(new Point(830, -150)));
+    var floor5Room1 = new Room(view.center.add(new Point(-430, -450)));
+    var floor5Room2 = new Room(view.center.add(new Point(430, -450)));
+    var floor6Room1 = new Room(view.center.add(new Point(0, -750)));
+
+    /*First floor initialisation */
+    mainRoom.setDoorLeadingLeft(floor1Room2);
+    mainRoom.setDoorLeadingRight(floor1Room3);
+
+    floor1Room1.setDoorLeadingRight(floor1Room2);
+    
+    floor1Room2.setUpStairs(floor2Room1);
+    floor1Room2.setDoorLeadingLeft(floor1Room1);
+    floor1Room2.setDoorLeadingRight(mainRoom);
+    
+    floor1Room3.setUpStairs(floor2Room2);
+    floor1Room3.setDoorLeadingLeft(mainRoom);
+    floor1Room3.setDoorLeadingRight(floor1Room4);
+    
+    floor1Room4.setDoorLeadingLeft(floor1Room3);
+
+    /* Second Floor initialisation. */
+    floor2Room1.setUpStairs(floor3Room1);
+    floor2Room1.setDownStairs(floor1Room2);
+    
+    floor2Room2.setDownStairs(floor1Room3);
+    floor2Room2.setDoorLeadingRight(floor2Room3);
+
+    floor2Room3.setUpStairs(floor3Room5);
+    floor2Room3.setDoorLeadingLeft(floor2Room2);
+
+    /* Third Floor initialization. */
+    floor3Room1.setUpStairs(floor4Room1);
+    floor3Room1.setDownStairs(floor2Room1);
+    floor3Room1.setDoorLeadingRight(floor3Room2);
+
+    floor3Room2.setDoorLeadingLeft(floor3Room1);
+    floor3Room2.setDoorLeadingRight(floor3Room3);
+
+    floor3Room3.setDoorLeadingLeft(floor3Room2);
+    floor3Room3.setDoorLeadingRight(floor3Room4);
+
+    floor3Room4.setUpStairs(floor4Room4);
+    floor3Room4.setDoorLeadingLeft(floor3Room3);
+    floor3Room4.setDoorLeadingRight(floor3Room5);
+    
+    floor3Room5.setDownStairs(floor2Room3);
+    floor3Room5.setDoorLeadingLeft(floor3Room4);
+
+    /* Fourth Floor initialization. */
+    floor4Room1.setUpStairs(floor5Room1);
+    floor4Room1.setDownStairs(floor3Room1);
+    floor4Room1.setDoorLeadingRight(floor4Room2);
+
+    floor4Room2.setDoorLeadingLeft(floor4Room1);
+    floor4Room2.setDoorLeadingRight(floor4Room3);
+
+    floor4Room3.setUpStairs(floor5Room2);
+    floor4Room3.setDoorLeadingLeft(floor4Room2);
+    floor4Room3.setDoorLeadingRight(floor4Room4);
+
+    floor4Room4.setDownStairs(floor3Room4);
+    floor4Room4.setDoorLeadingLeft(floor4Room3);
+
+    /* Fifth Floor initialization. */
+    floor5Room1.setUpStairs(floor6Room1);
+    floor5Room1.setDownStairs(floor4Room1);
+    floor5Room1.setDoorLeadingRight(floor5Room2);
+
+    floor5Room2.setDownStairs(floor4Room3);
+    floor5Room2.setDoorLeadingLeft(floor5Room1);
+
+    /*Sixth Floor initialization. */
+    floor6Room1.setDownStairs(floor5Room1);
+
+
+
+
+
+
+
     var snailmoo = new Ghost('red', mainRoom);
 
     var scaleCount = 0; 
     var weight = 1;
 
+    var wbool = false;
+    
+
     view.onFrame = function(event) {
-	if (Key.isDown('w')) {
-	}
-	if (Key.isDown('a')) {
-	}
-	if (Key.isDown('s')) {
-	}
-	if (Key.isDown('d')) {
-	}
-        if (Key.isDown('i') && (scaleCount < 10)) {
-            project.activeLayer.scale(1.25, view.center);
-            weight *= 0.8;
-            scaleCount++;
-        }
-        if (Key.isDown('o') && (scaleCount > -5)) {
-            project.activeLayer.scale(0.8, view.center);
-            weight *= 1.25;
-            scaleCount--;
-        }
-        if (Key.isDown('right')) {
-            scroll(new Point(-100 * weight, 0));
-            snailmoo.pickUp();
-        }
-        if (Key.isDown('left')) {
-            scroll(new Point(100 * weight, 0));
-            snailmoo.drop();
-        }
-        if (Key.isDown('up')) {
-            scroll(new Point(0, 100 * weight));
-        }
-        if (Key.isDown('down')) {
-            scroll(new Point(0, -100 * weight));
-        }
         snailUpdate();
         //snail.move();
         snailmoo.move();
@@ -69,20 +137,55 @@ window.onload = function() {
         click = !click;
     }
     scroll = function(movement) {
-        if (!project.activeLayer.translate(movement).bounds.contains(view.center)) {
-            project.activeLayer.translate(new Point(0,0).subtract(movement));
+        if (!project.activeLayer.translate(movement).bounds.contains(view.center))
+            project.activeLayer.translate(movement.multiply(-1));
+    }
+    
+    tool.onKeyDown = function(event) {
+        if (event.key == 'w') {
+            snailmoo.moveUp();
+        }
+        if (event.key == 'a') {
+            snailmoo.moveLeft();
+        }
+        if (event.key == 's') {
+            snailmoo.moveDown();
+        }
+        if (event.key == 'd') {
+            snailmoo.moveRight();
+        }
+        if ((event.key == 'i') && (scaleCount < 5)) {
+            project.activeLayer.scale(1.25, view.center);
+            weight *= 0.8;
+            scaleCount++;
+        }
+        if ((event.key == 'o') && (scaleCount > -10)) {
+            project.activeLayer.scale(0.8, view.center);
+            weight *= 1.25;
+            scaleCount--;
+        }
+        if (event.key == 'right') {
+            scroll(new Point(-100 * weight, 0));
+            snailmoo.pickUp();
+        }
+        if (event.key == 'left') {
+            scroll(new Point(100 * weight, 0));
+            snailmoo.drop();
+        }
+        if (event.key == 'up') {
+            scroll(new Point(0, 100 * weight));
+        }
+        if (event.key == 'down') {
+            scroll(new Point(0, -100 * weight));
         }
     }
 
-    tool.onResize = function(event) {
-    	view.viewSize = [width, height]; 
-    }
 }
 </script>
 {% endblock %}
 
 {% block content %}
-<canvas id="canvas" class="grid_12" style="height: 800px" resize></canvas>
+<canvas id="canvas" class="grid_12"  resize></canvas>
 
 <img src="/static/img/snail_teeth.png" class="sprite" id="snail" />
 <img src="/static/img/larger_houseplan.png" class="sprite" id="house" />

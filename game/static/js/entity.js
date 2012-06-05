@@ -3,7 +3,6 @@ entitySetup = function() {
 
     var house = new Raster('house');
     house.position = view.center;
-    house.scale(1.2, 0.9);   
     /* Code for the snail symbol */
     var raster = new Raster('snail');
     raster.position = view.center;
@@ -39,16 +38,16 @@ entitySetup = function() {
 
     snailGroup = new Group([raster, rightEye, rightEyeball, leftEye, leftEyeball]);
     snailSymbol = new Symbol(snailGroup);
-    snailGroup.scale(0.25, 0.175);
+    snailGroup.scale(0.2);
 
     ghostSymbol = new Symbol(new Raster('ghost'));
-    ghostSymbol.definition.scale(0.25, 0.175);
+    ghostSymbol.definition.scale(0.2);
     ghostBoxSymbol = new Symbol(new Raster('ghostbox'));
-    ghostBoxSymbol.definition.scale(0.25, 0.175);
+    ghostBoxSymbol.definition.scale(0.2);
 
 
     ammoBox = new Raster('ammobox');
-    ammoBox.scale(0.25, 0.175);
+    ammoBox.scale(0.2);
     ammoBox.position = view.center;
 
     /* Virtual class, adds attributes to an item. (this.item must be defined) */
@@ -114,16 +113,18 @@ entitySetup = function() {
             if (this.room.up == null) 
                 return;
             
-            this.moveStairs();
+            //this.moveStairs();
             this.room = this.room.up;
+            this.setDestination(this.room.position);
         }
         
         this.moveDown = function() {
             if (this.room.down == null) 
                 return;
             
-            this.moveStairs();
+            //this.moveStairs();
             this.room = this.room.down;
+            this.setDestination(this.room.position);
         }
 
         this.moveStairs = function () {
@@ -148,9 +149,9 @@ entitySetup = function() {
     this.Ghost = function(colour, room) {
         var position = room.position;
         this.hat = triangle(colour);
-        this.hat.scale(0.8);
+        this.hat.scale(0.6);
         this.raster = ghostSymbol.place(position);
-        this.hat.position = position.add(new Point(13, -80));
+        this.hat.position = position.add(new Point(11, -75));
         this.item = new Group(this.raster, this.hat);
         this.destination = position;
         this.room = room;
@@ -227,7 +228,7 @@ entitySetup = function() {
     }
 
     this.triangle = function(colour) {
-        var triangle = new Path.RegularPolygon(new Point(80, 70), 3, 50);
+        var triangle = new Path.RegularPolygon(new Point(80, 30), 3, 40);
         triangle.fillColor = colour;
 	    return triangle;
     }
