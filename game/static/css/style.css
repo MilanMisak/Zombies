@@ -21,6 +21,7 @@ border-radius: 20px;
 -webkit-border-radius: 20px;
 -moz-border-radius: 20px;
 box-shadow: 2px 2px 1px #eee;
+overflow: hidden;
 }
 
 #index_canvas {
