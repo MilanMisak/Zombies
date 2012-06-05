@@ -8,7 +8,7 @@ $(document).ready(function() {
             });
 
             $('#player_list').html('<ul>' + items.join('') + '</ul>');
-        }).error(function() {
+        }).error(function(xhr, status, data) {
             alert('The game you created was cancelled');
             window.location.replace('/');
         });

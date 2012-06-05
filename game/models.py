@@ -8,9 +8,9 @@ class Player(models.Model):
     last_checked_in = models.DateTimeField(auto_now=True)
     
     @staticmethod
-    def delete_old():
+    def clean_up():
         """
-        Deletes players not checked-in for 10 seconds or more.
+        Deletes players not checked-in for 3 seconds or more.
         """
         time = datetime.now() - timedelta(seconds=3)
         Player.objects.filter(last_checked_in__lte=time).delete()
@@ -31,9 +31,9 @@ class Game(models.Model):
     last_checked_in = models.DateTimeField(auto_now=True)
    
     @staticmethod
-    def delete_old():
+    def clean_up():
         """
-        Deletes games not checked-in for 10 seconds or more.
+        Deletes games not checked-in for 3 seconds or more.
         """
         time = datetime.now() - timedelta(seconds=3)
         Game.objects.filter(last_checked_in__lte=time).delete()
@@ -45,11 +45,8 @@ class Game(models.Model):
         Returns a dictionary of games not joined by the given player
         (PK : string representation).
         """
-        Game.delete_old()
-
         # Exclude the game joined by the player
         exclude_pk = player.game.pk if player.game is not None else -1
-
         return {game.pk : str(game) for game in Game.objects.exclude(pk=exclude_pk)}
 
     def get_list_of_players_names(self):

@@ -80,9 +80,7 @@ def ajax_game_info(request):
     player = get_player(request)
     if player is None:
         return HttpResponseBadRequest('NO-PLAYER')
-
-    Game.delete_old()
-    Player.delete_old()
+    
     game = player.game
     if game is None:
         return HttpResponseBadRequest('NO-GAME')
