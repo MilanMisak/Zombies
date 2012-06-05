@@ -7,12 +7,13 @@
 {% block content %}
     <div class="grid_1"><p>&nbsp;</p></div>
     
-    <canvas class="grid_4" id="index_canvas">
-    </canvas>
+    <!--<canvas class="grid_4" id="index_canvas">
+    </canvas>-->
+    <p class="grid_3 push_1" id="index_snail">
+        <img src="/static/img/snail_teeth.png" />
+    </p>
     
-    <div class="grid_1"><p>&nbsp;</p></div>
-
-    <div class="grid_5" id="form_box">
+    <div class="grid_5 push_1" id="form_box">
         <form action="/" method="post" id="login_form">{% csrf_token %}
             {{ form.create_game.as_hidden }}
             {{ form.player_name.label_tag }}<br>

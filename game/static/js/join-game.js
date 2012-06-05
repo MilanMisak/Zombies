@@ -31,9 +31,14 @@ $(document).ready(function() {
 
     var updateGameInfo = function() {
         $.getJSON('/ajax-game-info', function(data) {
+            if (data[1] === 1) {
+                // Game has started
+                window.location.replace('/game');
+            }
+
             var items = [];
 
-            $.each(data[1], function(key, val) {
+            $.each(data[2], function(key, val) {
                 items.push('<li>' + val + '</li>');
             });
 
