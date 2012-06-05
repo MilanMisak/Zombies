@@ -5,18 +5,29 @@ class Player(models.Model):
     name            = models.CharField(max_length=50)
     game            = models.ForeignKey('Game', related_name='players', null=True,
                           on_delete=models.SET_NULL)
-    last_checked_in = models.DateField(auto_now=True)
+    last_checked_in = models.DateTimeField(auto_now=True)
     
+    @staticmethod
+    def delete_old():
+        """
+        Deletes players not checked-in for 10 seconds or more.
+        """
+        time = datetime.now() - timedelta(seconds=3)
+        Player.objects.filter(last_checked_in__lte=time).delete()
+
     def check_in(self):
+        """
+        Checks-in a player informing the system that the player is still online.
+        """
         self.save()
-        if self.game and self.game.master() == self:
-            print 'game check-in'
+        if self.game and self.game.master == self:
             self.game.save()
 
     def __unicode__(self):
         return self.name
 
 class Game(models.Model):
+    master          = models.OneToOneField(Player, related_name='mastered_game', null=True)
     last_checked_in = models.DateTimeField(auto_now=True)
    
     @staticmethod
@@ -26,6 +37,7 @@ class Game(models.Model):
         """
         time = datetime.now() - timedelta(seconds=3)
         Game.objects.filter(last_checked_in__lte=time).delete()
+        Game.objects.filter(master=None).delete()
 
     @staticmethod
     def get_dict_of_games(player):
@@ -40,12 +52,6 @@ class Game(models.Model):
 
         return {game.pk : str(game) for game in Game.objects.exclude(pk=exclude_pk)}
 
-    def master(self):
-        """
-        Returns the game master - whoever created the game.
-        """
-        return self.players.all()[0]
-
     def get_list_of_players_names(self):
         """
         Returns a list of players' names.
@@ -56,4 +62,4 @@ class Game(models.Model):
         if self.players.count() == 0:
             # For the case when a game is left in the DB for longer than expected
             return "Noone's game"
-        return "{0!s}'s game".format(self.master())
+        return "{0!s}'s game".format(self.master)

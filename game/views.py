@@ -11,7 +11,7 @@ def index(request):
     player = get_player(request)
     if player is not None:
         # Delete old player and game objects
-        if player.game and player == player.game.master():
+        if player.game and player == player.game.master:
             player.game.delete()
         player.delete()
         del request.session['player_pk']
@@ -33,6 +33,7 @@ def index(request):
             player.save()
             
             if create_game:
+                game.master = player
                 game.players.add(player)
                 game.save()
 
@@ -81,6 +82,7 @@ def ajax_game_info(request):
         return HttpResponseBadRequest('NO-PLAYER')
 
     Game.delete_old()
+    Player.delete_old()
     game = player.game
     if game is None:
         return HttpResponseBadRequest('NO-GAME')
