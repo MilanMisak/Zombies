@@ -6,14 +6,17 @@
     <script type="text/javascript" src="/static/js/entity.js"></script>
 <script type = "text/javascript">
 paper.install(window);
-window.onload = function() {
+$(function() {
     paper.setup('canvas');
+
+    var canvasWidth = $('#canvas').attr('data-width');
+    $('#canvas').css('height', '600px');
+    paper.view.viewSize = [canvasWidth, 600];
+
     entitySetup();
 
     //var snail = new SnailGroup(5);
     //var snailmoo = new SnailGroup(5);
-    var width = document.getElementById("canvas").width;
-    var height = document.getElementById("canvas").height;
 
     /* Declaration of room positions */
     var mainRoom = new Room(view.center.add(new Point(0, 753)));
@@ -196,15 +199,15 @@ window.onload = function() {
         }
     }
 
-}
+});
 </script>
 {% endblock %}
 
 {% block content %}
 {% if game.players.count == 1 %}
-    <canvas id="canvas" class="grid_12 alpha" resize></canvas>
+    <canvas id="canvas" class="grid_12 alpha" data-width="940"></canvas>
 {% else %}
-    <canvas id="canvas" class="grid_10 alpha" resize></canvas>
+    <canvas id="canvas" class="grid_10 alpha" data-width="780"></canvas>
     <div class="grid_2 alpha">
         <div style="padding: 10px;">
             <h3>Chat:</h3>
