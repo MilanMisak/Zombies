@@ -9,4 +9,6 @@ $(document).ready(function() {
 
     updateGameInfo();
     setInterval(updateGameInfo, 1000);
+
+    $('#instructions_modal').modal('show');
 });
