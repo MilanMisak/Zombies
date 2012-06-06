@@ -89,7 +89,7 @@ def game(request):
     if game is None or game.status != 1:
         return redirect('/')
 
-    return render(request, 'game/game.html')
+    return render(request, 'game/game.html', {'game': game})
 
 # AJAX calls
 
