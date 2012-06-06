@@ -18,124 +18,8 @@ $(function() {
     //var snail = new SnailGroup(5);
     //var snailmoo = new SnailGroup(5);
 
-    /* Declaration of room positions */
-    var mainRoom = new Room(view.center.add(new Point(0, 753)));
-    var floor1Room1 = new Room(view.center.add(new Point(-1130, 755)));
-    var floor1Room2 = new Room(view.center.add(new Point(-680, 755)));
-    var floor1Room3 = new Room(view.center.add(new Point(680, 755)));
-    var floor1Room4 = new Room(view.center.add(new Point(1130, 755)));
-    var floor2Room1 = new Room(view.center.add(new Point(-680, 450)));
-    var floor2Room2 = new Room(view.center.add(new Point(680, 450)));
-    var floor2Room3 = new Room(view.center.add(new Point(1130, 450)));
-    var floor3Room1 = new Room(view.center.add(new Point(-680, 150)));
-    var floor3Room2 = new Room(view.center.add(new Point(-230, 150)));
-    var floor3Room3 = new Room(view.center.add(new Point(230, 150)));
-    var floor3Room4 = new Room(view.center.add(new Point(680, 150)));
-    var floor3Room5 = new Room(view.center.add(new Point(1130, 150)));
-    var floor4Room1 = new Room(view.center.add(new Point(-680, -150)));
-    var floor4Room2 = new Room(view.center.add(new Point(-230, -150)));
-    var floor4Room3 = new Room(view.center.add(new Point(230, -150)));
-    var floor4Room4 = new Room(view.center.add(new Point(830, -150)));
-    var floor5Room1 = new Room(view.center.add(new Point(-250, -450)));
-    var floor5Room2 = new Room(view.center.add(new Point(430, -450)));
-    var floor6Room1 = new Room(view.center.add(new Point(-100, -750)));
-
-    /* Stairs are numbered left to right, bottom to top. */
-
-    /*First floor initialisation */
-    mainRoom.setDoorLeadingLeft(floor1Room2);
-    mainRoom.setDoorLeadingRight(floor1Room3);
-
-    floor1Room1.setDoorLeadingRight(floor1Room2);
-    
-    stairs1 = new Stairs(floor1Room2.position.add(new Point(110, 0)),
-                         floor2Room1.position.add(new Point(-175, 0)));
-    floor1Room2.setUpStairs(floor2Room1, stairs1);
-    floor1Room2.setDoorLeadingLeft(floor1Room1);
-    floor1Room2.setDoorLeadingRight(mainRoom);
-    
-    stairs2 = new Stairs(floor1Room3.position.add(new Point(110, 0)),
-                         floor2Room2.position.add(new Point(-185, 0)));
-    floor1Room3.setUpStairs(floor2Room2, stairs2);
-    floor1Room3.setDoorLeadingLeft(mainRoom);
-    floor1Room3.setDoorLeadingRight(floor1Room4);
-    
-    floor1Room4.setDoorLeadingLeft(floor1Room3);
-
-
-    /* Second Floor initialisation. */
-    stairs3 = new Stairs(floor2Room1.position.add(new Point(110, 0)),
-                         floor3Room1.position.add(new Point(-175, 0)));
-    floor2Room1.setUpStairs(floor3Room1, stairs3);
-    floor2Room1.setDownStairs(floor1Room2, stairs1);
-    
-    floor2Room2.setDownStairs(floor1Room3, stairs2);
-    floor2Room2.setDoorLeadingRight(floor2Room3);
-
-    stairs4 = new Stairs(floor2Room3.position.add(new Point(-110, 0)),
-                         floor3Room5.position.add(new Point(175, 0)));
-    floor2Room3.setUpStairs(floor3Room5, stairs4);
-    floor2Room3.setDoorLeadingLeft(floor2Room2);
-
-
-    /* Third Floor initialization. */
-    stairs5 = new Stairs(floor3Room1.position.add(new Point(110, 0)),
-                         floor4Room1.position.add(new Point(-175, 0)));
-    floor3Room1.setUpStairs(floor4Room1, stairs5);
-    floor3Room1.setDownStairs(floor2Room1, stairs3);
-    floor3Room1.setDoorLeadingRight(floor3Room2);
-
-    floor3Room2.setDoorLeadingLeft(floor3Room1);
-    floor3Room2.setDoorLeadingRight(floor3Room3);
-
-    floor3Room3.setDoorLeadingLeft(floor3Room2);
-    floor3Room3.setDoorLeadingRight(floor3Room4);
-
-    stairs6 = new Stairs(floor3Room4.position.add(new Point(-110, 0)),
-                         floor4Room4.position.add(new Point(35, 0)));
-    floor3Room4.setUpStairs(floor4Room4, stairs6);
-    floor3Room4.setDoorLeadingLeft(floor3Room3);
-    floor3Room4.setDoorLeadingRight(floor3Room5);
-    
-    floor3Room5.setDownStairs(floor2Room3, stairs4);
-    floor3Room5.setDoorLeadingLeft(floor3Room4);
-
-
-    /* Fourth Floor initialization. */
-    stairs7 = new Stairs(floor4Room1.position.add(new Point(120, 0)),
-                         floor5Room1.position.add(new Point(-615, 0)));
-    floor4Room1.setUpStairs(floor5Room1, stairs7);
-    floor4Room1.setDownStairs(floor3Room1, stairs5);
-    floor4Room1.setDoorLeadingRight(floor4Room2);
-
-    floor4Room2.setDoorLeadingLeft(floor4Room1);
-    floor4Room2.setDoorLeadingRight(floor4Room3);
-
-    stairs8 = new Stairs(floor4Room3.position.add(new Point(100, 0)),
-                         floor5Room2.position.add(new Point(-385, 0)));
-    floor4Room3.setUpStairs(floor5Room2, stairs8);
-    floor4Room3.setDoorLeadingLeft(floor4Room2);
-    floor4Room3.setDoorLeadingRight(floor4Room4);
-
-    floor4Room4.setDownStairs(floor3Room4, stairs6);
-    floor4Room4.setDoorLeadingLeft(floor4Room3);
-
-    /* Fifth Floor initialization. */
-    stairs9 = new Stairs(floor5Room1.position.add(new Point(-95, 0)),
-                         floor6Room1.position.add(new Point(60, 0)));
-    floor5Room1.setUpStairs(floor6Room1, stairs9);
-    floor5Room1.setDownStairs(floor4Room1, stairs7);
-    floor5Room1.setDoorLeadingRight(floor5Room2);
-
-    floor5Room2.setDownStairs(floor4Room3, stairs8);
-    floor5Room2.setDoorLeadingLeft(floor5Room1);
-
-    /*Sixth Floor initialization. */
-    floor6Room1.setDownStairs(floor5Room1, stairs9);
-
-
-    var snailmoo = new SnailGroup(5, floor3Room3);
-    //var snailmoo = new Ghost('blue', floor3Room3);
+    //var snailmoo = new SnailGroup(5, floor3Room3);
+    var snailmoo = new Ghost('blue', floor3Room3);
 
     var scaleCount = 0; 
     var weight = 1;
@@ -238,4 +122,5 @@ $(function() {
 <img src="/static/img/ghost_gun.png" class="sprite" id="ghost" />
 <img src="/static/img/ghost_ammobox.png" class="sprite" id="ghostbox" />
 <img src="/static/img/ammobox.png" class="sprite" id="ammobox" />
+<img src="/static/img/barricade_stairs.png" class="sprite" id="stairBarricade" />
 {% endblock %}

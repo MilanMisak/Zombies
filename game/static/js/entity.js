@@ -3,6 +3,7 @@ entitySetup = function() {
     	
     var house = new Raster('house');
     house.position = view.center;
+    
     /* Code for the snail symbol */
     var raster = new Raster('snail');
     raster.position = view.center;
@@ -45,10 +46,11 @@ entitySetup = function() {
     ghostBoxSymbol = new Symbol(new Raster('ghostbox'));
     ghostBoxSymbol.definition.scale(0.2);
 
-
     ammoBox = new Raster('ammobox');
     ammoBox.scale(0.2);
-    ammoBox.position = view.center;
+
+    stairBarricadeSymbol = new Symbol(new Raster('stairBarricade'));
+    stairBarricadeSymbol.definition.scale(0.4);
 
     /* Virtual class, adds attributes to an item. (this.item must be defined) */
     this.Entity = function() {
@@ -344,6 +346,146 @@ entitySetup = function() {
         this.startPoint = startPoint;
         this.endPoint = endPoint;
     }
+
+    this.StairBarricade = function(position) {
+        this.item = stairBarricadeSymbol.place(position);
+    }
+    StairBarricade.prototype = new Entity(); 
+    
+    /* Declaration of room positions */
+    mainRoom = new Room(view.center.add(new Point(0, 753)));
+    floor1Room1 = new Room(view.center.add(new Point(-1130, 755)));
+    floor1Room2 = new Room(view.center.add(new Point(-680, 755)));
+    floor1Room3 = new Room(view.center.add(new Point(680, 755)));
+    floor1Room4 = new Room(view.center.add(new Point(1130, 755)));
+    floor2Room1 = new Room(view.center.add(new Point(-680, 450)));
+    floor2Room2 = new Room(view.center.add(new Point(680, 450)));
+    floor2Room3 = new Room(view.center.add(new Point(1130, 450)));
+    floor3Room1 = new Room(view.center.add(new Point(-680, 150)));
+    floor3Room2 = new Room(view.center.add(new Point(-230, 150)));
+    floor3Room3 = new Room(view.center.add(new Point(230, 150)));
+    floor3Room4 = new Room(view.center.add(new Point(680, 150)));
+    floor3Room5 = new Room(view.center.add(new Point(1130, 150)));
+    floor4Room1 = new Room(view.center.add(new Point(-680, -150)));
+    floor4Room2 = new Room(view.center.add(new Point(-230, -150)));
+    floor4Room3 = new Room(view.center.add(new Point(230, -150)));
+    floor4Room4 = new Room(view.center.add(new Point(830, -150)));
+    floor5Room1 = new Room(view.center.add(new Point(-250, -450)));
+    floor5Room2 = new Room(view.center.add(new Point(430, -450)));
+    floor6Room1 = new Room(view.center.add(new Point(-100, -750)));
+
+    /* Stairs are numbered left to right, bottom to top. */
+
+    /*First floor initialisation */
+    mainRoom.setDoorLeadingLeft(floor1Room2);
+    mainRoom.setDoorLeadingRight(floor1Room3);
+
+    floor1Room1.setDoorLeadingRight(floor1Room2);
+    
+    stairs1 = new Stairs(floor1Room2.position.add(new Point(110, 0)),
+                         floor2Room1.position.add(new Point(-175, 0)));
+    floor1Room2.setUpStairs(floor2Room1, stairs1);
+    floor1Room2.setDoorLeadingLeft(floor1Room1);
+    floor1Room2.setDoorLeadingRight(mainRoom);
+    
+    stairs2 = new Stairs(floor1Room3.position.add(new Point(110, 0)),
+                         floor2Room2.position.add(new Point(-185, 0)));
+    floor1Room3.setUpStairs(floor2Room2, stairs2);
+    floor1Room3.setDoorLeadingLeft(mainRoom);
+    floor1Room3.setDoorLeadingRight(floor1Room4);
+    
+    floor1Room4.setDoorLeadingLeft(floor1Room3);
+
+
+    /* Second Floor initialisation. */
+    stairs3 = new Stairs(floor2Room1.position.add(new Point(110, 0)),
+                         floor3Room1.position.add(new Point(-175, 0)));
+    floor2Room1.setUpStairs(floor3Room1, stairs3);
+    floor2Room1.setDownStairs(floor1Room2, stairs1);
+    
+    floor2Room2.setDownStairs(floor1Room3, stairs2);
+    floor2Room2.setDoorLeadingRight(floor2Room3);
+
+    stairs4 = new Stairs(floor2Room3.position.add(new Point(-110, 0)),
+                         floor3Room5.position.add(new Point(175, 0)));
+    floor2Room3.setUpStairs(floor3Room5, stairs4);
+    floor2Room3.setDoorLeadingLeft(floor2Room2);
+
+    /* Third Floor initialization. */
+    stairs5 = new Stairs(floor3Room1.position.add(new Point(110, 0)),
+                         floor4Room1.position.add(new Point(-175, 0)));
+    floor3Room1.setUpStairs(floor4Room1, stairs5);
+    floor3Room1.setDownStairs(floor2Room1, stairs3);
+    floor3Room1.setDoorLeadingRight(floor3Room2);
+
+    floor3Room2.setDoorLeadingLeft(floor3Room1);
+    floor3Room2.setDoorLeadingRight(floor3Room3);
+
+    floor3Room3.setDoorLeadingLeft(floor3Room2);
+    floor3Room3.setDoorLeadingRight(floor3Room4);
+
+    stairs6 = new Stairs(floor3Room4.position.add(new Point(-110, 0)),
+                         floor4Room4.position.add(new Point(35, 0)));
+    floor3Room4.setUpStairs(floor4Room4, stairs6);
+    floor3Room4.setDoorLeadingLeft(floor3Room3);
+    floor3Room4.setDoorLeadingRight(floor3Room5);
+    
+    floor3Room5.setDownStairs(floor2Room3, stairs4);
+    floor3Room5.setDoorLeadingLeft(floor3Room4);
+
+
+    /* Fourth Floor initialization. */
+    stairs7 = new Stairs(floor4Room1.position.add(new Point(120, 0)),
+                         floor5Room1.position.add(new Point(-615, 0)));
+    floor4Room1.setUpStairs(floor5Room1, stairs7);
+    floor4Room1.setDownStairs(floor3Room1, stairs5);
+    floor4Room1.setDoorLeadingRight(floor4Room2);
+
+    floor4Room2.setDoorLeadingLeft(floor4Room1);
+    floor4Room2.setDoorLeadingRight(floor4Room3);
+
+    stairs8 = new Stairs(floor4Room3.position.add(new Point(100, 0)),
+                         floor5Room2.position.add(new Point(-385, 0)));
+    floor4Room3.setUpStairs(floor5Room2, stairs8);
+    floor4Room3.setDoorLeadingLeft(floor4Room2);
+    floor4Room3.setDoorLeadingRight(floor4Room4);
+
+    floor4Room4.setDownStairs(floor3Room4, stairs6);
+    floor4Room4.setDoorLeadingLeft(floor4Room3);
+
+    /* Fifth Floor initialization. */
+    stairs9 = new Stairs(floor5Room1.position.add(new Point(-95, 0)),
+                         floor6Room1.position.add(new Point(60, 0)));
+    floor5Room1.setUpStairs(floor6Room1, stairs9);
+    floor5Room1.setDownStairs(floor4Room1, stairs7);
+    floor5Room1.setDoorLeadingRight(floor5Room2);
+
+    floor5Room2.setDownStairs(floor4Room3, stairs8);
+    floor5Room2.setDoorLeadingLeft(floor5Room1);
+
+    /* Sixth Floor initialization. */
+    floor6Room1.setDownStairs(floor5Room1, stairs9);
+
+
+    /* Stair Barricade initialization. */
+    stairBarricade1 = new StairBarricade(stairs1.startPoint.add(new Point(-100, -50)));
+    stairBarricade2 = new StairBarricade(stairs2.startPoint.add(new Point(-110, -50)));
+    stairBarricade3 = new StairBarricade(stairs3.startPoint.add(new Point(-100, -50)));
+    stairBarricade4 = new StairBarricade(stairs4.startPoint.add(new Point(100, -50)));
+    stairBarricade4.flip();
+    stairBarricade5 = new StairBarricade(stairs5.startPoint.add(new Point(-100, -50)));
+    stairBarricade6 = new StairBarricade(stairs6.startPoint.add(new Point(100, -50)));
+    stairBarricade6.flip();
+    stairBarricade7 = new StairBarricade(stairs7.startPoint.add(new Point(-110, -50)));
+    stairBarricade8 = new StairBarricade(stairs8.startPoint.add(new Point(-100, -50)));
+    stairBarricade9 = new StairBarricade(stairs9.startPoint.add(new Point(120, -50)));
+    stairBarricade9.flip();
+
+
+
+   
+    /* Ammo box initialization. */
+    ammoBox.position = mainRoom.position.add(new Point(0, 70));
 
 }
 
