@@ -81,8 +81,15 @@ def start_game(request):
     return redirect('/game')
 
 def game(request):
-    # TODO - Check for a player and game which must be started
-    return render(request, 'game/game.html')
+    player = get_player(request)
+    if player is None:
+        return redirect('/')
+    
+    game = player.game
+    if game is None or game.status != 1:
+        return redirect('/')
+
+    return render(request, 'game/game.html', {'game': game})
 
 # AJAX calls
 

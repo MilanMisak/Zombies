@@ -42,13 +42,15 @@ $(document).ready(function() {
                 items.push('<li>' + val + '</li>');
             });
 
-            $('#player_list').html('<ul>' + items.join('') + '</ul>');
             $('#game_name').html(data[0]);
+            $('#joined_game_instructions').fadeIn();
+            $('#player_list').html('<ul>' + items.join('') + '</ul>');
         }).error(function(xhr, status, data) {
             if ('NO-GAME' === xhr.responseText && hasJoinedGameYet) {
                 // No game associated with this player anymore
                 hasJoinedGameYet = false;
                 $('#game_name').html('');
+                $('#joined_game_instructions').fadeOut();
                 alert('The game you joined was cancelled');
             }
             $('#player_list').html('<p>No game joined</p>');
