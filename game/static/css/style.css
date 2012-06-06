@@ -17,9 +17,9 @@ margin-top: 15px;
 #content_box {
 background-color: #eee;
 border: 1px solid #bbb;
-border-radius: 20px;
 -webkit-border-radius: 20px;
 -moz-border-radius: 20px;
+border-radius: 20px;
 box-shadow: 2px 2px 1px #eee;
 overflow: hidden;
 }
@@ -52,6 +52,9 @@ margin-bottom: 20px;
 width: 100%;
 border: 1px solid #bbb; 
 text-align: left;
+-webkit-border-radius: 2px;
+-moz-border-radius: 2px;
+border-radius: 2px;
 }
 
 #player_list p {
@@ -68,6 +71,9 @@ width: 100%;
 border: 1px solid #bbb; 
 text-align: left;
 margin-bottom: 20px;
+-webkit-border-radius: 2px;
+-moz-border-radius: 2px;
+border-radius: 2px;
 }
 
 #game_list p {
@@ -95,7 +101,6 @@ padding-top: 10px;
 
 #joined_game_instructions {
 display: none;
-/*visibility: hidden;*/
 }
 
 .error {
