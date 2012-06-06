@@ -93,6 +93,11 @@ text-align: center;
 padding-top: 10px; 
 }
 
+#joined_game_instructions {
+display: none;
+/*visibility: hidden;*/
+}
+
 .error {
 color: #f00;
 margin-bottom: 0px;

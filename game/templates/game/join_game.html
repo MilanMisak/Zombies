@@ -8,14 +8,20 @@
     <div class="grid_5 push_1" style="text-align: center; padding-top: 10px">
         <p>List of Games:</p>
         
-        <div id="game_list"></div>
+        <div id="game_list">
+            <p>No available games</p>
+        </div>
     </div>
     
     <div class="grid_4 push_2" id="joined_game_info">
         <p style="text-align: left">You Joined: <span id="game_name"></span></p>
+
+        <p id="joined_game_instructions">Please wait for the game master to start the game.</p>
         
         <p>List of Players:</p>
         
-        <div id="player_list"></div>
+        <div id="player_list">
+            <p>No game joined</p>
+        </div>
     </div>
 {% endblock %}
