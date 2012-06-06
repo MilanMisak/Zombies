@@ -37,6 +37,8 @@ window.onload = function() {
     var floor5Room2 = new Room(view.center.add(new Point(430, -450)));
     var floor6Room1 = new Room(view.center.add(new Point(0, -750)));
 
+    /* Stairs are numbered left to right, bottom to top. */
+
     /*First floor initialisation */
     mainRoom.setDoorLeadingLeft(floor1Room2);
     mainRoom.setDoorLeadingRight(floor1Room3);
@@ -129,18 +131,10 @@ window.onload = function() {
     floor6Room1.setDownStairs(floor5Room1, stairs9);
 
 
-
-
-
-
-
-    var snailmoo = new Ghost('red', mainRoom);
+    var snailmoo = new SnailGroup(4, floor3Room3);
 
     var scaleCount = 0; 
     var weight = 1;
-
-    var wbool = false;
-    
 
     view.onFrame = function(event) {
         snailUpdate();
@@ -151,10 +145,10 @@ window.onload = function() {
     var click = true;
     tool.onMouseDown = function(event) {
         if (click) {
-            snailmoo.setDestination(mainRoom.position);
+            //snailmoo.setDestination(mainRoom.position);
             //snail.setDestination(event.point);
         } else {
-            snailmoo.setDestination(event.point);
+            //snailmoo.setDestination(event.point);
         }
         click = !click;
     }
