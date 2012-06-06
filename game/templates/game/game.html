@@ -203,6 +203,18 @@ window.onload = function() {
 {% block content %}
 {% if game.players.count == 1 %}
     <canvas id="canvas" class="grid_12 alpha" resize></canvas>
+{% else %}
+    <canvas id="canvas" class="grid_10 alpha" resize></canvas>
+    <div class="grid_2 alpha">
+        <div style="padding: 10px;">
+            <h3>Chat:</h3>
+            <div style="height: 100px"></div>
+            <p>
+                <input type="text" style="width: 110px" id="message_input" />
+                <a class="btn btn-danger" href="#">Send</a>
+            </p>
+        </div>
+    </div>
 {% endif %}
 
 <img src="/static/img/snail_teeth.png" class="sprite" id="snail" />
