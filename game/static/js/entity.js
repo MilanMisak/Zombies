@@ -62,6 +62,8 @@ entitySetup = function() {
 
         this.moving = true;
 
+	this.faceTarget = function() {
+	}
 
         /* Function to move the entity every frame. */
         this.move = function() {
@@ -74,11 +76,11 @@ entitySetup = function() {
             if (vector.length < 10) {
                 if (this.destinations.length > 0) {
                     this.setDestination(this.destinations.shift());
+		    this.faceTarget();
                 } else {
                     this.moving = false;
                 }
             }
-            
             
             /* Move the item 1/10th of the distance towards the destination. */ 
             this.item.translate(vector.divide(10)); 
@@ -155,17 +157,46 @@ entitySetup = function() {
     }
 
     /* Creates a group of entities. (used for groups of snails) */
-    this.SnailGroup = function(noOfEntities) {
+    this.SnailGroup = function(noOfEntities, room) {
+        this.room = room;
         this.item = new Group();
+        this.rotation = 0;
         for (var i = 0; i < noOfEntities; i++)
-            this.item.addChild(new Snail(Point.random().multiply(100)).item);
+            this.item.addChild(
+                    snailSymbol.place(room.position.add(
+                            new Point(Math.random() * 120 - 60, Math.random() * 18))));
+        this.destination = this.item.position.add(new Point(0, 65));
+
+        this.pushDestination = function(destination) {
+            this.destinations.push(destination.add(new Point(0, 65)));
+            this.moving = true;
+        }
+
+        this.faceTarget = function() {
+            this.item.rotate(this.rotation);
+            var direction = new Point(this.destination.subtract(this.item.position));
+            this.rotation = 0;
+            if ((direction.y > 9 && direction.x < -9) || (direction.y < -9 && direction.x > 9)) { 
+                this.rotation = -45;    
+            } else {
+                if ((direction.y > 9 && direction.x > 9) || (direction.y < -9 && direction.x < -9)) {
+                    this.rotation = 45;
+                }
+            }
+            console.log(direction);
+            this.item.rotate(this.rotation);
+        }
     }
     SnailGroup.prototype = new Entity();
 
 
-    this.Snail = function(position) {
-        this.item = snailSymbol.place(position);
-        this.destination = position;
+    this.Snail = function(room) {
+        this.item = snailSymbol.place(room.position.add(new Point(0, 70)));
+	this.room = room;
+        this.pushDestination = function(destination) {
+            this.destinations.push(destination.add(new Point(0, 70)));
+            this.moving = true;
+	}
     }
     Snail.prototype = new Entity();
 
