@@ -6868,12 +6868,12 @@ var View = this.View = Base.extend(Callback, {
 			element.width = size.width;
 			element.height = size.height;
 			DomEvent.add(window, {
-				resize: function(event) {
+				/*resize: function(event) {
 					if (!DomElement.isInvisible(element))
 						offset = DomElement.getOffset(element, true);
 					that.setViewSize(DomElement.getViewportBounds(element)
 							.getSize().subtract(offset));
-				}
+				}*/
 			});
 		} else {
 			size = DomElement.isInvisible(element)
