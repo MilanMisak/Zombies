@@ -158,18 +158,34 @@ entitySetup = function() {
 
     /* Creates a group of entities. (used for groups of snails) */
     this.SnailGroup = function(noOfEntities, room) {
-	this.room = room;
+        this.room = room;
         this.item = new Group();
+        this.rotation = 0;
         for (var i = 0; i < noOfEntities; i++)
             this.item.addChild(
-	    snailSymbol.place(room.position.add(
-	    new Point(Math.random() * 120 - 60, Math.random() * 18))));
-	this.destination = this.item.position.add(new Point(0, 65));
-        
-	this.pushDestination = function(destination) {
+                    snailSymbol.place(room.position.add(
+                            new Point(Math.random() * 120 - 60, Math.random() * 18))));
+        this.destination = this.item.position.add(new Point(0, 65));
+
+        this.pushDestination = function(destination) {
             this.destinations.push(destination.add(new Point(0, 65)));
             this.moving = true;
-	}
+        }
+
+        this.faceTarget = function() {
+            this.item.rotate(this.rotation);
+            var direction = new Point(this.destination.subtract(this.item.position));
+            this.rotation = 0;
+            if ((direction.y > 9 && direction.x < -9) || (direction.y < -9 && direction.x > 9)) { 
+                this.rotation = -45;    
+            } else {
+                if ((direction.y > 9 && direction.x > 9) || (direction.y < -9 && direction.x < -9)) {
+                    this.rotation = 45;
+                }
+            }
+            console.log(direction);
+            this.item.rotate(this.rotation);
+        }
     }
     SnailGroup.prototype = new Entity();
 
