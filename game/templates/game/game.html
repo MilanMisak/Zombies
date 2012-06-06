@@ -33,9 +33,9 @@ window.onload = function() {
     var floor4Room2 = new Room(view.center.add(new Point(-230, -150)));
     var floor4Room3 = new Room(view.center.add(new Point(230, -150)));
     var floor4Room4 = new Room(view.center.add(new Point(830, -150)));
-    var floor5Room1 = new Room(view.center.add(new Point(-430, -450)));
+    var floor5Room1 = new Room(view.center.add(new Point(-230, -450)));
     var floor5Room2 = new Room(view.center.add(new Point(430, -450)));
-    var floor6Room1 = new Room(view.center.add(new Point(0, -750)));
+    var floor6Room1 = new Room(view.center.add(new Point(-100, -750)));
 
     /* Stairs are numbered left to right, bottom to top. */
 
@@ -45,8 +45,8 @@ window.onload = function() {
 
     floor1Room1.setDoorLeadingRight(floor1Room2);
     
-    stairs1 = new Stairs(floor1Room2.position.add(new Point(130, 0)),
-                         floor2Room1.position.add(new Point(-170, 0)));
+    stairs1 = new Stairs(floor1Room2.position.add(new Point(110, 0)),
+                         floor2Room1.position.add(new Point(-150, 0)));
     floor1Room2.setUpStairs(floor2Room1, stairs1);
     floor1Room2.setDoorLeadingLeft(floor1Room1);
     floor1Room2.setDoorLeadingRight(mainRoom);
@@ -100,7 +100,7 @@ window.onload = function() {
 
     /* Fourth Floor initialization. */
     stairs7 = new Stairs(floor4Room1.position.add(new Point(130, 0)),
-                         floor5Room1.position.add(new Point(-370, 0)));
+                         floor5Room1.position.add(new Point(-570, 0)));
     floor4Room1.setUpStairs(floor5Room1, stairs7);
     floor4Room1.setDownStairs(floor3Room1, stairs5);
     floor4Room1.setDoorLeadingRight(floor4Room2);
@@ -118,8 +118,8 @@ window.onload = function() {
     floor4Room4.setDoorLeadingLeft(floor4Room3);
 
     /* Fifth Floor initialization. */
-    stairs9 = new Stairs(floor5Room1.position.add(new Point(70, 0)),
-                         floor6Room1.position.add(new Point(20, 0)));
+    stairs9 = new Stairs(floor5Room1.position.add(new Point(-70, 0)),
+                         floor6Room1.position.add(new Point(50, 0)));
     floor5Room1.setUpStairs(floor6Room1, stairs9);
     floor5Room1.setDownStairs(floor4Room1, stairs7);
     floor5Room1.setDoorLeadingRight(floor5Room2);
@@ -131,7 +131,7 @@ window.onload = function() {
     floor6Room1.setDownStairs(floor5Room1, stairs9);
 
 
-    var snailmoo = new SnailGroup(4, floor3Room3);
+    var snailmoo = new SnailGroup(3, floor3Room3);
 
     var scaleCount = 0; 
     var weight = 1;

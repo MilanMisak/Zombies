@@ -58,12 +58,12 @@ entitySetup = function() {
         this.destinations = new Array();
   
         /* The place the entity is moving to. */
-        this.destination = view.center;
+        //this.destination = this.item.position;
 
         this.moving = true;
 
-	this.faceTarget = function() {
-	}
+        this.faceTarget = function() {
+        }
 
         /* Function to move the entity every frame. */
         this.move = function() {
@@ -73,7 +73,7 @@ entitySetup = function() {
                and it's destination. */ 
             var vector = new Point(this.destination.subtract(this.item.position));
             
-            if (vector.length < 10) {
+            if (vector.length < 1) {
                 if (this.destinations.length > 0) {
                     this.setDestination(this.destinations.shift());
 		    this.faceTarget();
@@ -115,7 +115,7 @@ entitySetup = function() {
             if (this.room.left == null) 
                 return;
             
-            this.room = this.room.left;
+            this.setRoom(this.room.left);
             this.pushDestination(this.room.position);
         }
         
@@ -123,7 +123,7 @@ entitySetup = function() {
             if (this.room.right == null) 
                 return;
             
-            this.room = this.room.right;
+            this.setRoom(this.room.right);
             this.pushDestination(this.room.position);
         }
         
@@ -132,7 +132,7 @@ entitySetup = function() {
                 return;
             
             this.moveUpStairs(this.room.upStairs);
-            this.room = this.room.up;
+            this.setRoom(this.room.up);
             this.pushDestination(this.room.position);
         }
         
@@ -141,7 +141,7 @@ entitySetup = function() {
                 return;
             
             this.moveDownStairs(this.room.downStairs);
-            this.room = this.room.down;
+            this.setRoom(this.room.down);
             this.pushDestination(this.room.position);
         }
 
@@ -154,49 +154,76 @@ entitySetup = function() {
             this.pushDestination(stairs.endPoint);
             this.pushDestination(stairs.startPoint);
         }
+        
+        this.setRoom = function(room) {
+            this.room = room;
+        }
     }
 
     /* Creates a group of entities. (used for groups of snails) */
     this.SnailGroup = function(noOfEntities, room) {
         this.room = room;
         this.item = new Group();
-        this.rotation = 0;
-        for (var i = 0; i < noOfEntities; i++)
-            this.item.addChild(
-                    snailSymbol.place(room.position.add(
-                            new Point(Math.random() * 120 - 60, Math.random() * 18))));
-        this.destination = this.item.position.add(new Point(0, 65));
+        for (var i = 0; i < noOfEntities; i++) {
+            var snail = new Snail(room); 
+            snail.pushDestination(room.position.add(
+                            new Point(Math.random() * 100 - 50, Math.random() * 5)));
+            this.item.addChild(snail.item);
+        }
+
+        this.destination = this.item.position;
 
         this.pushDestination = function(destination) {
-            this.destinations.push(destination.add(new Point(0, 65)));
-            this.moving = true;
+            for (var i = 0; i < noOfEntities; i++) {
+                var snail = this.item.children[i].Parent;
+                snail.pushDestination(destination);
+            }
+        }
+        
+        this.move = function() {
+            for (var i = 0; i < noOfEntities; i++) {
+                var snail = this.item.children[i].Parent;
+                if (!snail.moving)
+                    snail.pushDestination(snail.room.position.add(
+                                new Point(Math.random() * 300 - 150, 0)));
+                    snail.move();
+            }
+        }
+        
+        this.setRoom = function(room) {
+            this.room = room;
+            for (var i = 0; i < noOfEntities; i++) 
+                this.item.children[i].Parent.setRoom(room);
         }
 
-        this.faceTarget = function() {
-            this.item.rotate(this.rotation);
-            var direction = new Point(this.destination.subtract(this.item.position));
-            this.rotation = 0;
-            if ((direction.y > 9 && direction.x < -9) || (direction.y < -9 && direction.x > 9)) { 
-                this.rotation = -45;    
-            } else {
-                if ((direction.y > 9 && direction.x > 9) || (direction.y < -9 && direction.x < -9)) {
-                    this.rotation = 45;
-                }
-            }
-            console.log(direction);
-            this.item.rotate(this.rotation);
-        }
     }
     SnailGroup.prototype = new Entity();
 
 
     this.Snail = function(room) {
         this.item = snailSymbol.place(room.position.add(new Point(0, 70)));
-	this.room = room;
+        this.item.Parent = this;
+        this.room = room;
+        this.rotation = 0;
+        this.destination = this.item.position;
         this.pushDestination = function(destination) {
             this.destinations.push(destination.add(new Point(0, 70)));
             this.moving = true;
-	}
+        }
+        
+        this.faceTarget = function() {
+            this.item.rotate(this.rotation);
+            var direction = new Point(this.destination.subtract(this.item.position));
+            this.rotation = 0;
+            if ((direction.y > 200 && direction.x < -50) || (direction.y < -200 && direction.x > 50)) { 
+                this.rotation = -45;    
+            } else {
+                if ((direction.y > 200 && direction.x > 50) || (direction.y < -200 && direction.x < -50)) {
+                    this.rotation = 45;
+                }
+            }
+            this.item.rotate(this.rotation);
+        }
     }
     Snail.prototype = new Entity();
 
