@@ -10,6 +10,7 @@ $(document).ready(function() {
     updateGameInfo();
     setInterval(updateGameInfo, 1000);
 
+    // Show a modal with instructions
     $('#instructions_modal').modal('show');
 
     // Disable page scrolling
@@ -18,6 +19,7 @@ $(document).ready(function() {
             return false;
     });
 
+    // Replaces a class of a given object
     var replaceClass = function(obj, whatClass, withClass) {
         var classes = $(obj).attr('class');
         $(obj).attr('class', classes.replace(whatClass, withClass));
