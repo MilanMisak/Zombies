@@ -9,9 +9,8 @@ paper.install(window);
 $(function() {
     paper.setup('canvas');
 
-    var canvasWidth = $('#canvas').attr('data-width');
     $('#canvas').css('height', '600px');
-    paper.view.viewSize = [canvasWidth, 600];
+    paper.view.viewSize = [700, 600];
 
     entitySetup();
 
@@ -70,11 +69,9 @@ $(function() {
         }
         if (event.key == 'right') {
             scroll(new Point(-100 * weight, 0));
-            snailmoo.pickUp();
         }
         if (event.key == 'left') {
             scroll(new Point(100 * weight, 0));
-            snailmoo.drop();
         }
         if (event.key == 'up') {
             scroll(new Point(0, 100 * weight));
@@ -82,6 +79,13 @@ $(function() {
         if (event.key == 'down') {
             scroll(new Point(0, -100 * weight));
         }
+        if (event.key == 'k') {
+            snailmoo.pickUp();
+        }
+        if (event.key == 'l') {
+            snailmoo.drop();
+        }
+
     }
 
 });
@@ -89,21 +93,20 @@ $(function() {
 {% endblock %}
 
 {% block content %}
-{% if game.players.count == 1 %}
-    <canvas id="canvas" class="grid_12 alpha" data-width="940"></canvas>
-{% else %}
-    <canvas id="canvas" class="grid_10 alpha" data-width="780"></canvas>
-    <div class="grid_2 alpha">
-        <div style="padding: 10px;">
-            <h3>Chat:</h3>
-            <div style="height: 100px"></div>
-            <p>
-                <input type="text" style="width: 110px" id="message_input" />
-                <a class="btn btn-danger" href="#">Send</a>
-            </p>
-        </div>
+<canvas id="canvas" class="grid_9 alpha"></canvas>
+<div class="grid_3 alpha">
+    <div style="padding: 10px">
+        <h3>Game Controls:</h3>
     </div>
-{% endif %}
+    <div style="padding: 10px;">
+        <h3>Chat:</h3>
+        <div style="height: 100px"></div>
+        <p>
+            <input type="text" style="width: 110px" id="message_input" />
+            <a class="btn btn-success" href="#">Send</a>
+        </p>
+    </div>
+</div>
 
 <div id="instructions_modal" class="modal hide">
     <div class="modal-header">
@@ -113,12 +116,12 @@ $(function() {
         <p>Here we need instructions...</p>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-primary btn-danger" data-dismiss="modal">Got It!</a>
+        <a href="#" class="btn btn-primary btn-success" data-dismiss="modal">Got It!</a>
     </div>
 </div>
 
 <img src="/static/img/snail_teeth.png" class="sprite" id="snail" />
-<img src="/static/img/final_houseplan.png" class="sprite" id="house" />
+<img src="/static/img/houseplan.jpg" class="sprite" id="house" />
 <img src="/static/img/ghost_gun.png" class="sprite" id="ghost" />
 <img src="/static/img/ghost_ammobox.png" class="sprite" id="ghostbox" />
 <img src="/static/img/ammobox.png" class="sprite" id="ammobox" />

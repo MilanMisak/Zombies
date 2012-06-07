@@ -8,7 +8,7 @@ $(document).ready(function() {
             $.each(data, function(key, val) {
                 items.push('<li>' +
                 '<span>' + val + '</span>' +
-                '<a class="btn btn-danger btn_join_game" data-game-id="' + key + '">' +
+                '<a class="btn btn-success btn_join_game" data-game-id="' + key + '">' +
                 'Join</a>' +
                 '</li>');
             });

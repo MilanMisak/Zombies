@@ -8,7 +8,6 @@ entitySetup = function() {
     var house = new Raster('house');
     house.position = view.center;
     
-    
     /* Code for the snail symbol */
     var raster = new Raster('snail');
     raster.position = view.center;
@@ -27,10 +26,8 @@ entitySetup = function() {
         rightEye.add(new Point(130, (size - (i + 1))-15).add(view.center));
     var rightStart = new Point(rightEye.segments[0].point);
 
-
     var rightEyeball = new Path.Circle(rightEye.segments[0].point, 10);
     rightEyeball.fillColor = 'black';       
-
 
     var leftEye = new Path();
     leftEye.style = eyeStyle;
@@ -41,24 +38,29 @@ entitySetup = function() {
     var leftEyeball = new Path.Circle(leftEye.segments[0].point, 10);
     leftEyeball.fillColor = 'black'; 
 
-
     snailGroup = new Group([raster, rightEye, rightEyeball, leftEye, leftEyeball]);
     snailSymbol = new Symbol(snailGroup);
     snailGroup.scale(0.2);
 
+
+    /* Code for the ghost symbol */
     ghostSymbol = new Symbol(new Raster('ghost'));
     ghostSymbol.definition.scale(0.2);
     ghostBoxSymbol = new Symbol(new Raster('ghostbox'));
     ghostBoxSymbol.definition.scale(0.2);
 
+
     ammoBox = new Raster('ammobox');
     ammoBox.scale(0.2);
+
 
     stairBarricadeSymbol = new Symbol(new Raster('stairBarricade'));
     stairBarricadeSymbol.definition.scale(0.4);
 
+
     doorBarricadeSymbol = new Symbol(new Raster('doorBarricade'));
     doorBarricadeSymbol.definition.scale(0.4);
+
 
     /* Virtual class, adds attributes to an item. (this.item must be defined) */
     this.Entity = function() {
@@ -80,7 +82,7 @@ entitySetup = function() {
             if (!this.moving)
                 return;
             /* The vector is the difference between the position of the item
-               and it's destination. */ 
+               and its destination. */ 
             var vector = new Point(this.destination.subtract(this.item.position));
             
             if (vector.length < 1) {
