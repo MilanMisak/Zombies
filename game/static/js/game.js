@@ -12,6 +12,12 @@ $(document).ready(function() {
 
     $('#instructions_modal').modal('show');
 
+    // Disable page scrolling
+    $(document).keydown(function(e) {
+        if (e.keyCode >= 37 && e.keyCode <= 40)
+            return false;
+    });
+
     var replaceClass = function(obj, whatClass, withClass) {
         var classes = $(obj).attr('class');
         $(obj).attr('class', classes.replace(whatClass, withClass));
