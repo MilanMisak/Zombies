@@ -52,6 +52,9 @@ entitySetup = function() {
     stairBarricadeSymbol = new Symbol(new Raster('stairBarricade'));
     stairBarricadeSymbol.definition.scale(0.4);
 
+    doorBarricadeSymbol = new Symbol(new Raster('doorBarricade'));
+    doorBarricadeSymbol.definition.scale(0.3);
+
     /* Virtual class, adds attributes to an item. (this.item must be defined) */
     this.Entity = function() {
         
@@ -85,7 +88,7 @@ entitySetup = function() {
             }
             
             /* Move the item 1/10th of the distance towards the destination. */ 
-            this.item.translate(vector.divide(10)); 
+            this.item.translate(vector.divide(5)); 
         }
 
         /* Set the Entity's destination, flip it if necessary. */
@@ -351,6 +354,11 @@ entitySetup = function() {
         this.item = stairBarricadeSymbol.place(position);
     }
     StairBarricade.prototype = new Entity(); 
+
+
+    this.doorBarricade = function(position) {
+        this.item = doorBarricadeSymbol.place(position);
+    }
     
     /* Declaration of room positions */
     mainRoom = new Room(view.center.add(new Point(0, 753)));
@@ -481,7 +489,7 @@ entitySetup = function() {
     stairBarricade9 = new StairBarricade(stairs9.startPoint.add(new Point(120, -50)));
     stairBarricade9.flip();
 
-
+    doorBarricade1 = new doorBarricade(floor1Room1.position.add(new Point(-200, -20)));
 
    
     /* Ammo box initialization. */
