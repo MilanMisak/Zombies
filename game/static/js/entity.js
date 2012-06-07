@@ -1,9 +1,11 @@
 
 entitySetup = function() {
     
-   /* var floor = new Path.Rectangle(view.center.add(new Point(-8000, 8000)),
-                              view.center.add(new Point(8000, 850)));
-    floor.fillColor = 'red';*/	
+    var background = new Path.Rectangle(view.center.add(new Point(-8000, 8000)),
+                                        view.center.add(new Point(8000, -8000)));
+    background.fillColor = 'white';
+
+    var houseLayer = new Layer();	
 
     var house = new Raster('house');
     house.position = view.center;
@@ -110,8 +112,8 @@ entitySetup = function() {
 
         /* Adds a destination to the entity's queue. */
         this.pushDestination = function(destination) {
-            this.destinations.push(destination);
             this.moving = true;
+            this.destinations.push(destination);
         }
 
         /* Move the Entity to the origin, flip it, then move it back. */ 
@@ -124,7 +126,7 @@ entitySetup = function() {
         }
 
         this.moveLeft = function() {
-            if (this.room.left == null) 
+            if (this.room.left == null || this.room.leftBarricade.exists) 
                 return;
             
             this.setRoom(this.room.left);
@@ -132,7 +134,7 @@ entitySetup = function() {
         }
         
         this.moveRight = function() {
-            if (this.room.right == null) 
+            if (this.room.right == null || this.room.rightBarricade.exists) 
                 return;
             
             this.setRoom(this.room.right);
@@ -140,7 +142,7 @@ entitySetup = function() {
         }
         
         this.moveUp = function() {
-            if (this.room.up == null) 
+            if (this.room.up == null || this.room.upStairs.barricade.exists) 
                 return;
             
             this.moveUpStairs(this.room.upStairs);
@@ -149,7 +151,7 @@ entitySetup = function() {
         }
         
         this.moveDown = function() {
-            if (this.room.down == null) 
+            if (this.room.down == null || this.room.downStairs.barricade.exists) 
                 return;
             
             this.moveDownStairs(this.room.downStairs);
@@ -288,6 +290,27 @@ entitySetup = function() {
             ammoBox.visible = true; 
             this.holdingBox = false; 
         }
+
+        this.barricadeUp = function() {
+            if (this.room.up != null) {
+                this.room.upStairs.barricade.make();
+            }
+        }
+        this.barricadeDown = function() {
+            if (this.room.down != null) {
+                this.room.downStairs.barricade.make();
+            }
+        }
+        this.barricadeLeft = function() {
+            if (this.room.left != null) {
+                this.room.leftBarricade.make();
+            }
+        }
+        this.barricadeRight = function() {
+            if (this.room.right != null) {
+                this.room.rightBarricade.make();
+            }
+        }
     }
     Ghost.prototype = new Entity();
 
@@ -345,18 +368,12 @@ entitySetup = function() {
 
         this.setDoorLeadingRight = function(room, doorBarricade) {
             this.right = room;
-            if (doorBarricade != null) {
-                this.rightBarricade = doorBarricade;   
-                this.rightBarricade.item.visible = false;   
-            } 
+            this.rightBarricade = doorBarricade;   
         }
 
         this.setDoorLeadingLeft = function(room, doorBarricade) {
             this.left = room;
-            if (doorBarricade != null) {
-                this.leftBarricade = doorBarricade;
-                this.leftBarricade.item.visible = false;    
-            }
+            this.leftBarricade = doorBarricade;
         }   
     }
     
@@ -369,17 +386,49 @@ entitySetup = function() {
         }
     }
 
+    this.Barricade = function() {
+        this.item = doorBarricadeSymbol.place(view.center);
+        this.exists = false;
+        this.health = 100;
+
+        /* Repairs or makes the Barricade */
+        this.make = function() {
+            if (health > 0) {
+                health = 100;
+                return;
+            }
+            this.exists = true;
+            this.item.visible = true;
+        }
+    
+        this.damage = function(damageDealt) {
+            this.health -= damageDealt;
+            if (this.health <= 0)
+                this.destroy;
+        }
+    
+        this.destroy = function() {
+            this.exists = false
+            this.visible = false;
+        }
+    }
+    Barricade.prototype = new Entity();
+
     this.StairBarricade = function(position) {
+        this.item.remove();
         this.item = stairBarricadeSymbol.place(position);
         this.item.visible = false;
     }
-    StairBarricade.prototype = new Entity(); 
+    StairBarricade.prototype = new Barricade(); 
 
 
     this.doorBarricade = function(position) {
+        this.item.remove();
         this.item = doorBarricadeSymbol.place(position);
-        this.item.visible = true;
+        this.item.visible = false;
+	    this.exists = false;
     }
+    doorBarricade.prototype = new Barricade();
     
     /* Declaration of room positions */
     mainRoom = new Room(view.center.add(new Point(0, 753)));
