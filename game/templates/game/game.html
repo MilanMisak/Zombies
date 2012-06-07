@@ -1,6 +1,7 @@
 {% extends 'game/base.html' %}
 
 {% block extra_js %}
+    <script type="text/javascript" src="/static/js/bootstrap-button.js"></script>
     <script type="text/javascript" src="/static/js/game.js"></script>
     <script type="text/javascript" src="/static/js/paper.js"></script>
     <script type="text/javascript" src="/static/js/entity.js"></script>
@@ -109,6 +110,14 @@ $(function() {
 <div class="grid_3 alpha">
     <div style="padding: 10px">
         <h3>Game Controls:</h3>
+        <p>
+            <a class="btn btn-success control_btn_left" id="btn_move" href="#" data-toggle="button">Move</a>
+            <a class="btn btn-success control_btn_right" id="btn_barricade" href="#" data-toggle="button">Barricade</a>
+        </p>
+        <p>
+            <a class="btn btn-success control_btn_left" id="btn_shoot" href="#" data-toggle="button">Shoot</a>
+            <a class="btn btn-success control_btn_right" id="btn_reload" href="#" data-toggle="button">Reload</a>
+        </p>
     </div>
     <div style="padding: 10px;">
         <h3>Chat:</h3>
