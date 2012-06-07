@@ -41,6 +41,7 @@ $(document).ready(function() {
     $('.control_btn_left, .control_btn_right').click(untoggleActionButtons);
 
     // Arrow buttons
+    var arrowButtons = '#btn_arrow_left, #btn_arrow_up, #btn_arrow_right, #btn_arrow_down';
     var arrowIDs = ['#btn_arrow_left', '#btn_arrow_up', '#btn_arrow_right', '#btn_arrow_down'];
     var untoggleArrowButtons = function(e) {
         for (var id in arrowIDs) {
@@ -54,5 +55,14 @@ $(document).ready(function() {
             replaceClass(this, 'btn-success', 'btn-warning');
         return false;
     };
-    $('#btn_arrow_left, #btn_arrow_up, #btn_arrow_right, #btn_arrow_down').click(untoggleArrowButtons);
+    $(arrowButtons).click(untoggleArrowButtons);
+
+    // Disabling and enabling the arrow buttons depending on the selected action
+    $('#btn_move, #btn_barricade, #btn_shoot').click(function() {
+        $(arrowButtons).removeClass('disabled');
+    });
+    $('#btn_reload').click(function() {
+        $(arrowButtons).removeClass('btn-warning').addClass('disabled btn-success');
+    });
+    
 });
