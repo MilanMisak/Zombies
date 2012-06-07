@@ -114,14 +114,14 @@ width: 70px;
 }
 
 .arrow_btn {
-width: 20px;
+width: 30px;
 }
 
 #btn_arrow_up, #btn_arrow_down {
-margin-left: 80px;
+margin-left: 75px;
 }
 #btn_arrow_left {
-margin-left: 25px;
+margin-left: 10px;
 }
 #btn_arrow_go, #btn_arrow_right {
 margin-left: 10px;
