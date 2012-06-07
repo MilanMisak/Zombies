@@ -70,11 +70,9 @@ $(function() {
         }
         if (event.key == 'right') {
             scroll(new Point(-100 * weight, 0));
-            snailmoo.pickUp();
         }
         if (event.key == 'left') {
             scroll(new Point(100 * weight, 0));
-            snailmoo.drop();
         }
         if (event.key == 'up') {
             scroll(new Point(0, 100 * weight));
@@ -82,6 +80,13 @@ $(function() {
         if (event.key == 'down') {
             scroll(new Point(0, -100 * weight));
         }
+        if (event.key == 'k') {
+            snailmoo.pickUp();
+        }
+        if (event.key == 'l') {
+            snailmoo.drop();
+        }
+
     }
 
 });
