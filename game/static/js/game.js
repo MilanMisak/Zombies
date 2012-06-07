@@ -76,4 +76,9 @@ $(document).ready(function() {
         $('#instructions_modal').modal();
         return false;
     });
+
+    // The GO action
+    $('#btn_arrow_go').click(function() {
+        //TODO 
+    });
 });
