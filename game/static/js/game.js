@@ -79,6 +79,7 @@ $(document).ready(function() {
         }
     });
 
+    // Flashing arrow instructions
     $(arrowButtons).click(function(e) {
         $('#instruction_label').html('Click GO');
         $('#instruction_label').fadeIn();
@@ -89,6 +90,13 @@ $(document).ready(function() {
     $('#btn_show_instructions').click(function() {
         $('#instructions_modal').modal();
         return false;
+    });
+
+    // Flashing the select action instruction
+    $('#instructions_modal').on('hidden', function() {
+        $('#instruction_label').html('Select an action');
+        $('#instruction_label').fadeIn();
+        $('#instruction_label').fadeOut('slow');
     });
 
     // The GO action
