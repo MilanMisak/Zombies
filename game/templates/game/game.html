@@ -70,11 +70,9 @@ $(function() {
         }
         if (event.key == 'right') {
             scroll(new Point(-100 * weight, 0));
-            snailmoo.pickUp();
         }
         if (event.key == 'left') {
             scroll(new Point(100 * weight, 0));
-            snailmoo.drop();
         }
         if (event.key == 'up') {
             scroll(new Point(0, 100 * weight));
@@ -82,6 +80,13 @@ $(function() {
         if (event.key == 'down') {
             scroll(new Point(0, -100 * weight));
         }
+        if (event.key == 'k') {
+            snailmoo.pickUp();
+        }
+        if (event.key == 'l') {
+            snailmoo.drop();
+        }
+
     }
 
 });
@@ -118,7 +123,7 @@ $(function() {
 </div>
 
 <img src="/static/img/snail_teeth.png" class="sprite" id="snail" />
-<img src="/static/img/final_houseplan.png" class="sprite" id="house" />
+<img src="/static/img/houseplan.jpg" class="sprite" id="house" />
 <img src="/static/img/ghost_gun.png" class="sprite" id="ghost" />
 <img src="/static/img/ghost_ammobox.png" class="sprite" id="ghostbox" />
 <img src="/static/img/ammobox.png" class="sprite" id="ammobox" />
