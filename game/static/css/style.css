@@ -127,6 +127,10 @@ margin-left: 10px;
 margin-left: 10px;
 }
 
+#instruction_label {
+text-align: center;
+}
+
 .control_key {
 width: 80px;
 text-align: right;

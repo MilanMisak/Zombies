@@ -49,7 +49,6 @@ $(document).ready(function() {
             var arrowID = arrowIDs[id];
             if ($(arrowID).hasClass('btn-warning')) {
                 replaceClass(arrowID, 'btn-warning', 'btn-success');
-            console.log('untoggling ' + arrowID + ' ' + id);
             }
         }
         if (this != undefined)
@@ -66,9 +65,24 @@ $(document).ready(function() {
         $(arrowButtons).removeClass('btn-warning').addClass('disabled btn-success');
     });
     
-    // Enabling the GO button
-    $(actionButtons).click(function() {
+    // Enabling the GO button and flashing action instructions
+    $(actionButtons).click(function(e) {
         $('#btn_arrow_go').removeClass('disabled');
+        if (this != undefined) {
+            if ($(this).attr('id') != 'btn_reload') {
+                $('#instruction_label').html('Pick a direction and click GO');
+            } else {
+                $('#instruction_label').html('Click GO');
+            }
+            $('#instruction_label').fadeIn();
+            $('#instruction_label').fadeOut(1000);
+        }
+    });
+
+    $(arrowButtons).click(function(e) {
+        $('#instruction_label').html('Click GO');
+        $('#instruction_label').fadeIn();
+        $('#instruction_label').fadeOut('slow');
     });
 
     // Showing the instructions modal
