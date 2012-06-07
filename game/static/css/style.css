@@ -113,6 +113,20 @@ margin-right: 10px;
 width: 70px;
 }
 
+.arrow_btn {
+width: 30px;
+}
+
+#btn_arrow_up, #btn_arrow_down {
+margin-left: 75px;
+}
+#btn_arrow_left {
+margin-left: 10px;
+}
+#btn_arrow_go, #btn_arrow_right {
+margin-left: 10px;
+}
+
 .error {
 color: #f00;
 margin-bottom: 0px;

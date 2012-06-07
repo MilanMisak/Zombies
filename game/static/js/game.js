@@ -12,22 +12,45 @@ $(document).ready(function() {
 
     $('#instructions_modal').modal('show');
 
-    var replaceClass = function(selector, whatClass, withClass) {
-        var classes = $(selector).attr('class');
-        $(selector).attr('class', classes.replace(whatClass, withClass));
+    // Disable page scrolling
+    $(document).keydown(function(e) {
+        if (e.keyCode >= 37 && e.keyCode <= 40)
+            return false;
+    });
+
+    var replaceClass = function(obj, whatClass, withClass) {
+        var classes = $(obj).attr('class');
+        $(obj).attr('class', classes.replace(whatClass, withClass));
     };
 
-    var actions = {'Move': '#btn_move', 'Barricade': '#btn_barricade',
-                   'Shoot': '#btn_shoot', 'Reload': '#btn_reload'};
+    // Action buttons
+    var actionIDs = ['#btn_move', '#btn_barricade', '#btn_shoot', '#btn_reload'];
     var untoggleActionButtons = function(e) {
-        for (action in actions) {
-            var actionButton = actions[action];
-            if ($(actionButton).hasClass('btn-warning')) {
-                $(actionButton).button('toggle');
-                replaceClass(actionButton, 'btn-warning', 'btn-success');
+        for (var id in actionIDs) {
+            var actionID = actionIDs[id];
+            if ($(actionID).hasClass('btn-warning')) {
+                replaceClass(actionID, 'btn-warning', 'btn-success');
             }
         }
-        replaceClass(e.target, 'btn-success', 'btn-warning');
+        if (this != undefined)
+            replaceClass(this, 'btn-success', 'btn-warning');
+        return false;
     };
     $('.control_btn_left, .control_btn_right').click(untoggleActionButtons);
+
+    // Arrow buttons
+    var arrowIDs = ['#btn_arrow_left', '#btn_arrow_up', '#btn_arrow_right', '#btn_arrow_down'];
+    var untoggleArrowButtons = function(e) {
+        for (var id in arrowIDs) {
+            var arrowID = arrowIDs[id];
+            if ($(arrowID).hasClass('btn-warning')) {
+                replaceClass(arrowID, 'btn-warning', 'btn-success');
+            console.log('untoggling ' + arrowID + ' ' + id);
+            }
+        }
+        if (this != undefined)
+            replaceClass(this, 'btn-success', 'btn-warning');
+        return false;
+    };
+    $('#btn_arrow_left, #btn_arrow_up, #btn_arrow_right, #btn_arrow_down').click(untoggleArrowButtons);
 });
