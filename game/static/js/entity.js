@@ -311,6 +311,27 @@ entitySetup = function() {
                 this.room.rightBarricade.make();
             }
         }
+
+        this.breakBarUp = function() {
+            if (this.room.up != null) {
+                this.room.upStairs.barricade.destroy();
+            }
+        }
+        this.breakBarDown = function() {
+            if (this.room.down != null) {
+                this.room.downStairs.barricade.destroy();
+            }
+        }
+        this.breakBarLeft = function() {
+            if (this.room.left != null) {
+                this.room.leftBarricade.destroy();
+            }
+        }
+        this.breakBarRight = function() {
+            if (this.room.right != null) {
+                this.room.rightBarricade.destroy();
+            }
+        }
     }
     Ghost.prototype = new Entity();
 
@@ -410,7 +431,7 @@ entitySetup = function() {
         this.destroy = function() {
             this.health = 0;
             this.exists = false;
-            this.visible = false;
+            this.item.visible = false;
         }
     }
     Barricade.prototype = new Entity();
