@@ -293,12 +293,12 @@ entitySetup = function() {
 
         this.barricadeUp = function() {
             if (this.room.up != null) {
-                this.room.upStairs.make();
+                this.room.upStairs.barricade.make();
             }
         }
         this.barricadeDown = function() {
             if (this.room.down != null) {
-                this.room.downStairs.make();
+                this.room.downStairs.barricade.make();
             }
         }
         this.barricadeLeft = function() {
