@@ -18,8 +18,8 @@ $(function() {
     //var snail = new SnailGroup(5);
     //var snailmoo = new SnailGroup(5);
 
-    var snailmoo = new SnailGroup(5, floor3Room3);
-    //var snailmoo = new Ghost('blue', floor3Room3);
+    //var snailmoo = new SnailGroup(5, outsideRight);
+    var snailmoo = new Ghost('blue', floor3Room3);
 
     var scaleCount = 0; 
     var weight = 1;
@@ -58,12 +58,12 @@ $(function() {
         if (event.key == 'd') {
             snailmoo.moveRight();
         }
-        if ((event.key == 'i') && (scaleCount < 5)) {
+        if ((event.key == 'i') && (scaleCount < 2)) {
             project.activeLayer.scale(1.25, view.center);
             weight *= 0.8;
             scaleCount++;
         }
-        if ((event.key == 'o') && (scaleCount > -10)) {
+        if ((event.key == 'o') && (scaleCount > -6)) {
             project.activeLayer.scale(0.8, view.center);
             weight *= 1.25;
             scaleCount--;
