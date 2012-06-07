@@ -53,7 +53,7 @@ entitySetup = function() {
     stairBarricadeSymbol.definition.scale(0.4);
 
     doorBarricadeSymbol = new Symbol(new Raster('doorBarricade'));
-    doorBarricadeSymbol.definition.scale(0.3);
+    doorBarricadeSymbol.definition.scale(0.4);
 
     /* Virtual class, adds attributes to an item. (this.item must be defined) */
     this.Entity = function() {
@@ -87,8 +87,8 @@ entitySetup = function() {
                 }
             }
             
-            /* Move the item 1/10th of the distance towards the destination. */ 
-            this.item.translate(vector.divide(5)); 
+            /* Move the item 1/7th of the distance towards the destination. */ 
+            this.item.translate(vector.divide(7)); 
         }
 
         /* Set the Entity's destination, flip it if necessary. */
@@ -352,12 +352,14 @@ entitySetup = function() {
 
     this.StairBarricade = function(position) {
         this.item = stairBarricadeSymbol.place(position);
+        this.item.visible = false;
     }
     StairBarricade.prototype = new Entity(); 
 
 
     this.doorBarricade = function(position) {
         this.item = doorBarricadeSymbol.place(position);
+        this.item.visible = false;
     }
     
     /* Declaration of room positions */
@@ -489,9 +491,33 @@ entitySetup = function() {
     stairBarricade9 = new StairBarricade(stairs9.startPoint.add(new Point(120, -50)));
     stairBarricade9.flip();
 
-    doorBarricade1 = new doorBarricade(floor1Room1.position.add(new Point(-200, -20)));
 
+    /* First Floor Barricades. */
+    doorBarricade1 = new doorBarricade(floor1Room1.position.add(new Point(-250, 10)));
+    doorBarricade2 = new doorBarricade(floor1Room2.position.add(new Point(-230, 10)));
+    doorBarricade3 = new doorBarricade(mainRoom.position.add(new Point(-440, 10)));
+    doorBarricade4 = new doorBarricade(floor1Room3.position.add(new Point(-230, 10)));
+    doorBarricade5 = new doorBarricade(floor1Room4.position.add(new Point(-230, 10)));
+    doorBarricade6 = new doorBarricade(floor1Room4.position.add(new Point(250, 10)));
+
+    /* Second Floor Barricades. */
+    doorBarricade7 = new doorBarricade(floor2Room2.position.add(new Point(230, 10)));
    
+    /* Third Floor Barricades. */
+    doorBarricade8 = new doorBarricade(floor3Room1.position.add(new Point(230, 10)));
+    doorBarricade9 = new doorBarricade(floor3Room2.position.add(new Point(230, 10)));
+    doorBarricade10 = new doorBarricade(floor3Room3.position.add(new Point(230, 10)));
+    doorBarricade11 = new doorBarricade(floor3Room4.position.add(new Point(230, 10)));
+
+    /* Fourth Floor Barricades. */
+    doorBarricade12 = new doorBarricade(floor4Room1.position.add(new Point(230, 10)));
+    doorBarricade13 = new doorBarricade(floor4Room2.position.add(new Point(230, 10)));
+    doorBarricade14 = new doorBarricade(floor4Room3.position.add(new Point(230, 10)));
+
+    /* Fifth Floor Barricades. */
+    doorBarricade15 = new doorBarricade(floor5Room1.position.add(new Point(240, 10)));
+
+
     /* Ammo box initialization. */
     ammoBox.position = mainRoom.position.add(new Point(0, 70));
 
