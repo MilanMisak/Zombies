@@ -108,7 +108,7 @@ $(function() {
 {% block content %}
 <canvas id="canvas" class="grid_9 alpha"></canvas>
 <div class="grid_3 alpha">
-    <div style="padding: 10px">
+    <div style="padding: 10px; height: 530px">
         <p>
             <a class="btn btn-success control_btn_left" id="btn_move" href="#">Move</a>
             <a class="btn btn-success control_btn_right" id="btn_barricade" href="#">Barricade</a>
@@ -141,13 +141,11 @@ $(function() {
             </a>
         </p>
     </div>
-    <div style="padding: 10px;">
-        <h3>Chat:</h3>
-        <div style="height: 100px"></div>
-        <p>
-            <input type="text" style="width: 110px" id="message_input" />
-            <a class="btn btn-success" href="#">Send</a>
-        </p>
+
+    <div style="padding: 10px">
+            <a class="btn btn-success" href="#" id="btn_show_instructions">
+                <i class="icon-info-sign icon-white"></i> Show Instructions
+            </a>
     </div>
 </div>
 

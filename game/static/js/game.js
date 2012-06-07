@@ -70,4 +70,10 @@ $(document).ready(function() {
     $(actionButtons).click(function() {
         $('#btn_arrow_go').removeClass('disabled');
     });
+
+    // Showing the instructions modal
+    $('#btn_show_instructions').click(function() {
+        $('#instructions_modal').modal();
+        return false;
+    });
 });
