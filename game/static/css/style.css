@@ -130,8 +130,8 @@ margin-left: 10px;
 .control_key {
 font-weight: bold;
 font-size: 150%;
-width: 10px;
-text-align: center;
+width: 50px;
+text-align: right;
 display: inline-block;
 }
 
