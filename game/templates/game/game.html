@@ -9,9 +9,8 @@ paper.install(window);
 $(function() {
     paper.setup('canvas');
 
-    var canvasWidth = $('#canvas').attr('data-width');
     $('#canvas').css('height', '600px');
-    paper.view.viewSize = [canvasWidth, 600];
+    paper.view.viewSize = [700, 600];
 
     entitySetup();
 
@@ -94,21 +93,20 @@ $(function() {
 {% endblock %}
 
 {% block content %}
-{% if game.players.count == 1 %}
-    <canvas id="canvas" class="grid_12 alpha" data-width="940"></canvas>
-{% else %}
-    <canvas id="canvas" class="grid_10 alpha" data-width="780"></canvas>
-    <div class="grid_2 alpha">
-        <div style="padding: 10px;">
-            <h3>Chat:</h3>
-            <div style="height: 100px"></div>
-            <p>
-                <input type="text" style="width: 110px" id="message_input" />
-                <a class="btn btn-danger" href="#">Send</a>
-            </p>
-        </div>
+<canvas id="canvas" class="grid_9 alpha"></canvas>
+<div class="grid_3 alpha">
+    <div style="padding: 10px">
+        <h3>Game Controls:</h3>
     </div>
-{% endif %}
+    <div style="padding: 10px;">
+        <h3>Chat:</h3>
+        <div style="height: 100px"></div>
+        <p>
+            <input type="text" style="width: 110px" id="message_input" />
+            <a class="btn btn-danger" href="#">Send</a>
+        </p>
+    </div>
+</div>
 
 <div id="instructions_modal" class="modal hide">
     <div class="modal-header">
