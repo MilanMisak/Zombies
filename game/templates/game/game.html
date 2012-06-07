@@ -58,12 +58,12 @@ $(function() {
         if (event.key == 'd') {
             snailmoo.moveRight();
         }
-        if ((event.key == 'i') && (scaleCount < 2)) {
+        if ((event.key == '=') && (scaleCount < 2)) {
             project.activeLayer.scale(1.25, view.center);
             weight *= 0.9;
             scaleCount++;
         }
-        if ((event.key == 'o') && (scaleCount > -6)) {
+        if ((event.key == '-') && (scaleCount > -6)) {
             project.activeLayer.scale(0.8, view.center);
             weight *= 1 / 0.9;
             scaleCount--;
@@ -80,10 +80,10 @@ $(function() {
         if (event.key == 'down') {
             scroll(new Point(0, -100 * weight));
         }
-        if (event.key == 'k') {
+        if (event.key == 'n') {
             snailmoo.pickUp();
         }
-        if (event.key == 'l') {
+        if (event.key == 'm') {
             snailmoo.drop();
         }
         if (event.key == 't') {
@@ -97,6 +97,18 @@ $(function() {
         }
         if (event.key == 'h') {
             snailmoo.barricadeRight();
+        }
+        if (event.key == 'i') {
+            snailmoo.breakBarUp();
+        }
+        if (event.key == 'j') {
+            snailmoo.breakBarLeft();
+        }
+        if (event.key == 'k') {
+            snailmoo.breakBarDown();
+        }
+        if (event.key == 'l') {
+            snailmoo.breakBarRight();
         }
 
     }
