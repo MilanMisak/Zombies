@@ -80,5 +80,6 @@ $(document).ready(function() {
     // The GO action
     $('#btn_arrow_go').click(function() {
         //TODO 
+        return false;
     });
 });
