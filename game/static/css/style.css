@@ -127,6 +127,14 @@ margin-left: 10px;
 margin-left: 10px;
 }
 
+.control_key {
+font-weight: bold;
+font-size: 150%;
+width: 10px;
+text-align: center;
+display: inline-block;
+}
+
 .error {
 color: #f00;
 margin-bottom: 0px;
