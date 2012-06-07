@@ -23,7 +23,7 @@ class Player(models.Model):
         """
         Deletes players not checked-in for 3 seconds or more.
         """
-        time = datetime.now() - timedelta(seconds=3)
+        time = datetime.now() - timedelta(seconds=10)
         Player.objects.filter(last_checked_in__lte=time).delete()
 
     def check_in(self):
@@ -47,7 +47,7 @@ class Game(models.Model):
         """
         Deletes games not checked-in for 3 seconds or more.
         """
-        time = datetime.now() - timedelta(seconds=3)
+        time = datetime.now() - timedelta(seconds=10)
         Game.objects.filter(last_checked_in__lte=time).delete()
         Game.objects.filter(master=None).delete()
 
