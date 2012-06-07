@@ -389,12 +389,12 @@ entitySetup = function() {
     this.Barricade = function() {
         this.item = doorBarricadeSymbol.place(view.center);
         this.exists = false;
-        this.health = 100;
+        this.health = 0;
 
         /* Repairs or makes the Barricade */
         this.make = function() {
-            if (health > 0) {
-                health = 100;
+            if (this.health > 0) {
+                this.health = 100;
                 return;
             }
             this.exists = true;
@@ -408,7 +408,8 @@ entitySetup = function() {
         }
     
         this.destroy = function() {
-            this.exists = false
+            this.health = 0;
+            this.exists = false;
             this.visible = false;
         }
     }
@@ -418,6 +419,7 @@ entitySetup = function() {
         this.item.remove();
         this.item = stairBarricadeSymbol.place(position);
         this.item.visible = false;
+        this.exsts = false;
     }
     StairBarricade.prototype = new Barricade(); 
 
@@ -426,7 +428,7 @@ entitySetup = function() {
         this.item.remove();
         this.item = doorBarricadeSymbol.place(position);
         this.item.visible = false;
-	    this.exists = false;
+        this.exists = false;
     }
     doorBarricade.prototype = new Barricade();
     
