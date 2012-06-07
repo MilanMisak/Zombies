@@ -26,6 +26,7 @@ $(document).ready(function() {
     };
 
     // Action buttons
+    var actionButtons = '#btn_move, #btn_barricade, #btn_shoot, #btn_reload';
     var actionIDs = ['#btn_move', '#btn_barricade', '#btn_shoot', '#btn_reload'];
     var untoggleActionButtons = function(e) {
         for (var id in actionIDs) {
@@ -38,7 +39,7 @@ $(document).ready(function() {
             replaceClass(this, 'btn-success', 'btn-warning');
         return false;
     };
-    $('.control_btn_left, .control_btn_right').click(untoggleActionButtons);
+    $(actionButtons).click(untoggleActionButtons);
 
     // Arrow buttons
     var arrowButtons = '#btn_arrow_left, #btn_arrow_up, #btn_arrow_right, #btn_arrow_down';
@@ -65,4 +66,8 @@ $(document).ready(function() {
         $(arrowButtons).removeClass('btn-warning').addClass('disabled btn-success');
     });
     
+    // Enabling the GO button
+    $(actionButtons).click(function() {
+        $('#btn_arrow_go').removeClass('disabled');
+    });
 });
