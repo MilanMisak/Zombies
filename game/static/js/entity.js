@@ -44,7 +44,6 @@ entitySetup = function() {
     snailSymbol = new Symbol(snailGroup);
     snailGroup.scale(0.2);
 
-
     /* Code for the ghost symbol */
     ghostSymbol = new Symbol(new Raster('ghost'));
     ghostSymbol.definition.scale(0.2);
