@@ -76,7 +76,7 @@ $(document).ready(function() {
     var selectedDirection = null;
 
     // Action buttons
-    var actionIDs = ['#btn_move', '#btn_barricade', '#btn_shoot', '#btn_reload'];
+    var actionIDs = ['#btn_move', '#btn_skip_go', '#btn_shoot', '#btn_reload', '#btn_barricade', '#btn_debarricade'];
     var untoggleActionButtons = function(e) {
         if (isDisabled(this))
             return;
@@ -106,12 +106,12 @@ $(document).ready(function() {
     });
 
     // Disabling and enabling the arrow buttons depending on the selected action
-    $('#btn_move, #btn_barricade, #btn_shoot').click(function() {
+    $('#btn_move, #btn_shoot, #btn_barricade, #btn_debarricade').click(function() {
         $.each(arrowIDs, function(i, v) {
              $(v).removeClass('disabled');
         });
     });
-    $('#btn_reload').click(function() {
+    $('#btn_skip_go, #btn_reload').click(function() {
         $.each(arrowIDs, function(i, v) {
              $(v).addClass('disabled');
              untoggle(null, v);
@@ -123,7 +123,8 @@ $(document).ready(function() {
     var enableGoAndFlashActionInstructions = function(e) {
         if (this == undefined)
             return;
-        if ($(this).attr('id') != 'btn_reload') {
+        var id = $(this).attr('id');
+        if (id !== 'btn_skip_go' && id !== 'btn_reload') {
             $('#btn_arrow_go').addClass('disabled');
             $('#instruction_label').html('Pick a direction and click GO');
         } else {
@@ -180,7 +181,7 @@ $(document).ready(function() {
     // The GO action
     $('#btn_arrow_go').click(function(e) {
         if (isDisabled(this))
-            return;
+            return false;
         
         console.log(canMove("Up"));
         console.log(canMove("Left"));
@@ -190,14 +191,20 @@ $(document).ready(function() {
         case 'Move':
             alert('m ' + selectedDirection);
             break;
-        case 'Barricade':
-            alert('b ' + selectedDirection);
+        case 'Skip Go':
+            alert('g ');
             break;
         case 'Shoot':
             alert('s ' + selectedDirection);
             break;
         case 'Reload':
             alert('r');
+            break;
+        case 'Barricade':
+            alert('b ' + selectedDirection);
+            break;
+        case 'Debarricade':
+            alert('d ' + selectedDirection);
             break;
         default:
             break;
