@@ -1,19 +1,27 @@
-$(document).ready(function() {
-    var updateGameInfo = function() {
-        $.getJSON('/ajax-game-info', function(data) {
-            var items = [];
+var documentReady = false;
 
-            $.each(data[2], function(key, val) {
-                items.push('<li>' + val + '</li>');
-            });
+// Outside the document ready handler for immediate execution
+var updateGameInfo = function() {
+    $.getJSON('/ajax-game-info', function(data) {
+        if (!documentReady)
+            return;
 
-            $('#player_list').html('<ul>' + items.join('') + '</ul>');
-        }).error(function(xhr, status, data) {
-            alert('The game you created was cancelled. Please try again');
-            window.location.replace('/');
+        var items = [];
+
+        $.each(data[2], function(key, val) {
+            items.push('<li>' + val + '</li>');
         });
-    };
 
-    updateGameInfo();
-    setInterval(updateGameInfo, 1000);
+        $('#player_list').html('<ul>' + items.join('') + '</ul>');
+    }).error(function(xhr, status, data) {
+        alert('The game you created was cancelled. Please try again');
+        window.location.replace('/');
+    });
+};
+
+updateGameInfo();
+setInterval(updateGameInfo, 1000);
+
+$(document).ready(function() {
+    documentReady = true;
 });

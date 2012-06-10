@@ -1,3 +1,4 @@
+// Outside the document ready handler for immediate execution
 var updateGameInfo = function() {
     $.getJSON('/ajax-game-info', function(data) {
     }).error(function(xhr, status, data) {

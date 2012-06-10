@@ -1,4 +1,42 @@
+var documentReady = false;
+
+// Outside the document ready handler for immediate execution
+var updateGameInfo = function() {
+    $.getJSON('/ajax-game-info', function(data) {
+        if (!documentReady)
+            return;
+
+        if (data[1] === 1) {
+            // Game has started
+            window.location.replace('/game');
+        }
+
+        var items = [];
+
+        $.each(data[2], function(key, val) {
+            items.push('<li>' + val + '</li>');
+        });
+
+        $('#game_name').html(data[0]);
+        $('#joined_game_instructions').fadeIn();
+        $('#player_list').html('<ul>' + items.join('') + '</ul>');
+    }).error(function(xhr, status, data) {
+        if ('NO-GAME' === xhr.responseText && hasJoinedGameYet) {
+            // No game associated with this player anymore
+            hasJoinedGameYet = false;
+            $('#game_name').html('');
+            $('#joined_game_instructions').fadeOut();
+            alert('The game you joined was cancelled');
+        }
+        $('#player_list').html('<p>No game joined</p>');
+    });
+};
+
+updateGameInfo();
+setInterval(updateGameInfo, 1000);
+
 $(document).ready(function() {
+    documentReady = true;
     var hasJoinedGameYet = false;
 
     var updateGameList = function() {
@@ -29,35 +67,6 @@ $(document).ready(function() {
         });
     };
 
-    var updateGameInfo = function() {
-        $.getJSON('/ajax-game-info', function(data) {
-            if (data[1] === 1) {
-                // Game has started
-                window.location.replace('/game');
-            }
-
-            var items = [];
-
-            $.each(data[2], function(key, val) {
-                items.push('<li>' + val + '</li>');
-            });
-
-            $('#game_name').html(data[0]);
-            $('#joined_game_instructions').fadeIn();
-            $('#player_list').html('<ul>' + items.join('') + '</ul>');
-        }).error(function(xhr, status, data) {
-            if ('NO-GAME' === xhr.responseText && hasJoinedGameYet) {
-                // No game associated with this player anymore
-                hasJoinedGameYet = false;
-                $('#game_name').html('');
-                $('#joined_game_instructions').fadeOut();
-                alert('The game you joined was cancelled');
-            }
-            $('#player_list').html('<p>No game joined</p>');
-        });
-    };
-
     updateGameList();
     setInterval(updateGameList, 1000);
-    setInterval(updateGameInfo, 1000);
 });
