@@ -182,6 +182,9 @@ $(document).ready(function() {
         if (isDisabled(this))
             return;
         
+        console.log(canMove("Up"));
+        console.log(canMove("Left"));
+
         //TODO 
         switch (selectedAction) {
         case 'Move':
