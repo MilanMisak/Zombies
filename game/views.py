@@ -103,12 +103,14 @@ def ajax_games(request):
 def ajax_game_info(request):
     player = get_player(request)
     if player is None:
+        print 'NO-PLAYER'
         return HttpResponseBadRequest('NO-PLAYER')
 
     print 'GAME-INFO {}'.format(player)
     
     game = player.game
     if game is None:
+        print 'NO-GAME'
         return HttpResponseBadRequest('NO-GAME')
 
     json = simplejson.dumps([str(game), game.status, game.get_list_of_players_names()])

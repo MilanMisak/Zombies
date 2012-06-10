@@ -1,18 +1,17 @@
-var documentReady = false;
+var instructionsModalShown = false;
 var errorModalShown = false;
 
 // Outside the document ready handler for immediate execution
 var updateGameInfo = function() {
     $.getJSON('/ajax-game-info', function(data) {
     }).error(function(xhr, status, data) {
-        if (!documentReady) {
-            alert('Oops! An error has occurred.');
-            return;
-        }
-
         if (errorModalShown)
             return;
         errorModalShown = true;
+
+        if (instructionsModalShown) {
+            $('#instructions_modal').modal('hide');
+        }
 
         if ('NO-GAME' === xhr.responseText) {
             $('#error_reason').html('the game was cancelled.');
@@ -21,10 +20,10 @@ var updateGameInfo = function() {
                 'Are you experiencing any internet connection issues?');
         }
 
-        $('#error_modal').modal('show');
         $('#error_modal').on('hide', function() {
             window.location.replace('/');
         });
+        $('#error_modal').modal('show');
     });
 };
 
@@ -32,11 +31,12 @@ updateGameInfo();
 setInterval(updateGameInfo, 1000);
 
 // Show a modal with instructions
+$('#instructions_modal').on('show', function() {
+    instructionsModalShown = true;
+});
 $('#instructions_modal').modal('show');
 
 $(document).ready(function() {
-    documentReady = true;
-
     // Disable page scrolling
     $(document).keydown(function(e) {
         if (e.keyCode >= 37 && e.keyCode <= 40)

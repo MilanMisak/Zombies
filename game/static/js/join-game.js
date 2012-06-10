@@ -1,18 +1,18 @@
 var documentReady = false;
+var hasJoinedGameYet = false;
 
 // Outside the document ready handler for immediate execution
 var updateGameInfo = function() {
     $.getJSON('/ajax-game-info', function(data) {
-        if (!documentReady)
-            return;
-
         if (data[1] === 1) {
             // Game has started
             window.location.replace('/game');
         }
 
-        var items = [];
+        if (!documentReady)
+            return;
 
+        var items = [];
         $.each(data[2], function(key, val) {
             items.push('<li>' + val + '</li>');
         });
@@ -37,7 +37,6 @@ setInterval(updateGameInfo, 1000);
 
 $(document).ready(function() {
     documentReady = true;
-    var hasJoinedGameYet = false;
 
     var updateGameList = function() {
         $.getJSON('/ajax-games', function(data) {
@@ -63,6 +62,7 @@ $(document).ready(function() {
                 });
             });
         }).error(function(xhr, status, data) {
+            alert('An error occurred');
             window.location.replace('/');
         });
     };
