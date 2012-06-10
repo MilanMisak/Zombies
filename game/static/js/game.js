@@ -207,7 +207,7 @@ $(document).ready(function() {
             //alert('r');
             break;
         case 'Barricade':
-            if (canBarricade(selectedDirection())
+            if (canBarricade(selectedDirection))
                 Barricade(selectedDirection);
             //alert('b ' + selectedDirection);
             break;
