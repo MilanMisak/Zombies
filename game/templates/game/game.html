@@ -116,6 +116,19 @@ $(function() {
 </script>
 {% endblock %}
 
+{% block error_modal %}
+    <div class="modal-header">
+        <h3>Oops! An error has occurred.</h3>
+    </div>
+    <div class="modal-body">
+        <p>It looks like that <span id="error_reason"></span</p>
+        <p>You will now be redirected to the main page where you can create or join a different game.</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary btn-success" data-dismiss="modal">Fine</a>
+    </div>
+{% endblock %}
+
 {% block content %}
 <div id="instructions_modal" class="modal hide">
     <div class="modal-header">
@@ -130,24 +143,11 @@ $(function() {
             <span class="control_key big">IJKL</span> Break Barricades<br>
             <span class="control_key big">N</span> Pick Up Ammo Crate<br>
             <span class="control_key big">M</span> Drop Ammo Crate<br>
-            <span class="control_key">arrow keys</span> Move Camera<br>
+            <span class="control_key">arrow keys</span> Move Camera
         </p>
     </div>
     <div class="modal-footer">
         <a href="#" class="btn btn-primary btn-success" data-dismiss="modal">Got It!</a>
-    </div>
-</div>
-
-<div id="error_modal" class="modal hide">
-    <div class="modal-header">
-        <h3>Oops! An error has occurred.</h3>
-    </div>
-    <div class="modal-body">
-        <p>It looks like that <span id="error_reason"></span</p>
-        <p>You will now be redirected to the main page where you can create or join a different game.</p>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn btn-primary btn-success" data-dismiss="modal">Fine</a>
     </div>
 </div>
 

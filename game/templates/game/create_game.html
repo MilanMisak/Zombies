@@ -4,6 +4,19 @@
     <script type="text/javascript" src="/static/js/create-game.js"></script>
 {% endblock %}
 
+{% block error_modal %}
+    <div class="modal-header">
+        <h3>Oops! An error has occurred.</h3>
+    </div>
+    <div class="modal-body">
+        <p>It looks like that the game you created was cancelled for some reason.</p>
+        <p>You will now be redirected to the main page where you can create or join a different game.</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary btn-success" data-dismiss="modal">Fine</a>
+    </div>
+{% endblock %}
+
 {% block content %}
     <div class="grid_4 push_4" style="text-align: center; padding-top: 10px">
         <p>List of Players:</p>
