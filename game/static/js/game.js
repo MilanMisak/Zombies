@@ -1,9 +1,30 @@
+var documentReady = false;
+var errorModalShown = false;
+
 // Outside the document ready handler for immediate execution
 var updateGameInfo = function() {
     $.getJSON('/ajax-game-info', function(data) {
     }).error(function(xhr, status, data) {
-        alert('Oops! An error has occurred.');
-        window.location.replace('/');
+        if (!documentReady) {
+            alert('Oops! An error has occurred.');
+            return;
+        }
+
+        if (errorModalShown)
+            return;
+        errorModalShown = true;
+
+        if ('NO-GAME' === xhr.responseText) {
+            $('#error_reason').html('the game was cancelled.');
+        } else {
+            $('#error_reason').html('your player has been wiped off the server. ' +
+                'Are you experiencing any internet connection issues?');
+        }
+
+        $('#error_modal').modal('show');
+        $('#error_modal').on('hide', function() {
+            window.location.replace('/');
+        });
     });
 };
 
@@ -14,6 +35,8 @@ setInterval(updateGameInfo, 1000);
 $('#instructions_modal').modal('show');
 
 $(document).ready(function() {
+    documentReady = true;
+
     // Disable page scrolling
     $(document).keydown(function(e) {
         if (e.keyCode >= 37 && e.keyCode <= 40)
