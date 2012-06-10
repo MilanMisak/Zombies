@@ -802,16 +802,40 @@ entitySetup = function() {
     }
 
     this.shoot = function(direction) {
-        return true;
+        player.shoot(direction);
     }
 
     this.canReload = function() {
-        return true; /* for now */    
+        return player.canReload();   
     }
 
     this.reload = function() {
-        return true;
+        player.reload();
     }
+
+    this.canPickUp = function() {
+        return player.canPickUp();
+    }
+    
+    this.pickUp = function() {
+        player.pickUp();
+    }
+    
+    this.canDrop = function() {
+        return player.canDrop();
+    }
+    
+    this.drop = function() {
+        player.drop();
+    }
+    
+    this.canBreakBarricade = function(direction) {
+        return true;
+    }   
+    
+    this.breakBarricade = function(direction) {
+        return true;
+    }   
 
 }
 
