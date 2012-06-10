@@ -1,15 +1,15 @@
+var updateGameInfo = function() {
+    $.getJSON('/ajax-game-info', function(data) {
+    }).error(function(xhr, status, data) {
+        alert('Oops! An error has occurred.');
+        window.location.replace('/');
+    });
+};
+
+updateGameInfo();
+setInterval(updateGameInfo, 1000);
+
 $(document).ready(function() {
-    var updateGameInfo = function() {
-        $.getJSON('/ajax-game-info', function(data) {
-        }).error(function(xhr, status, data) {
-            alert('Oops! An error has occurred.');
-            window.location.replace('/');
-        });
-    };
-
-    updateGameInfo();
-    setInterval(updateGameInfo, 1000);
-
     // Show a modal with instructions
     $('#instructions_modal').modal('show');
 
