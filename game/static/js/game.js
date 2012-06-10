@@ -49,67 +49,99 @@ $(document).ready(function() {
         $(obj).attr('class', classes.replace(whatClass, withClass));
     };
 
+    var green = 'btn-success';  // Not pressed
+    var yellow = 'btn-warning'; // Pressed
+
+    // Toggles a button with a given selector
+    var toggle = function(aux, selector) {
+        replaceClass(selector, green, yellow);
+    };
+
+    // Untoggles a button with a given selector 
+    var untoggle = function(aux, selector) {
+        replaceClass(selector, yellow, green);
+    };
+
+    // Checks if a button is toggled
+    var isToggled = function(selector) {
+        return $(selector).hasClass(yellow);
+    };
+
+    // Checks if a button is disabled
+    var isDisabled = function(obj) {
+        return obj != undefined && $(obj).hasClass('disabled');
+    };
+
     // Action buttons
-    var actionButtons = '#btn_move, #btn_barricade, #btn_shoot, #btn_reload';
     var actionIDs = ['#btn_move', '#btn_barricade', '#btn_shoot', '#btn_reload'];
     var untoggleActionButtons = function(e) {
-        for (var id in actionIDs) {
-            var actionID = actionIDs[id];
-            if ($(actionID).hasClass('btn-warning')) {
-                replaceClass(actionID, 'btn-warning', 'btn-success');
-            }
-        }
+        if (isDisabled(this))
+            return;
+        $.each(actionIDs, untoggle);
         if (this != undefined)
-            replaceClass(this, 'btn-success', 'btn-warning');
+            toggle(null, '#' + $(this).attr('id'));
         return false;
     };
-    $(actionButtons).click(untoggleActionButtons);
+    $.each(actionIDs, function(i, v) {
+        $(v).click(untoggleActionButtons);
+    });
 
     // Arrow buttons
-    var arrowButtons = '#btn_arrow_left, #btn_arrow_up, #btn_arrow_right, #btn_arrow_down';
     var arrowIDs = ['#btn_arrow_left', '#btn_arrow_up', '#btn_arrow_right', '#btn_arrow_down'];
     var untoggleArrowButtons = function(e) {
-        for (var id in arrowIDs) {
-            var arrowID = arrowIDs[id];
-            if ($(arrowID).hasClass('btn-warning')) {
-                replaceClass(arrowID, 'btn-warning', 'btn-success');
-            }
-        }
+        if (isDisabled(this))
+            return;
+        $.each(arrowIDs, untoggle);
         if (this != undefined)
-            replaceClass(this, 'btn-success', 'btn-warning');
+            toggle(null, '#' + $(this).attr('id'));
         return false;
     };
-    $(arrowButtons).click(untoggleArrowButtons);
+    $.each(arrowIDs, function(i, v) {
+        $(v).click(untoggleArrowButtons);
+    });
 
     // Disabling and enabling the arrow buttons depending on the selected action
     $('#btn_move, #btn_barricade, #btn_shoot').click(function() {
-        $(arrowButtons).removeClass('disabled');
+        $.each(arrowIDs, function(i, v) {
+             $(v).removeClass('disabled');
+        });
     });
     $('#btn_reload').click(function() {
-        $(arrowButtons).removeClass('btn-warning').addClass('disabled btn-success');
+        $.each(arrowIDs, function(i, v) {
+             $(v).addClass('disabled');
+             untoggle(null, v);
+        });
     });
     
-    // Enabling the GO button and flashing action instructions
-    $(actionButtons).click(function(e) {
-        if (this != undefined) {
-            if ($(this).attr('id') != 'btn_reload') {
-                $('#btn_arrow_go').addClass('disabled');
-                $('#instruction_label').html('Pick a direction and click GO');
-            } else {
-                $('#btn_arrow_go').removeClass('disabled');
-                $('#instruction_label').html('Click GO');
-            }
-            $('#instruction_label').fadeIn();
-            $('#instruction_label').fadeOut(1000);
+    // A callback for enabling the GO button and flashing action instructions
+    var enableGoAndFlashActionInstructions = function(e) {
+        if (this == undefined)
+            return;
+        if ($(this).attr('id') != 'btn_reload') {
+            $('#btn_arrow_go').addClass('disabled');
+            $('#instruction_label').html('Pick a direction and click GO');
+        } else {
+            $('#btn_arrow_go').removeClass('disabled');
+            $('#instruction_label').html('Click GO');
         }
+        $('#instruction_label').fadeIn();
+        $('#instruction_label').fadeOut(1000);
+    };
+    $.each(actionIDs, function(i, v) {
+        $(v).click(enableGoAndFlashActionInstructions);
     });
 
-    // Flashing arrow instructions
-    $(arrowButtons).click(function(e) {
+    // Flashes arrow instructions
+    var flashArrowInstructions = function(e) {
+        if (isDisabled(this))
+            return;
         $('#instruction_label').html('Click GO');
         $('#instruction_label').fadeIn();
         $('#instruction_label').fadeOut('slow');
         $('#btn_arrow_go').removeClass('disabled');
+    };
+    $.each(arrowIDs, function(i, v) {
+        $(v).click(flashArrowInstructions); 
     });
 
     // Showing the instructions modal
@@ -125,26 +157,30 @@ $(document).ready(function() {
         $('#instruction_label').fadeOut('slow');
     });
 
+    // Enable a button
+    var enable = function(aux, selector) {
+        $(selector).removeClass('disabled');
+        if (isToggled(selector))
+            untoggle(null, selector);
+    };
+    
+    // Disable a button
+    var disable = function(aux, selector) {
+        $(selector).addClass('disabled');
+        if (isToggled(selector))
+            untoggle(null, selector);
+    };
+
     // The GO action
-    $('#btn_arrow_go').click(function() {
+    $('#btn_arrow_go').click(function(e) {
+        if (isDisabled(this))
+            return;
+        
         //TODO 
 
-        $(actionButtons).removeClass('disabled');
-        for (var id in actionIDs) {
-            var actionID = actionIDs[id];
-            if ($(actionID).hasClass('btn-warning')) {
-                replaceClass(actionID, 'btn-warning', 'btn-success');
-            }
-        }
-
-        $(arrowButtons).addClass('disabled');
-        for (var id in arrowIDs) {
-            var arrowID = arrowIDs[id];
-            if ($(arrowID).hasClass('btn-warning')) {
-                replaceClass(arrowID, 'btn-warning', 'btn-success');
-            }
-        }
-
+        $.each(actionIDs, enable);
+        $.each(arrowIDs, disable);
+        
         $('#btn_arrow_go').addClass('disabled');
 
         return false;
