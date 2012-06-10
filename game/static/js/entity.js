@@ -210,7 +210,9 @@ entitySetup = function() {
         }
         
         this.setRoom = function(room) {
+            this.room.removeSnailGroup(this);
             this.room = room;
+            this.room.addSnailGroup(this);
             for (var i = 0; i < noOfEntities; i++) 
                 this.item.children[i].Parent.setRoom(room);
         }
@@ -398,7 +400,7 @@ entitySetup = function() {
         this.down = null;
         this.left = null;
         this.right = null;
-        this.containsSnails = false;
+        this.snails = new Array();
 
         this.setUpStairs = function(room, stairs) {
             this.up = room;
@@ -418,7 +420,19 @@ entitySetup = function() {
         this.setDoorLeadingLeft = function(room, doorBarricade) {
             this.left = room;
             this.leftBarricade = doorBarricade;
-        }   
+        } 
+
+        this.containsSnails = function() {
+            return (this.snails.length > 0);
+        }
+        
+        this.addSnailGroup = function(snails) {
+            this.snails.push(snails);
+        }
+    
+        this.removeSnailGroup = function(snails) {
+            this.snails.remove(snails);
+        }        
     }
     
     this.Stairs = function(startPoint, endPoint) {
@@ -655,6 +669,17 @@ entitySetup = function() {
     /* Ammo box initialization. */
     ammoBox.position = mainRoom.position.add(new Point(0, 70));
 
+}
+
+Array.prototype.remove= function(){
+    var what, a= arguments, L= a.length, ax;
+    while(L && this.length){
+        what= a[--L];
+        while((ax= this.indexOf(what))!= -1){
+            this.splice(ax, 1);
+        }
+    }
+    return this;
 }
 
 
