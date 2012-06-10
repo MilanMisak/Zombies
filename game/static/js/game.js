@@ -72,11 +72,15 @@ $(document).ready(function() {
         return obj != undefined && $(obj).hasClass('disabled');
     };
 
+    var selectedAction = null;
+    var selectedDirection = null;
+
     // Action buttons
     var actionIDs = ['#btn_move', '#btn_barricade', '#btn_shoot', '#btn_reload'];
     var untoggleActionButtons = function(e) {
         if (isDisabled(this))
             return;
+        selectedAction = $(this).attr('data-action');
         $.each(actionIDs, untoggle);
         if (this != undefined)
             toggle(null, '#' + $(this).attr('id'));
@@ -91,6 +95,7 @@ $(document).ready(function() {
     var untoggleArrowButtons = function(e) {
         if (isDisabled(this))
             return;
+        selectedDirection = $(this).attr('data-direction');
         $.each(arrowIDs, untoggle);
         if (this != undefined)
             toggle(null, '#' + $(this).attr('id'));
@@ -111,6 +116,7 @@ $(document).ready(function() {
              $(v).addClass('disabled');
              untoggle(null, v);
         });
+        selectedDirection = null;
     });
     
     // A callback for enabling the GO button and flashing action instructions
@@ -177,11 +183,28 @@ $(document).ready(function() {
             return;
         
         //TODO 
+        switch (selectedAction) {
+        case 'Move':
+            alert('m ' + selectedDirection);
+            break;
+        case 'Barricade':
+            alert('b ' + selectedDirection);
+            break;
+        case 'Shoot':
+            alert('s ' + selectedDirection);
+            break;
+        case 'Reload':
+            alert('r');
+            break;
+        default:
+            break;
+        }
 
+        // Put buttons in their initial state
         $.each(actionIDs, enable);
         $.each(arrowIDs, disable);
-        
         $('#btn_arrow_go').addClass('disabled');
+        selectedAction = null;
 
         return false;
     });
