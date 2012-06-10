@@ -127,16 +127,16 @@ entitySetup = function() {
         this.canMove = function(direction) {
             switch (direction) {
                 case "Left":
-                    return (this.room.left == null || this.room.leftBarricade.exists)
+                    return !(this.room.left == null || this.room.leftBarricade.exists)
                     break;
                 case "Right":
-                    return (this.room.right == null || this.room.leftBarricade.exists)
+                    return !(this.room.right == null || this.room.leftBarricade.exists)
                     break;
                 case "Up":
-                    return (this.room.up == null || this.room.upStairs.barricade.exists)
+                    return !(this.room.up == null || this.room.upStairs.barricade.exists)
                     break;
                 case "Down":
-                    return (this.room.down == null || this.room.downStairs.barricade.exists)
+                    return !(this.room.down == null || this.room.downStairs.barricade.exists)
                     break;
             }          
         }
@@ -276,6 +276,7 @@ entitySetup = function() {
         this.destination = position;
         this.room = room;
         this.holdingBox = false;
+        this.ammo = 5;
 
         /* Animation for ghost picking up box */
         this.pickUp = function() {
@@ -296,6 +297,10 @@ entitySetup = function() {
             this.holdingBox = true;
         }
 
+        this.canPickUp = function() {
+            return (ammoBox.visible && (this.room == ammoBox.room));
+        }
+
         /* Animation for ghost dropping box */
         this.drop = function() {
             if (!this.holdingBox)
@@ -312,42 +317,62 @@ entitySetup = function() {
             hatDestroy.remove(); 
 
             ammoBox.position = this.item.position.add(new Point(-10, 65));
+            ammoBox.room = this.room;
             ammoBox.visible = true; 
             this.holdingBox = false; 
         }
 
+        this.canDrop = function() {
+            return this.holdingBox;
+        }   
+
         this.canBarricade = function(direction) {
             switch (direction) {
                 case "Left":
-                    return (this.room.left != null || !this.room.containsSnails)
+                    return (this.room.left != null && !this.room.containsSnails)
                     break;
                 case "Right":
-                    return (this.room.right != null || !this.room.containsSnails)
+                    return (this.room.right != null && !this.room.containsSnails)
                     break;
                 case "Up":
-                    return (this.room.up != null || !this.room.containsSnails)
+                    return (this.room.up != null && !this.room.containsSnails)
                     break;
                 case "Down":
-                    return (this.room.down != null || !this.room.containsSnails)
+                    return (this.room.down != null && !this.room.containsSnails)
                     break;
             }
         }
 
-        this.canReload = function(direction) {
+        this.shoot = function(direction){
+            return true;
+        }
+
+        this.canShoot = function(direction) {
+            if (this.ammo == 0)
+                return false;
+
             switch(direction) {
                 case "Left":
-                    return (this.room.left != null || this.room.containsSnails)
+                    return (this.room.left != null && this.room.containsSnails)
                     break;
                 case "Right":
-                    return (this.room.right != null || this.room.containsSnails)
+                    return (this.room.right != null && this.room.containsSnails)
                     break;
                 case "Up":
-                    return (this.room.up != null || this.room.containsSnails)
+                    return (this.room.up != null && this.room.containsSnails)
                     break;
                 case "Down":
-                    return (this.room.down != null || this.room.containsSnails)
+                    return (this.room.down != null && this.room.containsSnails)
                     break;
             }
+        }
+
+        this.reload = function() {
+            this.ammo = 5;
+        }
+
+        this.canReload = function() {
+            return ((this.room == ammoBox.room) && this.ammo < 5);
         }
 
         this.barricadeUp = function() {
@@ -704,6 +729,7 @@ entitySetup = function() {
 
     /* Ammo box initialization. */
     ammoBox.position = mainRoom.position.add(new Point(0, 70));
+    ammoBox.room = mainRoom;
 
 
     player = new Ghost('blue', mainRoom);
@@ -712,17 +738,61 @@ entitySetup = function() {
         return player.canMove(direction);
     }	
 
+    this.Move = function(direction) {
+        switch (direction) {
+            case "Left":
+                player.moveLeft();
+                break;
+            case "Right":
+                player.moveRight();
+                break;
+            case "Up":
+                player.moveUp();
+                break;
+            case "Down":
+                player.moveDown();
+                break;
+        }
+                
+    }
+
     this.canBarricade = function(direction) {
         return player.canBarricade(direction);
+    }
+
+    this.Barricade = function() {
+        switch (direction) {
+            case "Left":
+                player.barricadeLeft();
+                break;
+            case "Right":
+                player.barricadeRight();
+                break;
+            case "Up":
+                player.barricadeUp();
+                break;
+            case "Down":
+                player.barricadeDown();
+                break;
+        }
     }
     
     this.canShoot = function(direction) {
         return player.canShoot(direction);
     }
 
-    this.canReload = function(direction) {
+    this.shoot = function(direction) {
+        return true;
+    }
+
+    this.canReload = function() {
         return true; /* for now */    
     }
+
+    this.reload = function() {
+        return true;
+    }
+
 }
 
 Array.prototype.remove= function(){
