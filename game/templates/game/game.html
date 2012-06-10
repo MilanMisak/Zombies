@@ -14,48 +14,41 @@ $(function() {
 
     entitySetup();
 
-    //var snail = new SnailGroup(5);
-    //var snailmoo = new SnailGroup(5);
-
-    //var snailmoo = new SnailGroup(5, outsideRight);
-    var snailmoo = new Ghost('blue', floor3Room3);
+    var player = new Ghost('blue', mainRoom);
 
     var scaleCount = 0; 
     var weight = 1;
 
     view.onFrame = function(event) {
         snailUpdate();
-        //snail.move();
-        snailmoo.move();
+        player.move();
     }
 
-    var click = true;
-    tool.onMouseDown = function(event) {
-        if (click) {
-            //snailmoo.setDestination(mainRoom.position);
-            //snail.setDestination(event.point);
-        } else {
-            //snailmoo.setDestination(event.point);
-        }
-        click = !click;
-    }
     scroll = function(movement) {
         if (!project.activeLayer.translate(movement).bounds.contains(view.center))
             project.activeLayer.translate(movement.multiply(-1));
     }
+
+    canMove = function(direction) {
+        return player.canMove(direction);
+    }
     
+    canBarricade = function(direction) {
+        return player.canBarricade(direction);
+    }
+
     tool.onKeyDown = function(event) {
         if (event.key == 'w') {
-            snailmoo.moveUp();
+            player.moveUp();
         }
         if (event.key == 'a') {
-            snailmoo.moveLeft();
+            player.moveLeft();
         }
         if (event.key == 's') {
-            snailmoo.moveDown();
+            player.moveDown();
         }
         if (event.key == 'd') {
-            snailmoo.moveRight();
+            player.moveRight();
         }
         if ((event.key == '=') && (scaleCount < 2)) {
             project.activeLayer.scale(1.25, view.center);
@@ -80,34 +73,34 @@ $(function() {
             scroll(new Point(0, -100 * weight));
         }
         if (event.key == 'n') {
-            snailmoo.pickUp();
+            player.pickUp();
         }
         if (event.key == 'm') {
-            snailmoo.drop();
+            player.drop();
         }
         if (event.key == 't') {
-            snailmoo.barricadeUp();
+            player.barricadeUp();
         }
         if (event.key == 'f') {
-            snailmoo.barricadeLeft();
+            player.barricadeLeft();
         }
         if (event.key == 'g') {
-            snailmoo.barricadeDown();
+            player.barricadeDown();
         }
         if (event.key == 'h') {
-            snailmoo.barricadeRight();
+            player.barricadeRight();
         }
         if (event.key == 'i') {
-            snailmoo.breakBarUp();
+            player.breakBarUp();
         }
         if (event.key == 'j') {
-            snailmoo.breakBarLeft();
+            player.breakBarLeft();
         }
         if (event.key == 'k') {
-            snailmoo.breakBarDown();
+            player.breakBarDown();
         }
         if (event.key == 'l') {
-            snailmoo.breakBarRight();
+            player.breakBarRight();
         }
 
     }
