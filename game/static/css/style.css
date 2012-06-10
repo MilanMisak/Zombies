@@ -7,6 +7,15 @@ padding: 50px 0px;
 color: #999;
 }
 
+#headline a {
+color: #000;
+}
+
+#headline a:hover {
+color: #555;
+text-decoration: none;
+}
+
 h1 {
 font-size: 6em;
 font-family: 'Chango', cursive;

@@ -140,6 +140,10 @@ entitySetup = function() {
                     return (this.room.down == null || this.room.downStairs.barricade.exists)
                     break;
             }          
+        }
+
+        this.kill = function() {
+            this.item.remove();
         }	
 
         this.moveLeft = function() {
@@ -180,8 +184,9 @@ entitySetup = function() {
     }
 
     /* Creates a group of entities. (used for groups of snails) */
-    this.SnailGroup = function(noOfEntities, room) {
+    this.SnailGroup = function(noOfEntities, room, strength) {
         this.room = room;
+        this.strength = strength;
         this.item = new Group();
         for (var i = 0; i < noOfEntities; i++) {
             var snail = new Snail(room); 
@@ -209,6 +214,20 @@ entitySetup = function() {
             }
         }
         
+        this.hurt = function(damage) {
+            this.strength -= damage;
+            if (this.strength <= 0)
+                this.kill;
+        }
+ 
+        this.setStrength = function(newStrength) {
+            this.strength = newStrength;
+        }
+        
+        this.attack = function(barricade) {
+            barricade.damage(this.strength);
+        }
+
         this.setRoom = function(room) {
             this.room.removeSnailGroup(this);
             this.room = room;
@@ -221,7 +240,7 @@ entitySetup = function() {
     SnailGroup.prototype = new Entity();
 
 
-    this.Snail = function(room) {
+    this.Snail = function(room, strength) {
         this.item = snailSymbol.place(room.position.add(new Point(0, 70)));
         this.item.Parent = this;
         this.room = room;
@@ -230,7 +249,7 @@ entitySetup = function() {
         this.pushDestination = function(destination) {
             this.destinations.push(destination.add(new Point(0, 70)));
             this.moving = true;
-        }
+        }        
         
         this.faceTarget = function() {
             this.item.rotate(this.rotation);
