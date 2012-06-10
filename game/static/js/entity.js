@@ -127,16 +127,16 @@ entitySetup = function() {
         this.canMove = function(direction) {
             switch (direction) {
                 case "Left":
-                    return (this.room.left == null || this.room.leftBarricade.exists)
+                    return !(this.room.left == null || this.room.leftBarricade.exists)
                     break;
                 case "Right":
-                    return (this.room.right == null || this.room.leftBarricade.exists)
+                    return !(this.room.right == null || this.room.leftBarricade.exists)
                     break;
                 case "Up":
-                    return (this.room.up == null || this.room.upStairs.barricade.exists)
+                    return !(this.room.up == null || this.room.upStairs.barricade.exists)
                     break;
                 case "Down":
-                    return (this.room.down == null || this.room.downStairs.barricade.exists)
+                    return !(this.room.down == null || this.room.downStairs.barricade.exists)
                     break;
             }          
         }
@@ -319,33 +319,33 @@ entitySetup = function() {
         this.canBarricade = function(direction) {
             switch (direction) {
                 case "Left":
-                    return (this.room.left != null || !this.room.containsSnails)
+                    return (this.room.left != null && !this.room.containsSnails)
                     break;
                 case "Right":
-                    return (this.room.right != null || !this.room.containsSnails)
+                    return (this.room.right != null && !this.room.containsSnails)
                     break;
                 case "Up":
-                    return (this.room.up != null || !this.room.containsSnails)
+                    return (this.room.up != null && !this.room.containsSnails)
                     break;
                 case "Down":
-                    return (this.room.down != null || !this.room.containsSnails)
+                    return (this.room.down != null && !this.room.containsSnails)
                     break;
             }
         }
 
-        this.canReload = function(direction) {
+        this.canShoot = function(direction) {
             switch(direction) {
                 case "Left":
-                    return (this.room.left != null || this.room.containsSnails)
+                    return (this.room.left != null && this.room.containsSnails)
                     break;
                 case "Right":
-                    return (this.room.right != null || this.room.containsSnails)
+                    return (this.room.right != null && this.room.containsSnails)
                     break;
                 case "Up":
-                    return (this.room.up != null || this.room.containsSnails)
+                    return (this.room.up != null && this.room.containsSnails)
                     break;
                 case "Down":
-                    return (this.room.down != null || this.room.containsSnails)
+                    return (this.room.down != null && this.room.containsSnails)
                     break;
             }
         }
