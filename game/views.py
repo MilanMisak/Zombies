@@ -104,6 +104,8 @@ def ajax_game_info(request):
     player = get_player(request)
     if player is None:
         return HttpResponseBadRequest('NO-PLAYER')
+
+    print 'GAME-INFO {}'.format(player)
     
     game = player.game
     if game is None:
