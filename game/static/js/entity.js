@@ -712,17 +712,61 @@ entitySetup = function() {
         return player.canMove(direction);
     }	
 
+    this.Move = function(direction) {
+        switch (direction) {
+            case "Left":
+                player.moveLeft();
+                break;
+            case "Right":
+                player.moveRight();
+                break;
+            case "Up":
+                player.moveUp();
+                break;
+            case "Down":
+                player.moveDown();
+                break;
+        }
+                
+    }
+
     this.canBarricade = function(direction) {
         return player.canBarricade(direction);
+    }
+
+    this.Barricade = function() {
+        switch (direction) {
+            case "Left":
+                player.barricadeLeft();
+                break;
+            case "Right":
+                player.barricadeRight();
+                break;
+            case "Up":
+                player.barricadeUp();
+                break;
+            case "Down":
+                player.barricadeDown();
+                break;
+        }
     }
     
     this.canShoot = function(direction) {
         return player.canShoot(direction);
     }
 
-    this.canReload = function(direction) {
+    this.shoot = function(direction) {
+        return true;
+    }
+
+    this.canReload = function() {
         return true; /* for now */    
     }
+
+    this.reload = function() {
+        return true;
+    }
+
 }
 
 Array.prototype.remove= function(){
