@@ -387,6 +387,40 @@ entitySetup = function() {
             }
         }
 
+        this.canBreak = function(direction) {
+            switch(direction) {
+                case "Left":
+                    return (this.room.left != null && this.room.left.barricade.exists)
+                    break;
+                case "Right":
+                    return (this.room.right != null && this.room.right.barricade.exists)
+                    break;
+                case "Up":
+                    return (this.room.up != null && this.room.upStairs.barricade.exists)
+                    break;
+                case "Down":
+                    return (this.room.down != null && this.room.downStairs.barricade.exists)
+                    break;
+            }
+        }
+        
+        this.breakBarricade = function(direction) {
+            switch(direction) {
+                case "Left":
+                    this.breakBarLeft();
+                    break;
+                case "Right":
+                    this.breakBarRight();
+                    break;
+                case "Up":
+                    this.breakBarUp();
+                    break;
+                case "Down":
+                    this.breakBarDown();
+                    break;
+            }
+        }
+
         this.reload = function() {
             this.ammo = 5;
         }
@@ -830,11 +864,11 @@ entitySetup = function() {
     }
     
     this.canBreakBarricade = function(direction) {
-        return true;
+        return player.canBreak(direction);
     }   
     
     this.breakBarricade = function(direction) {
-        return true;
+        player.breakBarricade(direction);
     }   
 
 }
