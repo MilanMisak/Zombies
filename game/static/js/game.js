@@ -189,22 +189,27 @@ $(document).ready(function() {
         //TODO 
         switch (selectedAction) {
         case 'Move':
-            alert('m ' + selectedDirection);
+            Move(selectedDirection);
+            //alert('m ' + selectedDirection);
             break;
-        case 'Skip Go':
+        /*case 'Skip Go':
             alert('g ');
-            break;
+            break;*/
         case 'Shoot':
-            alert('s ' + selectedDirection);
+            shoot(selectedDirection);
+            //alert('s ' + selectedDirection);
             break;
         case 'Reload':
-            alert('r');
+            reload();
+            //alert('r');
             break;
         case 'Barricade':
-            alert('b ' + selectedDirection);
+            Barricade(selectedDirection);
+            //alert('b ' + selectedDirection);
             break;
         case 'Debarricade':
-            alert('d ' + selectedDirection);
+            breakBarricade(selectedDirection);
+            //alert('d ' + selectedDirection);
             break;
         default:
             break;
