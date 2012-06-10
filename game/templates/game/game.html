@@ -118,6 +118,27 @@ $(function() {
 {% endblock %}
 
 {% block content %}
+<div id="instructions_modal" class="modal hide">
+    <div class="modal-header">
+        <h3>Game Instructions</h3>
+    </div>
+    <div class="modal-body">
+        <p>
+            <span class="control_key big">=</span> Zoom In<br>
+            <span class="control_key big">-</span> Zoom Out<br>
+            <span class="control_key big">WASD</span> Move Player<br>
+            <span class="control_key big">TFGH</span> Make Barricades<br>
+            <span class="control_key big">IJKL</span> Break Barricades<br>
+            <span class="control_key big">N</span> Pick Up Ammo Crate<br>
+            <span class="control_key big">M</span> Drop Ammo Crate<br>
+            <span class="control_key">arrow keys</span> Move Camera<br>
+        </p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary btn-success" data-dismiss="modal">Got It!</a>
+    </div>
+</div>
+
 <canvas id="canvas" class="grid_9 alpha"></canvas>
 <div class="grid_3 alpha">
     <div style="padding: 10px; height: 530px">
@@ -159,27 +180,6 @@ $(function() {
         <a class="btn btn-success" href="#" id="btn_show_instructions">
             <i class="icon-info-sign icon-white"></i> Show Instructions
         </a>
-    </div>
-</div>
-
-<div id="instructions_modal" class="modal hide">
-    <div class="modal-header">
-        <h3>Game Instructions</h3>
-    </div>
-    <div class="modal-body">
-        <p>
-            <span class="control_key big">=</span> Zoom In<br>
-            <span class="control_key big">-</span> Zoom Out<br>
-            <span class="control_key big">WASD</span> Move Player<br>
-            <span class="control_key big">TFGH</span> Make Barricades<br>
-            <span class="control_key big">IJKL</span> Break Barricades<br>
-            <span class="control_key big">N</span> Pick Up Ammo Crate<br>
-            <span class="control_key big">M</span> Drop Ammo Crate<br>
-            <span class="control_key">arrow keys</span> Move Camera<br>
-        </p>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn btn-primary btn-success" data-dismiss="modal">Got It!</a>
     </div>
 </div>
 

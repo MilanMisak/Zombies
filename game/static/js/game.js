@@ -10,10 +10,10 @@ var updateGameInfo = function() {
 updateGameInfo();
 setInterval(updateGameInfo, 1000);
 
-$(document).ready(function() {
-    // Show a modal with instructions
-    $('#instructions_modal').modal('show');
+// Show a modal with instructions
+$('#instructions_modal').modal('show');
 
+$(document).ready(function() {
     // Disable page scrolling
     $(document).keydown(function(e) {
         if (e.keyCode >= 37 && e.keyCode <= 40)
