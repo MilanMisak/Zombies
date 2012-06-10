@@ -276,6 +276,7 @@ entitySetup = function() {
         this.destination = position;
         this.room = room;
         this.holdingBox = false;
+        this.ammo = 5;
 
         /* Animation for ghost picking up box */
         this.pickUp = function() {
@@ -296,6 +297,10 @@ entitySetup = function() {
             this.holdingBox = true;
         }
 
+        this.canPickUp = function() {
+            return (ammoBox.visible && (this.room == ammoBox.room));
+        }
+
         /* Animation for ghost dropping box */
         this.drop = function() {
             if (!this.holdingBox)
@@ -312,9 +317,14 @@ entitySetup = function() {
             hatDestroy.remove(); 
 
             ammoBox.position = this.item.position.add(new Point(-10, 65));
+            ammoBox.room = this.room;
             ammoBox.visible = true; 
             this.holdingBox = false; 
         }
+
+        this.canDrop = function() {
+            return this.holdingBox;
+        }   
 
         this.canBarricade = function(direction) {
             switch (direction) {
@@ -333,7 +343,14 @@ entitySetup = function() {
             }
         }
 
+        this.shoot = function(direction){
+            return true;
+        }
+
         this.canShoot = function(direction) {
+            if (this.ammo == 0)
+                return false;
+
             switch(direction) {
                 case "Left":
                     return (this.room.left != null && this.room.containsSnails)
@@ -348,6 +365,14 @@ entitySetup = function() {
                     return (this.room.down != null && this.room.containsSnails)
                     break;
             }
+        }
+
+        this.reload = function() {
+            this.ammo = 5;
+        }
+
+        this.canReload = function() {
+            return ((this.room == ammoBox.room) && this.ammo < 5);
         }
 
         this.barricadeUp = function() {
@@ -704,6 +729,7 @@ entitySetup = function() {
 
     /* Ammo box initialization. */
     ammoBox.position = mainRoom.position.add(new Point(0, 70));
+    ammoBox.room = mainRoom;
 
 
     player = new Ghost('blue', mainRoom);
