@@ -218,6 +218,11 @@ entitySetup = function() {
             if (this.strength <= 0)
                 this.kill;
         }
+        
+        this.kill = function() {
+            this.item.remove();
+            this.room.removeSnailGroup(this);
+        }
  
         this.setStrength = function(newStrength) {
             this.strength = newStrength;
@@ -344,7 +349,22 @@ entitySetup = function() {
         }
 
         this.shoot = function(direction){
-            return true;
+            var room;
+            switch(direction) {
+                case "Left":
+                    room = this.room.left;
+                    break;
+                case "Right":
+                    room = this.room.right;
+                    break;
+                case "Up":
+                    room = this.room.up;
+                    break;
+                case "Down":
+                    room = this.room.down;
+                    break;
+            }
+            room.snails[0].hurt(20);
         }
 
         this.canShoot = function(direction) {
