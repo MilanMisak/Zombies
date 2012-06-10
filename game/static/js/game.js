@@ -189,26 +189,31 @@ $(document).ready(function() {
         //TODO 
         switch (selectedAction) {
         case 'Move':
-            Move(selectedDirection);
+            if (canMove(selectedDirection))
+                Move(selectedDirection);
             //alert('m ' + selectedDirection);
             break;
         /*case 'Skip Go':
             alert('g ');
             break;*/
         case 'Shoot':
-            shoot(selectedDirection);
+            if (canShoot(selectedDirection))
+                shoot(selectedDirection);
             //alert('s ' + selectedDirection);
             break;
         case 'Reload':
-            reload();
+            if (canReload())
+                reload();
             //alert('r');
             break;
         case 'Barricade':
-            Barricade(selectedDirection);
+            if (canBarricade(selectedDirection())
+                Barricade(selectedDirection);
             //alert('b ' + selectedDirection);
             break;
         case 'Debarricade':
-            breakBarricade(selectedDirection);
+            if (canBreakBarricade(selectedDirection))
+                breakBarricade(selectedDirection);
             //alert('d ' + selectedDirection);
             break;
         default:

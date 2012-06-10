@@ -127,7 +127,7 @@ entitySetup = function() {
         this.canMove = function(direction) {
             switch (direction) {
                 case "Left":
-                    return !(this.room.left == null || this.room.leftBarricade.exists)
+                    return !(this.room.left == null || this.room.rightBarricade.exists)
                     break;
                 case "Right":
                     return !(this.room.right == null || this.room.leftBarricade.exists)
@@ -780,7 +780,7 @@ entitySetup = function() {
         return player.canBarricade(direction);
     }
 
-    this.Barricade = function() {
+    this.Barricade = function(direction) {
         switch (direction) {
             case "Left":
                 player.barricadeLeft();
