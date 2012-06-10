@@ -444,7 +444,6 @@ entitySetup = function() {
         }
     }
 
-
     this.Barricade = function() {
         this.item = doorBarricadeSymbol.place(view.center);
         this.exists = false;
