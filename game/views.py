@@ -16,7 +16,6 @@ def index(request):
         if player.game and player == player.game.master:
             player.game.delete()
         player.delete()
-        print request.session['player_pk']
         del request.session['player_pk']
 
     if request.method == "POST":
