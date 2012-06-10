@@ -125,35 +125,40 @@ entitySetup = function() {
             this.item.transform(flipMatrix);
         }
 
+        this.canMove = function(direction) {
+            switch (direction) {
+                case "Left":
+                    return (this.room.left == null || this.room.leftBarricade.exists)
+                    break;
+                case "Right":
+                    return (this.room.right == null || this.room.leftBarricade.exists)
+                    break;
+                case "Up":
+                    return (this.room.up == null || this.room.upStairs.barricade.exists)
+                    break;
+                case "Down":
+                    return (this.room.down == null || this.room.downStairs.barricade.exists)
+                    break;
+            }          
+        }	
+
         this.moveLeft = function() {
-            if (this.room.left == null || this.room.leftBarricade.exists) 
-                return;
-            
             this.setRoom(this.room.left);
             this.pushDestination(this.room.position);
         }
         
         this.moveRight = function() {
-            if (this.room.right == null || this.room.rightBarricade.exists) 
-                return;
-            
             this.setRoom(this.room.right);
             this.pushDestination(this.room.position);
         }
         
         this.moveUp = function() {
-            if (this.room.up == null || this.room.upStairs.barricade.exists) 
-                return;
-            
             this.moveUpStairs(this.room.upStairs);
             this.setRoom(this.room.up);
             this.pushDestination(this.room.position);
         }
         
         this.moveDown = function() {
-            if (this.room.down == null || this.room.downStairs.barricade.exists) 
-                return;
-            
             this.moveDownStairs(this.room.downStairs);
             this.setRoom(this.room.down);
             this.pushDestination(this.room.position);
@@ -291,6 +296,23 @@ entitySetup = function() {
             this.holdingBox = false; 
         }
 
+        this.canBarricade = function(direction) {
+            switch (direction) {
+                case "Left":
+                    return (this.room.left != null || this.room.containsSnails)
+                    break;
+                case "Right":
+                    return (this.room.right != null || this.room.containsSnails)
+                    break;
+                case "Up":
+                    return (this.room.up != null || this.room.containsSnails)
+                    break;
+                case "Down":
+                    return (this.room.down != null || this.room.containsSnails)
+                    break;
+            }
+        }
+
         this.barricadeUp = function() {
             if (this.room.up != null) {
                 this.room.upStairs.barricade.make();
@@ -376,6 +398,7 @@ entitySetup = function() {
         this.down = null;
         this.left = null;
         this.right = null;
+        this.containsSnails = false;
 
         this.setUpStairs = function(room, stairs) {
             this.up = room;
