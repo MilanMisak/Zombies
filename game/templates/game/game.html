@@ -1,9 +1,9 @@
 {% extends 'game/base.html' %}
 
 {% block extra_js %}
-    <script type="text/javascript" src="/static/js/game.js"></script>
     <script type="text/javascript" src="/static/js/paper.js"></script>
     <script type="text/javascript" src="/static/js/entity.js"></script>
+    <script type="text/javascript" src="/static/js/game.js"></script>
 <script type = "text/javascript">
 paper.install(window);
 $(function() {
@@ -13,8 +13,6 @@ $(function() {
     paper.view.viewSize = [700, 600];
 
     entitySetup();
-
-    var player = new Ghost('blue', mainRoom);
 
     var scaleCount = 0; 
     var weight = 1;
@@ -27,14 +25,6 @@ $(function() {
     scroll = function(movement) {
         if (!project.activeLayer.translate(movement).bounds.contains(view.center))
             project.activeLayer.translate(movement.multiply(-1));
-    }
-
-    canMove = function(direction) {
-        return player.canMove(direction);
-    }
-    
-    canBarricade = function(direction) {
-        return player.canBarricade(direction);
     }
 
     tool.onKeyDown = function(event) {

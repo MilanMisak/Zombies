@@ -319,6 +319,23 @@ entitySetup = function() {
         this.canBarricade = function(direction) {
             switch (direction) {
                 case "Left":
+                    return (this.room.left != null || !this.room.containsSnails)
+                    break;
+                case "Right":
+                    return (this.room.right != null || !this.room.containsSnails)
+                    break;
+                case "Up":
+                    return (this.room.up != null || !this.room.containsSnails)
+                    break;
+                case "Down":
+                    return (this.room.down != null || !this.room.containsSnails)
+                    break;
+            }
+        }
+
+        this.canReload = function(direction) {
+            switch(direction) {
+                case "Left":
                     return (this.room.left != null || this.room.containsSnails)
                     break;
                 case "Right":
@@ -688,6 +705,24 @@ entitySetup = function() {
     /* Ammo box initialization. */
     ammoBox.position = mainRoom.position.add(new Point(0, 70));
 
+
+    player = new Ghost('blue', mainRoom);
+
+    this.canMove = function(direction) {
+        return player.canMove(direction);
+    }	
+
+    this.canBarricade = function(direction) {
+        return player.canBarricade(direction);
+    }
+    
+    this.canShoot = function(direction) {
+        return player.canShoot(direction);
+    }
+
+    this.canReload = function(direction) {
+        return true; /* for now */    
+    }
 }
 
 Array.prototype.remove= function(){
