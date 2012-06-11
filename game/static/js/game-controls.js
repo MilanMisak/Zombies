@@ -168,8 +168,7 @@ $(document).ready(function() {
         case 'Shoot':
             if (canShoot(selectedDirection)) {
                 shoot(selectedDirection);
-                $('#ammo_display').html('Ammo: <span style="color: green; font-size: 250%">' + 
-                player.ammo + '</span> / 5</p>');
+                $('#ammo_display').html(player.ammo);
                 actionAccepted = true;
             } else {
                 invalidSelection("You can't shoot there"); 
@@ -178,8 +177,7 @@ $(document).ready(function() {
         case 'Reload':
             if (canReload()) {
                 reload();
-                $('#ammo_display').html('Ammo: <span style="color: green; font-size: 250%">' + 
-                player.ammo + '</span> / 5</p>');
+                $('#ammo_display').html(player.ammo);
                 actionAccepted = true;
             } else {
                 invalidSelection("You can't reload"); 
