@@ -1,9 +1,14 @@
 var documentReady = false;
 var hasJoinedGameYet = false;
 
+var AJAX_ERROR_ALLOWANCE = 20; // Keep in sync with models.py setting, DOUBLED HERE
+var ajaxErrorCount = 0;
+
 // Outside the document ready handler for immediate execution
 var updateGameInfo = function() {
     $.getJSON('/ajax-game-info', function(data) {
+        ajaxErrorCount = 0;
+
         if (data[1] === 1) {
             // Game has started
             window.location.replace('/game');
@@ -21,6 +26,11 @@ var updateGameInfo = function() {
         $('#joined_game_instructions').fadeIn();
         $('#player_list').html('<ul>' + items.join('') + '</ul>');
     }).error(function(xhr, status, data) {
+        ajaxErrorCount++;
+        if (ajaxErrorCount < AJAX_ERROR_ALLOWANCE)
+            return;
+        ajaxErrorCount = 0;
+
         if ('NO-GAME' === xhr.responseText && hasJoinedGameYet) {
             // No game associated with this player anymore
             hasJoinedGameYet = false;
@@ -40,8 +50,9 @@ $(document).ready(function() {
 
     var updateGameList = function() {
         $.getJSON('/ajax-games', function(data) {
-            var items = [];
+            ajaxErrorCount = 0;
 
+            var items = [];
             $.each(data, function(key, val) {
                 items.push('<li>' +
                 '<span>' + val + '</span>' +
@@ -62,6 +73,11 @@ $(document).ready(function() {
                 });
             });
         }).error(function(xhr, status, data) {
+            ajaxErrorCount++;
+            if (ajaxErrorCount < AJAX_ERROR_ALLOWANCE)
+                return;
+            ajaxErrorCount = 0;
+
             alert('An error occurred');
             window.location.replace('/');
         });
