@@ -2,9 +2,11 @@ var instructionsModalShown = false;
 
 var ajaxErrorCount = 0;
 
-var updateGameInfo = function() {
-    $.getJSON('/ajax-game-info', function(data) {
+var updateGameState = function() {
+    $.getJSON('/ajax-game-state', function(data) {
         ajaxErrorCount = 0;
+
+        //TODO - something useful here
     }).error(function(xhr, status, data) {
         ajaxErrorCount++;
         if (ajaxErrorCount < AJAX_ERROR_ALLOWANCE)
@@ -27,8 +29,8 @@ var updateGameInfo = function() {
     });
 };
 
-updateGameInfo();
-setInterval(updateGameInfo, 1000);
+updateGameState();
+setInterval(updateGameState, 1000);
 
 // Show a modal with instructions, other resources are loading in background
 $('#instructions_modal').on('show', function() {

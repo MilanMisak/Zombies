@@ -27,5 +27,8 @@ urlpatterns = patterns('game.views',
     url(r'^ajax-games$',
         'ajax_games',
     ),
+    url(r'^ajax-game-state$',
+        'ajax_game_state',
+    ),
 )
 urlpatterns += staticfiles_urlpatterns()

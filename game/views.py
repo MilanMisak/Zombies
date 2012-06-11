@@ -129,6 +129,23 @@ def ajax_join_game(request, game_pk):
     except ObjectDoesNotExist:
         return HttpResponseBadRequest('NO-GAME')
 
+def ajax_game_state(request):
+    player = get_player(request)
+    if player is None:
+        print 'NO-PLAYER'
+        return HttpResponseBadRequest('NO-PLAYER')
+
+    print 'GAME-INFO {}'.format(player)
+
+    game = player.game
+    if game is None:
+        print 'NO-GAME'
+        return HttpResponseBadRequest('NO-GAME')
+
+    # TODO - something useful posted here
+    json = simplejson.dumps([])
+    return HttpResponse(json, mimetype='application/json')
+
 # Utility functions
 
 def get_player(request):
