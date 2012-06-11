@@ -16,10 +16,10 @@ entitySetup = function() {
     var raster = new Raster('snail');
     raster.position = view.center;
 
-    flipHorizontalMatrix = new Matrix(-1, 0, 0, 1, 0, 0);
+    var flipHorizontalMatrix = new Matrix(-1, 0, 0, 1, 0, 0);
 
     /* Snail eye stalk style. */
-    eyeStyle = {
+    var eyeStyle = {
     strokeColor: 'green',
     strokeWidth: 5,
     };
@@ -46,26 +46,26 @@ entitySetup = function() {
 
 
     /* Snail Symbol initialization. */
-    snailGroup = new Group([raster, rightEye, rightEyeball, leftEye, leftEyeball]);
-    snailSymbol = new Symbol(snailGroup);
+    var snailGroup = new Group([raster, rightEye, rightEyeball, leftEye, leftEyeball]);
+    var snailSymbol = new Symbol(snailGroup);
     snailGroup.scale(0.2);
 
     /* Code for the ghost symbol */
-    ghostSymbol = new Symbol(new Raster('ghost'));
+    var ghostSymbol = new Symbol(new Raster('ghost'));
     ghostSymbol.definition.scale(0.2);
     ghostBoxSymbol = new Symbol(new Raster('ghostbox'));
     ghostBoxSymbol.definition.scale(0.2);
 
 
     /* First ammo box initialization. */
-    ammoBox = new Raster('ammobox');
+    var ammoBox = new Raster('ammobox');
     ammoBox.scale(0.2);
 
     /* Barricade Symbol initialization. */
-    stairBarricadeSymbol = new Symbol(new Raster('stairBarricade'));
+    var stairBarricadeSymbol = new Symbol(new Raster('stairBarricade'));
     stairBarricadeSymbol.definition.scale(0.4);
 
-    doorBarricadeSymbol = new Symbol(new Raster('doorBarricade'));
+    var doorBarricadeSymbol = new Symbol(new Raster('doorBarricade'));
     doorBarricadeSymbol.definition.scale(0.4);
 
     /* List for all snail groups. */
@@ -218,7 +218,7 @@ entitySetup = function() {
                 if (!snail.moving)
                     snail.pushDestination(snail.room.position.add(
                                 new Point(Math.random() * 300 - 150, 0)));
-                    snail.move();
+                snail.move();
             }
         }
         
@@ -334,7 +334,7 @@ entitySetup = function() {
             this.item.addChild(this.raster);
             destroy.remove();
 
-            hatDestroy = this.hat;
+            var hatDestroy = this.hat;
             this.hat = this.hat.clone();
             this.item.addChild(this.hat);
             hatDestroy.remove(); 
