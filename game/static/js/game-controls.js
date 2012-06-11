@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    // Disable page scrolling
+    // Disable page scrolling with arrow keys
     $(document).keydown(function(e) {
         if (e.keyCode >= 37 && e.keyCode <= 40)
             return false;
@@ -11,22 +11,22 @@ $(document).ready(function() {
         $(obj).attr('class', classes.replace(whatClass, withClass));
     };
 
-    var green = 'btn-success';  // Not pressed
-    var yellow = 'btn-warning'; // Pressed
+    var notPressed = 'btn-success';  // Green
+    var pressed = 'btn-warning'; // Yellow
 
     // Toggles a button with a given selector
     var toggle = function(aux, selector) {
-        replaceClass(selector, green, yellow);
+        replaceClass(selector, notPressed, pressed);
     };
 
     // Untoggles a button with a given selector 
     var untoggle = function(aux, selector) {
-        replaceClass(selector, yellow, green);
+        replaceClass(selector, pressed, notPressed);
     };
 
     // Checks if a button is toggled
     var isToggled = function(selector) {
-        return $(selector).hasClass(yellow);
+        return $(selector).hasClass(pressed);
     };
 
     // Checks if a button is disabled

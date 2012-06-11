@@ -30,7 +30,7 @@ var updateGameInfo = function() {
 updateGameInfo();
 setInterval(updateGameInfo, 1000);
 
-// Show a modal with instructions
+// Show a modal with instructions, other resources are loading in background
 $('#instructions_modal').on('show', function() {
     instructionsModalShown = true;
 });
