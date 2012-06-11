@@ -68,6 +68,9 @@ entitySetup = function() {
     doorBarricadeSymbol = new Symbol(new Raster('doorBarricade'));
     doorBarricadeSymbol.definition.scale(0.4);
 
+    /* List for all snail groups. */
+    snailGroupList = new Array();
+
 
     /* Virtual class, adds attributes to an item. (this.item must be defined) */
     this.Entity = function() {
@@ -228,6 +231,7 @@ entitySetup = function() {
         this.kill = function() {
             this.item.remove();
             this.room.removeSnailGroup(this);
+            snailGroupList.remove(this);
         }
  
         this.setStrength = function(newStrength) {
@@ -252,7 +256,8 @@ entitySetup = function() {
     
     /* Snail factory. */
     SnailGroup.spawn = function(id, noOfEntities, room, strength) {
-        return new SnailGroup(id, noOfEntities, room, strength);
+        var snails =  new SnailGroup(id, noOfEntities, room, strength);
+        snailGroupList.push(snails);
     }
 
 
@@ -788,7 +793,7 @@ entitySetup = function() {
     stairBarricade5 = new StairBarricade(stairs5.startPoint.add(new Point(-100, -50)));
     stairs5.setBarricade(stairBarricade5);
     stairBarricade6 = new StairBarricade(stairs6.startPoint.add(new Point(100, -50)));
-    stairBarricade6.flip();
+
     stairs6.setBarricade(stairBarricade6);
     stairBarricade7 = new StairBarricade(stairs7.startPoint.add(new Point(-110, -50)));
     stairs7.setBarricade(stairBarricade7);
