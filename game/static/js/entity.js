@@ -1,10 +1,12 @@
 
 entitySetup = function() {
-    
+
+    /* Drawing of white background. */    
     var background = new Path.Rectangle(view.center.add(new Point(-8000, 8000)),
                                         view.center.add(new Point(8000, -8000)));
     background.fillColor = 'white';
 
+    /* Layer for everything movable by scrolling. */
     var houseLayer = new Layer();	
 
     var house = new Raster('house');
@@ -16,12 +18,14 @@ entitySetup = function() {
 
     flipHorizontalMatrix = new Matrix(-1, 0, 0, 1, 0, 0);
 
+    /* Snail eye stalk style. */
     eyeStyle = {
     strokeColor: 'green',
     strokeWidth: 5,
     };
     var size = 3;
 
+    /* Snail eye initialization. */
     var rightEye = new Path();
     rightEye.style = eyeStyle;
     for (var i = 0; i < size; i++)
@@ -40,6 +44,8 @@ entitySetup = function() {
     var leftEyeball = new Path.Circle(leftEye.segments[0].point, 10);
     leftEyeball.fillColor = 'black'; 
 
+
+    /* Snail Symbol initialization. */
     snailGroup = new Group([raster, rightEye, rightEyeball, leftEye, leftEyeball]);
     snailSymbol = new Symbol(snailGroup);
     snailGroup.scale(0.2);
@@ -51,13 +57,13 @@ entitySetup = function() {
     ghostBoxSymbol.definition.scale(0.2);
 
 
+    /* First ammo box initialization. */
     ammoBox = new Raster('ammobox');
     ammoBox.scale(0.2);
 
-
+    /* Barricade Symbol initialization. */
     stairBarricadeSymbol = new Symbol(new Raster('stairBarricade'));
     stairBarricadeSymbol.definition.scale(0.4);
-
 
     doorBarricadeSymbol = new Symbol(new Raster('doorBarricade'));
     doorBarricadeSymbol.definition.scale(0.4);
@@ -70,9 +76,6 @@ entitySetup = function() {
 
         this.destinations = new Array();
   
-        /* The place the entity is moving to. */
-        //this.destination = this.item.position;
-
         this.moving = true;
 
         this.faceTarget = function() {
@@ -142,6 +145,7 @@ entitySetup = function() {
         }
 
         this.kill = function() {
+            //TODO - remove from whatever list is containing it, maybe not here. */
             this.item.remove();
         }	
 
@@ -196,6 +200,7 @@ entitySetup = function() {
 
         this.destination = this.item.position;
 
+        /* Adds a new destination for the snails to move to. */
         this.pushDestination = function(destination) {
             for (var i = 0; i < noOfEntities; i++) {
                 var snail = this.item.children[i].Parent;
@@ -203,6 +208,7 @@ entitySetup = function() {
             }
         }
         
+        /* Animates the snails, should be called every frame. */
         this.move = function() {
             for (var i = 0; i < noOfEntities; i++) {
                 var snail = this.item.children[i].Parent;
@@ -240,8 +246,14 @@ entitySetup = function() {
                 this.item.children[i].Parent.setRoom(room);
         }
 
+
     }
     SnailGroup.prototype = new Entity();
+    
+    /* Snail factory. */
+    SnailGroup.spawn = function(id, noOfEntities, room, strength) {
+        return new SnailGroup(id, noOfEntities, room, strength);
+    }
 
 
     this.Snail = function(room, strength) {
@@ -254,7 +266,8 @@ entitySetup = function() {
             this.destinations.push(destination.add(new Point(0, 70)));
             this.moving = true;
         }        
-        
+       
+        /* Rotates snails for stair movement, MUST move in a zig zag motion. */ 
         this.faceTarget = function() {
             this.item.rotate(this.rotation);
             var direction = new Point(this.destination.subtract(this.item.position));
@@ -348,6 +361,7 @@ entitySetup = function() {
             }
         }
 
+        /* Code for damaging adjacent snails, no animation as yet. */
         this.shoot = function(direction){
             var room;
             switch(direction) {
@@ -425,6 +439,8 @@ entitySetup = function() {
             this.ammo = 5;
         }
 
+        /* Can only reload if ammo is not full, and the ammo box is on the floor in the same room
+            as the ghost. */
         this.canReload = function() {
             return ((this.room == ammoBox.room) && this.ammo < 5);
         }
@@ -474,7 +490,7 @@ entitySetup = function() {
     Ghost.prototype = new Entity();
 
 
-    /* Animates the snail's eyes */
+    /* Animates the snail's eyes, called every frame */
     this.snailUpdate = function() {
         rightEye.segments[0].point = 
         rightStart.add(new Point(Math.random() * -20 + 50, Math.random() * -150 + 10));
@@ -573,13 +589,15 @@ entitySetup = function() {
             this.exists = true;
             this.item.visible = true;
         }
-    
+   
+        /* Damages the barricade, TODO - increase optipacy. */ 
         this.damage = function(damageDealt) {
             this.health -= damageDealt;
             if (this.health <= 0)
                 this.destroy;
         }
     
+        /* Destroys the barricade image, the object still exits with 0 health. */
         this.destroy = function() {
             this.health = 0;
             this.exists = false;
@@ -786,8 +804,10 @@ entitySetup = function() {
     ammoBox.room = mainRoom;
 
 
+    /* Entity for the local player. */
     player = new Ghost('blue', mainRoom);
 
+    /* Action code. */
     this.canMove = function(direction) {
         return player.canMove(direction);
     }	
@@ -869,10 +889,22 @@ entitySetup = function() {
     
     this.breakBarricade = function(direction) {
         player.breakBarricade(direction);
+    }
+
+    this.spawnSnailGroup = function(id, side, strength, noOfEntities) {
+        switch (side) {
+            case "Left" :
+                SnailGroup.spawn(id, outsideLeft, strength, noOfEntities);
+            break;
+            case "Right":
+                SnailGroup.spawn(id, outsideRight, strength, noOfEntities);
+            break;
+        }
     }   
 
 }
 
+/* Removes an element from an array by value. */
 Array.prototype.remove= function(){
     var what, a= arguments, L= a.length, ax;
     while(L && this.length){
