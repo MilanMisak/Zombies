@@ -20,6 +20,7 @@ $(function() {
     view.onFrame = function(event) {
         snailUpdate();
         player.move();
+        player.animateShoot();
     }
 
     scroll = function(movement) {
@@ -123,7 +124,9 @@ $(function() {
 
 <img src="/static/img/houseplan.jpg" class="sprite" id="house" />
 <img src="/static/img/snail_teeth.png" class="sprite" id="snail" />
-<img src="/static/img/ghost_gun.png" class="sprite" id="ghost" />
+<img src="/static/img/muzzle_flash.png" class="sprite" id="muzzleflash" />
+<img src="/static/img/ghost.png" class="sprite" id="ghost" />
+<img src="/static/img/ghost_gun.png" class="sprite" id="ghostgun" />
 <img src="/static/img/ghost_ammobox.png" class="sprite" id="ghostbox" />
 <img src="/static/img/ammobox.png" class="sprite" id="ammobox" />
 <img src="/static/img/barricade_stairs.png" class="sprite" id="stairBarricade" />
@@ -147,7 +150,7 @@ $(function() {
             <a class="{{ action_right }}" id="btn_shoot" href="#" data-action="Shoot">Shoot</a>
         </p>
         <p>
-            <a class="{{ action_left }}" id="btn_ammo" href="#" data-action="Ammo">Get Ammo</a>
+            <a class="{{ action_left }}" id="btn_ammo" href="#" data-action="Ammo">Pick up Box</a>
             <a class="{{ action_right }}" id="btn_reload" href="#" data-action="Reload">Reload</a>
         </p>
         <p>
