@@ -140,6 +140,12 @@ $(document).ready(function() {
             untoggle(null, selector);
     };
 
+    var invalidSelection = function(text) {
+        $('#instruction_label').html('<span style="color: red;">' + text + '</span>');
+        $('#instruction_label').fadeIn();
+        $('#instruction_label').fadeOut('slow');
+    }
+
     // The GO action
     $('#btn_arrow_go').click(function(e) {
         if (isDisabled(this))
@@ -147,27 +153,46 @@ $(document).ready(function() {
 
         switch (selectedAction) {
         case 'Move':
-            if (canMove(selectedDirection))
+            if (canMove(selectedDirection)) {
                 Move(selectedDirection);
+            } else {
+               invalidSelection("Yo, you cant move there brah"); 
+            }
             break;
         case 'Ammo':
             alert('Ammo');
             break;
         case 'Shoot':
-            if (canShoot(selectedDirection))
+            if (canShoot(selectedDirection)) {
                 shoot(selectedDirection);
+                $('#ammo_display').html('Ammo: <span style="color: green; font-size: 250%">' + 
+                player.ammo + '</span> / 5</p>');
+            } else {
+                invalidSelection("You can't shoot there"); 
+            }
             break;
         case 'Reload':
-            if (canReload())
+            if (canReload()) {
                 reload();
+                $('#ammo_display').html('Ammo: <span style="color: green; font-size: 250%">' + 
+                player.ammo + '</span> / 5</p>');
+            } else {
+                invalidSelection("You can't reload"); 
+            }
             break;
         case 'Barricade':
-            if (canBarricade(selectedDirection))
+            if (canBarricade(selectedDirection)) {
                 Barricade(selectedDirection);
+            } else {
+                invalidSelection("You can't barricade there"); 
+            }
             break;
         case 'Debarricade':
-            if (canBreakBarricade(selectedDirection))
+            if (canBreakBarricade(selectedDirection)) {
                 breakBarricade(selectedDirection);
+            } else {
+                invalidSelection("There is nothing to break"); 
+            }
             break;
         default:
             break;
