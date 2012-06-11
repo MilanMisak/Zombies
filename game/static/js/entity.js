@@ -51,10 +51,14 @@ entitySetup = function() {
     snailGroup.scale(0.2);
 
     /* Code for the ghost symbol */
-    var ghostSymbol = new Symbol(new Raster('ghost'));
+    ghostSymbol = new Symbol(new Raster('ghost'));
     ghostSymbol.definition.scale(0.2);
+    ghostGunSymbol = new Symbol(new Raster('ghostgun'));
+    ghostGunSymbol.definition.scale(0.2);
     ghostBoxSymbol = new Symbol(new Raster('ghostbox'));
     ghostBoxSymbol.definition.scale(0.2);
+    flashSymbol = new Symbol(new Raster('muzzleflash'));
+    flashSymbol.definition.scale(0.2);
 
 
     /* First ammo box initialization. */
@@ -294,8 +298,16 @@ entitySetup = function() {
         this.hat = triangle(colour);
         this.hat.scale(0.6);
         this.raster = ghostSymbol.place(position);
+        this.gunArm = ghostGunSymbol.place(position);
+        this.boxArm = ghostBoxSymbol.place(position);
+        this.boxArm.visible = false;
+        this.flash = flashSymbol.place(position.add(new Point(80,0)));
+        this.flash.visible = false;
+        this.armGroup = new Group (this.gunArm, this.boxArm, this.flash);
         this.hat.position = position.add(new Point(11, -75));
-        this.item = new Group(this.raster, this.hat);
+        this.item = new Group(this.raster, this.armGroup, this.hat);
+        this.shootDirection = null;
+        this.shootCounter = 0;
         this.destination = position;
         this.room = room;
         this.holdingBox = false;
@@ -306,15 +318,18 @@ entitySetup = function() {
             if (this.holdingBox)
                 return;
 
-            var destroy = this.raster;
-            this.raster = ghostBoxSymbol.place(this.raster.position);
+            /*var destroy = this.raster;
+            this.raster = ghostSymbol.place(this.raster.position);
             this.item.addChild(this.raster);
-            destroy.remove();
+            destroy.remove();*/
+
+            this.gunArm.visible = false;
+            this.boxArm.visible = true;
 
             hatDestroy = this.hat;
             this.hat = this.hat.clone();
             this.item.addChild(this.hat);
-            hatDestroy.remove(); 
+            hatDestroy.remove();
 
             ammoBox.visible = false;
             this.holdingBox = true;
@@ -329,10 +344,13 @@ entitySetup = function() {
             if (!this.holdingBox)
                 return;
 
-            var destroy = this.raster;
+            /*var destroy = this.raster;
             this.raster = ghostSymbol.place(this.raster.position);
             this.item.addChild(this.raster);
-            destroy.remove();
+            destroy.remove();*/
+
+            this.gunArm.visible = true;
+            this.boxArm.visible = false;
 
             var hatDestroy = this.hat;
             this.hat = this.hat.clone();
@@ -347,7 +365,7 @@ entitySetup = function() {
 
         this.canDrop = function() {
             return this.holdingBox;
-        }   
+        }
 
         this.canBarricade = function(direction) {
             switch (direction) {
@@ -383,11 +401,49 @@ entitySetup = function() {
                     room = this.room.down;
                     break;
             }
+            if (direction == "Left" && this.facingRight) {
+                this.flip();
+                this.facingRight = false;
+            }
+            if (direction == "Right" && !this.facingRight) {
+                this.flip();
+                this.facingRight = true;
+            }
+            if (direction == "Up")
+                this.armGroup.rotate(-60);
+            if (direction == "Down")
+                this.armGroup.rotate(60);
+            
+            this.shootDirection = direction;
             room.snails[0].hurt(20);
         }
 
+        this.animateShoot = function() {
+            if (this.shootDirection == null)
+                return;
+            var countMod = this.shootCounter % 20;
+            if (countMod < 5)
+                this.flash.visible = true;
+            else
+                this.flash.visible = false;
+            if (countMod < 9)
+                this.armGroup.rotate(-1);
+            else if (countMod>10)
+                this.armGroup.rotate(1);
+            if (this.shootCounter == 120) {
+                if (this.shootDirection == "Up")
+                    this.armGroup.rotate(60);
+                if (this.shootDirection == "Down")
+                    this.armGroup.rotate(-60);
+                this.flash.visible = false;
+                this.shootCounter = 0;
+                this.shootDirection = null;
+            }
+            this.shootCounter++;
+        }
+
         this.canShoot = function(direction) {
-            if (this.ammo == 0)
+            if (this.ammo == 0 || this.holdingBox)
                 return false;
 
             switch(direction) {
@@ -407,6 +463,9 @@ entitySetup = function() {
         }
 
         this.canBreak = function(direction) {
+            if (this.holdingBox)
+                return false;
+
             switch(direction) {
                 case "Left":
                     return (this.room.left != null && this.room.leftBarricade.exists)
