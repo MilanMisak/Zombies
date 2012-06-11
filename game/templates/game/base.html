@@ -14,7 +14,16 @@
 <body>
 
 <div id="error_modal" class="modal hide">
-    {% block error_modal %}{% endblock %}
+    <div class="modal-header">
+        <h3>Oops! An error has occurred.</h3>
+    </div>
+    <div class="modal-body">
+        <p>It looks like that <span id="error_reason"></span</p>
+        <p id="error_details">You will now be redirected to the main page where you can create or join a different game.</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary btn-success" data-dismiss="modal">Fine</a>
+    </div>
 </div>
 
 <div class="container_12">
@@ -30,6 +39,7 @@
 
 </div>
 
+<!-- At th end of the file so that rendering is not slowed down by HTTP requests. -->
 <script type="text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="/static/js/bootstrap-modal.js"></script>
 {% block extra_js %}{% endblock %}
