@@ -5,9 +5,13 @@ var errorModalShown = false;
    is provided a redirect to a given URL will happen after a model is closed. */
 var showErrorModal = function(reason, details, redirectURL) {
     redirectURL = redirectURL || '';
+    details = details || '';
+    errorModalShown = true;
 
     $('#error_reason').html(reason);
-    $('#error_details').html(details);
+    if (details !== '') {
+        $('#error_details').html(details);
+    }
     $('#error_modal').on('hide', function() {
         errorModalShown = false;
         if (redirectURL !== '') {
