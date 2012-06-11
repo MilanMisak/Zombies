@@ -16,6 +16,7 @@ class Player(models.Model):
     name            = models.CharField(max_length=50)
     game            = models.ForeignKey('Game', related_name='players', null=True,
                           on_delete=models.SET_NULL)
+    index           = models.PositiveSmallIntegerField(null=True)
     last_checked_in = models.DateTimeField(auto_now=True)
     
     @staticmethod
@@ -67,6 +68,12 @@ class Game(models.Model):
         Returns a list of players' names.
         """
         return {player.pk : str(player) for player in self.players.all()}
+
+    def get_max_player_index(self):
+        """
+        Returns the maximum player index in this game.
+        """
+        return self.players.order_by('-index')[0].index
 
     def __unicode__(self):
         if self.players.count() == 0:
