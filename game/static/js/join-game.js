@@ -3,13 +3,14 @@ var errorModalShown = false;
 var documentReady = false;
 var hasJoinedGameYet = false;
 
-var AJAX_ERROR_ALLOWANCE = 20; // Keep in sync with models.py setting, DOUBLED HERE
+var AJAX_ERROR_ALLOWANCE = 10; // Keep in sync with models.py setting
 var ajaxErrorCount = 0;
+var ajaxErrorCount2 = 0;
 
 // Outside the document ready handler for immediate execution
 var updateGameInfo = function() {
     $.getJSON('/ajax-game-info', function(data) {
-        ajaxErrorCount = 0;
+        ajaxErrorCount2 = 0;
 
         if (data[1] === 1) {
             // Game has started
@@ -28,18 +29,29 @@ var updateGameInfo = function() {
         $('#joined_game_instructions').fadeIn();
         $('#player_list').html('<ul>' + items.join('') + '</ul>');
     }).error(function(xhr, status, data) {
-        ajaxErrorCount++;
-        if (ajaxErrorCount < AJAX_ERROR_ALLOWANCE)
+        ajaxErrorCount2++;
+        if (ajaxErrorCount2 < AJAX_ERROR_ALLOWANCE)
             return;
-        ajaxErrorCount = 0;
+        ajaxErrorCount2 = 0;
 
         if ('NO-GAME' === xhr.responseText && hasJoinedGameYet) {
+            if (errorModalShown)
+                return;
+            errorModalShown = true;
+
             // No game associated with this player anymore
             hasJoinedGameYet = false;
             $('#game_name').html('');
             $('#joined_game_instructions').fadeOut();
-            alert('The game you joined was cancelled');
+
+            $('#error_reason').html('the game you joined was cancelled.');
+            $('#error_details').html('Please join a different game.');
+            $('#error_modal').on('hide', function() {
+                errorModalShown = false;
+            });
+            $('#error_modal').modal('show');
         }
+
         $('#player_list').html('<p>No game joined</p>');
     });
 };
