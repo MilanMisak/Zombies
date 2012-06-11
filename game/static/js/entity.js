@@ -443,7 +443,7 @@ entitySetup = function() {
         }
 
         this.canShoot = function(direction) {
-            /*if (this.ammo == 0 || this.holdingBox)
+            if (this.ammo == 0 || this.holdingBox)
                 return false;
 
             switch(direction) {
@@ -459,8 +459,7 @@ entitySetup = function() {
                 case "Down":
                     return (this.room.down != null && this.room.containsSnails())
                     break;
-            }*/ return true;
-
+            }
         }
 
         this.canBreak = function(direction) {
