@@ -240,8 +240,12 @@ entitySetup = function() {
                 this.item.children[i].Parent.setRoom(room);
         }
 
+
     }
     SnailGroup.prototype = new Entity();
+    SnailGroup.spawn = function(id, noOfEntities, room, strength) {
+        return new SnailGroup(id, noOfEntities, room, strength);
+    }
 
 
     this.Snail = function(room, strength) {
@@ -869,6 +873,17 @@ entitySetup = function() {
     
     this.breakBarricade = function(direction) {
         player.breakBarricade(direction);
+    }
+
+    this.spawnSnailGroup = function(id, side, strength, noOfEntities) {
+        switch (side) {
+            case "Left" :
+                SnailGroup.spawn(id, outsideLeft, strength, noOfEntities);
+            break;
+            case "Right":
+                SnailGroup.spawn(id, outsideRight, strength, noOfEntities);
+            break;
+        }
     }   
 
 }
