@@ -33,7 +33,6 @@ class Player(models.Model):
         """
         self.save()
         if self.game and self.game.master == self:
-            print self.game.players.all()
             self.game.save()
 
     def __unicode__(self):
@@ -63,11 +62,17 @@ class Game(models.Model):
         exclude_pk = player.game.pk if player.game is not None else -1
         return {game.pk : str(game) for game in Game.objects.exclude(pk=exclude_pk)}
 
+    def get_list_of_players(self):
+        """
+        Returns a list of players in the order they joined the game in.
+        """
+        return self.players.order_by('index').all()
+
     def get_list_of_players_names(self):
         """
         Returns a list of players' names.
         """
-        return {player.pk : str(player) for player in self.players.all()}
+        return [str(player) for player in self.get_list_of_players()]
 
     def get_max_player_index(self):
         """

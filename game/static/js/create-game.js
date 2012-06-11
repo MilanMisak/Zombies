@@ -5,8 +5,8 @@ var updateGameInfo = function() {
         ajaxErrorCount = 0;
 
         var items = [];
-        $.each(data[2], function(key, val) {
-            items.push('<li>' + val + '</li>');
+        $.each(data[2], function(i, v) {
+            items.push('<li>' + v + '</li>');
         });
 
         $('#player_list').html('<ul>' + items.join('') + '</ul>');
