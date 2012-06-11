@@ -76,7 +76,7 @@ $(document).ready(function() {
     var selectedDirection = null;
 
     // Action buttons
-    var actionIDs = ['#btn_move', '#btn_skip_go', '#btn_shoot', '#btn_reload', '#btn_barricade', '#btn_debarricade'];
+    var actionIDs = ['#btn_move', '#btn_shoot', '#btn_ammo', '#btn_reload', '#btn_barricade', '#btn_debarricade'];
     var untoggleActionButtons = function(e) {
         if (isDisabled(this))
             return;
@@ -111,7 +111,7 @@ $(document).ready(function() {
              $(v).removeClass('disabled');
         });
     });
-    $('#btn_skip_go, #btn_reload').click(function() {
+    $('#btn_ammo').click(function() {
         $.each(arrowIDs, function(i, v) {
              $(v).addClass('disabled');
              untoggle(null, v);
@@ -124,12 +124,12 @@ $(document).ready(function() {
         if (this == undefined)
             return;
         var id = $(this).attr('id');
-        if (id !== 'btn_skip_go' && id !== 'btn_reload') {
-            $('#btn_arrow_go').addClass('disabled');
-            $('#instruction_label').html('Pick a direction and click GO');
-        } else {
+        if (id === 'btn_ammo' || id === 'btn_reload') {
             $('#btn_arrow_go').removeClass('disabled');
             $('#instruction_label').html('Click GO');
+        } else {
+            $('#btn_arrow_go').addClass('disabled');
+            $('#instruction_label').html('Pick a direction and click GO');
         }
         $('#instruction_label').fadeIn();
         $('#instruction_label').fadeOut(1000);
@@ -183,33 +183,29 @@ $(document).ready(function() {
         if (isDisabled(this))
             return false;
         
-        console.log(canMove("Up"));
-        console.log(canMove("Left"));
-
-        //TODO 
         switch (selectedAction) {
         case 'Move':
-            Move(selectedDirection);
-            //alert('m ' + selectedDirection);
+            if (canMove(selectedDirection))
+                Move(selectedDirection);
             break;
-        /*case 'Skip Go':
-            alert('g ');
-            break;*/
+        case 'Ammo':
+            alert('Ammo');
+            break;
         case 'Shoot':
-            shoot(selectedDirection);
-            //alert('s ' + selectedDirection);
+            if (canShoot(selectedDirection))
+                shoot(selectedDirection);
             break;
         case 'Reload':
-            reload();
-            //alert('r');
+            if (canReload())
+                reload();
             break;
         case 'Barricade':
-            Barricade(selectedDirection);
-            //alert('b ' + selectedDirection);
+            if (canBarricade(selectedDirection))
+                Barricade(selectedDirection);
             break;
         case 'Debarricade':
-            breakBarricade(selectedDirection);
-            //alert('d ' + selectedDirection);
+            if (canBreakBarricade(selectedDirection))
+                breakBarricade(selectedDirection);
             break;
         default:
             break;

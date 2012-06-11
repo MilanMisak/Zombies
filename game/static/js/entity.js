@@ -127,16 +127,16 @@ entitySetup = function() {
         this.canMove = function(direction) {
             switch (direction) {
                 case "Left":
-                    return !(this.room.left == null || this.room.leftBarricade.exists)
+                    return (this.room.left != null && !this.room.leftBarricade.exists)
                     break;
                 case "Right":
-                    return !(this.room.right == null || this.room.leftBarricade.exists)
+                    return (this.room.right != null && !this.room.rightBarricade.exists)
                     break;
                 case "Up":
-                    return !(this.room.up == null || this.room.upStairs.barricade.exists)
+                    return (this.room.up != null && !this.room.upStairs.barricade.exists)
                     break;
                 case "Down":
-                    return !(this.room.down == null || this.room.downStairs.barricade.exists)
+                    return (this.room.down != null && !this.room.downStairs.barricade.exists)
                     break;
             }          
         }
@@ -338,16 +338,16 @@ entitySetup = function() {
         this.canBarricade = function(direction) {
             switch (direction) {
                 case "Left":
-                    return (this.room.left != null && !this.room.containsSnails)
+                    return (this.room.left != null && !this.room.left.containsSnails())
                     break;
                 case "Right":
-                    return (this.room.right != null && !this.room.containsSnails)
+                    return (this.room.right != null && !this.room.right.containsSnails())
                     break;
                 case "Up":
-                    return (this.room.up != null && !this.room.containsSnails)
+                    return (this.room.up != null && !this.room.up.containsSnails())
                     break;
                 case "Down":
-                    return (this.room.down != null && !this.room.containsSnails)
+                    return (this.room.down != null && !this.room.down.containsSnails())
                     break;
             }
         }
@@ -377,16 +377,16 @@ entitySetup = function() {
 
             switch(direction) {
                 case "Left":
-                    return (this.room.left != null && this.room.containsSnails)
+                    return (this.room.left != null && this.room.containsSnails())
                     break;
                 case "Right":
-                    return (this.room.right != null && this.room.containsSnails)
+                    return (this.room.right != null && this.room.containsSnails())
                     break;
                 case "Up":
-                    return (this.room.up != null && this.room.containsSnails)
+                    return (this.room.up != null && this.room.containsSnails())
                     break;
                 case "Down":
-                    return (this.room.down != null && this.room.containsSnails)
+                    return (this.room.down != null && this.room.containsSnails())
                     break;
             }
         }
@@ -394,10 +394,10 @@ entitySetup = function() {
         this.canBreak = function(direction) {
             switch(direction) {
                 case "Left":
-                    return (this.room.left != null && this.room.left.barricade.exists)
+                    return (this.room.left != null && this.room.leftBarricade.exists)
                     break;
                 case "Right":
-                    return (this.room.right != null && this.room.right.barricade.exists)
+                    return (this.room.right != null && this.room.rightBarricade.exists)
                     break;
                 case "Up":
                     return (this.room.up != null && this.room.upStairs.barricade.exists)
@@ -818,7 +818,7 @@ entitySetup = function() {
         return player.canBarricade(direction);
     }
 
-    this.Barricade = function() {
+    this.Barricade = function(direction) {
         switch (direction) {
             case "Left":
                 player.barricadeLeft();
