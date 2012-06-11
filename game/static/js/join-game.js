@@ -1,9 +1,6 @@
-var errorModalShown = false;
-
 var documentReady = false;
 var hasJoinedGameYet = false;
 
-var AJAX_ERROR_ALLOWANCE = 10; // Keep in sync with models.py setting
 var ajaxErrorCount = 0;
 var ajaxErrorCount2 = 0;
 
@@ -35,21 +32,14 @@ var updateGameInfo = function() {
         ajaxErrorCount2 = 0;
 
         if ('NO-GAME' === xhr.responseText && hasJoinedGameYet) {
-            if (errorModalShown)
-                return;
-            errorModalShown = true;
+            showErrorModal(
+                'the game you joined was cancelled.',
+                'Please join a different game.');
 
             // No game associated with this player anymore
             hasJoinedGameYet = false;
             $('#game_name').html('');
             $('#joined_game_instructions').fadeOut();
-
-            $('#error_reason').html('the game you joined was cancelled.');
-            $('#error_details').html('Please join a different game.');
-            $('#error_modal').on('hide', function() {
-                errorModalShown = false;
-            });
-            $('#error_modal').modal('show');
         }
 
         $('#player_list').html('<p>No game joined</p>');
@@ -92,16 +82,10 @@ $(document).ready(function() {
                 return;
             ajaxErrorCount = 0;
 
-            if (errorModalShown)
-                return;
-            errorModalShown = true;
-
-            $('#error_reason').html('your player has been wiped off the server. ' +
-                'Are you experiencing any internet connection issues?');
-            $('#error_modal').on('hide', function() {
-                window.location.replace('/');
-            });
-            $('#error_modal').modal('show');
+            showErrorModal(
+                'your player has been wiped off the server. ' +
+                'Are you experiencing any internet connection issues?',
+                '', '/');
         });
     };
 

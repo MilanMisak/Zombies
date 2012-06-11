@@ -1,6 +1,3 @@
-var errorModalShown = false;
-
-var AJAX_ERROR_ALLOWANCE = 10; // Keep in sync with models.py setting
 var ajaxErrorCount = 0;
 
 var updateGameInfo = function() {
@@ -19,14 +16,10 @@ var updateGameInfo = function() {
             return;
         ajaxErrorCount = 0;
 
-        if (errorModalShown)
-            return;
-        errorModalShown = true;
-
-        $('#error_modal').on('hide', function() {
-            window.location.replace('/');
-        });
-        $('#error_modal').modal('show');
+        showErrorModal(
+            'your player has been wiped off the server. ' +
+            'Are you experiencing any internet connection issues?',
+            '', '/');
     });
 };
 
