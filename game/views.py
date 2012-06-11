@@ -30,6 +30,7 @@ def index(request):
                 game = Game()
                 game.save()
                 player.game = game
+                player.index = 1
 
             player.save()
             
@@ -124,6 +125,7 @@ def ajax_join_game(request, game_pk):
     try:
         game = Game.objects.get(pk=game_pk)
         player.game = game
+        player.index = game.get_max_player_index() + 1
         player.save()
         return HttpResponse()
     except ObjectDoesNotExist:

@@ -18,8 +18,8 @@ var updateGameInfo = function() {
             return;
 
         var items = [];
-        $.each(data[2], function(key, val) {
-            items.push('<li>' + val + '</li>');
+        $.each(data[2], function(i, v) {
+            items.push('<li>' + v + '</li>');
         });
 
         $('#game_name').html(data[0]);
