@@ -135,7 +135,7 @@ def ajax_game_state(request):
         print 'NO-PLAYER'
         return HttpResponseBadRequest('NO-PLAYER')
 
-    print 'GAME-INFO {}'.format(player)
+    print 'GAME-STATE {}'.format(player)
 
     game = player.game
     if game is None:

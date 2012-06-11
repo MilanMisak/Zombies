@@ -32,6 +32,7 @@ class Player(models.Model):
         """
         self.save()
         if self.game and self.game.master == self:
+            print self.game.players.all()
             self.game.save()
 
     def __unicode__(self):
