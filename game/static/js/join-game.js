@@ -1,3 +1,5 @@
+var errorModalShown = false;
+
 var documentReady = false;
 var hasJoinedGameYet = false;
 
@@ -78,8 +80,16 @@ $(document).ready(function() {
                 return;
             ajaxErrorCount = 0;
 
-            alert('An error occurred');
-            window.location.replace('/');
+            if (errorModalShown)
+                return;
+            errorModalShown = true;
+
+            $('#error_reason').html('your player has been wiped off the server. ' +
+                'Are you experiencing any internet connection issues?');
+            $('#error_modal').on('hide', function() {
+                window.location.replace('/');
+            });
+            $('#error_modal').modal('show');
         });
     };
 

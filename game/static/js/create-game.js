@@ -1,3 +1,5 @@
+var errorModalShown = false;
+
 var AJAX_ERROR_ALLOWANCE = 10; // Keep in sync with models.py setting
 var ajaxErrorCount = 0;
 
