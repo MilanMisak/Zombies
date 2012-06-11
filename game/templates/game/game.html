@@ -3,7 +3,7 @@
 {% block extra_js %}
     <script type="text/javascript" src="/static/js/paper.js"></script>
     <script type="text/javascript" src="/static/js/entity.js"></script>
-    <script type="text/javascript" src="/static/js/game.js"></script>
+    <script type="text/javascript" src="/static/js/game-controls.js"></script>
 <script type = "text/javascript">
 paper.install(window);
 $(function() {
@@ -141,6 +141,11 @@ $(function() {
 <img src="/static/img/ammobox.png" class="sprite" id="ammobox" />
 <img src="/static/img/barricade_stairs.png" class="sprite" id="stairBarricade" />
 <img src="/static/img/barricade_door.png" class="sprite" id="doorBarricade" />
+
+<!-- Need to have the AJAX requests running as early as possible. -->
+<script type="text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/static/js/game-ajax.js"></script>
 
 <canvas id="canvas" class="grid_9 alpha"></canvas>
 <div class="grid_3 alpha">

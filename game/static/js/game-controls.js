@@ -1,43 +1,5 @@
-var instructionsModalShown = false;
-var errorModalShown = false;
-
-// Outside the document ready handler for immediate execution
-var updateGameInfo = function() {
-    $.getJSON('/ajax-game-info', function(data) {
-    }).error(function(xhr, status, data) {
-        if (errorModalShown)
-            return;
-        errorModalShown = true;
-
-        if (instructionsModalShown) {
-            $('#instructions_modal').modal('hide');
-        }
-
-        if ('NO-GAME' === xhr.responseText) {
-            $('#error_reason').html('the game was cancelled.');
-        } else {
-            $('#error_reason').html('your player has been wiped off the server. ' +
-                'Are you experiencing any internet connection issues?');
-        }
-
-        $('#error_modal').on('hide', function() {
-            window.location.replace('/');
-        });
-        $('#error_modal').modal('show');
-    });
-};
-
-updateGameInfo();
-setInterval(updateGameInfo, 1000);
-
-// Show a modal with instructions
-$('#instructions_modal').on('show', function() {
-    instructionsModalShown = true;
-});
-$('#instructions_modal').modal('show');
-
 $(document).ready(function() {
-    // Disable page scrolling
+    // Disable page scrolling with arrow keys
     $(document).keydown(function(e) {
         if (e.keyCode >= 37 && e.keyCode <= 40)
             return false;
@@ -49,22 +11,22 @@ $(document).ready(function() {
         $(obj).attr('class', classes.replace(whatClass, withClass));
     };
 
-    var green = 'btn-success';  // Not pressed
-    var yellow = 'btn-warning'; // Pressed
+    var notPressed = 'btn-success';  // Green
+    var pressed = 'btn-warning'; // Yellow
 
     // Toggles a button with a given selector
     var toggle = function(aux, selector) {
-        replaceClass(selector, green, yellow);
+        replaceClass(selector, notPressed, pressed);
     };
 
-    // Untoggles a button with a given selector 
+    // Untoggles a button with a given selector
     var untoggle = function(aux, selector) {
-        replaceClass(selector, yellow, green);
+        replaceClass(selector, pressed, notPressed);
     };
 
     // Checks if a button is toggled
     var isToggled = function(selector) {
-        return $(selector).hasClass(yellow);
+        return $(selector).hasClass(pressed);
     };
 
     // Checks if a button is disabled
@@ -118,7 +80,7 @@ $(document).ready(function() {
         });
         selectedDirection = null;
     });
-    
+
     // A callback for enabling the GO button and flashing action instructions
     var enableGoAndFlashActionInstructions = function(e) {
         if (this == undefined)
@@ -148,7 +110,7 @@ $(document).ready(function() {
         $('#btn_arrow_go').removeClass('disabled');
     };
     $.each(arrowIDs, function(i, v) {
-        $(v).click(flashArrowInstructions); 
+        $(v).click(flashArrowInstructions);
     });
 
     // Showing the instructions modal
@@ -170,7 +132,7 @@ $(document).ready(function() {
         if (isToggled(selector))
             untoggle(null, selector);
     };
-    
+
     // Disable a button
     var disable = function(aux, selector) {
         $(selector).addClass('disabled');
@@ -182,7 +144,7 @@ $(document).ready(function() {
     $('#btn_arrow_go').click(function(e) {
         if (isDisabled(this))
             return false;
-        
+
         switch (selectedAction) {
         case 'Move':
             if (canMove(selectedDirection))
