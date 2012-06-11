@@ -151,10 +151,13 @@ $(document).ready(function() {
         if (isDisabled(this))
             return false;
 
+        var actionAccepted = false;
+
         switch (selectedAction) {
         case 'Move':
             if (canMove(selectedDirection)) {
                 Move(selectedDirection);
+                actionAccepted = true;
             } else {
                invalidSelection("Yo, you cant move there brah"); 
             }
@@ -167,6 +170,7 @@ $(document).ready(function() {
                 shoot(selectedDirection);
                 $('#ammo_display').html('Ammo: <span style="color: green; font-size: 250%">' + 
                 player.ammo + '</span> / 5</p>');
+                actionAccepted = true;
             } else {
                 invalidSelection("You can't shoot there"); 
             }
@@ -176,6 +180,7 @@ $(document).ready(function() {
                 reload();
                 $('#ammo_display').html('Ammo: <span style="color: green; font-size: 250%">' + 
                 player.ammo + '</span> / 5</p>');
+                actionAccepted = true;
             } else {
                 invalidSelection("You can't reload"); 
             }
@@ -183,6 +188,7 @@ $(document).ready(function() {
         case 'Barricade':
             if (canBarricade(selectedDirection)) {
                 Barricade(selectedDirection);
+                actionAccepted = true;
             } else {
                 invalidSelection("You can't barricade there"); 
             }
@@ -190,6 +196,7 @@ $(document).ready(function() {
         case 'Debarricade':
             if (canBreakBarricade(selectedDirection)) {
                 breakBarricade(selectedDirection);
+                actionAccepted = true;
             } else {
                 invalidSelection("There is nothing to break"); 
             }
@@ -198,11 +205,14 @@ $(document).ready(function() {
             break;
         }
 
+
         // Put buttons in their initial state
-        $.each(actionIDs, enable);
-        $.each(arrowIDs, disable);
-        $('#btn_arrow_go').addClass('disabled');
-        selectedAction = null;
+        if (actionAccepted) {
+            $.each(actionIDs, enable);
+            $.each(arrowIDs, disable);
+            $('#btn_arrow_go').addClass('disabled');
+            selectedAction = null;
+        }
 
         return false;
     });
