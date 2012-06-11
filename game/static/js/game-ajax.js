@@ -1,10 +1,18 @@
 var instructionsModalShown = false;
 var errorModalShown = false;
 
-// Outside the document ready handler for immediate execution
+var AJAX_ERROR_ALLOWANCE = 10; // Keep in sync with models.py setting
+var ajaxErrorCount = 0;
+
 var updateGameInfo = function() {
     $.getJSON('/ajax-game-info', function(data) {
+        ajaxErrorCount = 0;
     }).error(function(xhr, status, data) {
+        ajaxErrorCount++;
+        if (ajaxErrorCount < AJAX_ERROR_ALLOWANCE)
+            return;
+        ajaxErrorCount = 0;
+
         if (errorModalShown)
             return;
         errorModalShown = true;

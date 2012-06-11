@@ -21,9 +21,9 @@ class Player(models.Model):
     @staticmethod
     def clean_up():
         """
-        Deletes players not checked-in for 3 seconds or more.
+        Deletes players not checked-in for 10 seconds or more.
         """
-        time = datetime.now() - timedelta(seconds=3)
+        time = datetime.now() - timedelta(seconds=10)
         Player.objects.filter(last_checked_in__lte=time).delete()
 
     def check_in(self):
@@ -45,9 +45,9 @@ class Game(models.Model):
     @staticmethod
     def clean_up():
         """
-        Deletes games not checked-in for 3 seconds or more.
+        Deletes games not checked-in for 10 seconds or more.
         """
-        time = datetime.now() - timedelta(seconds=3)
+        time = datetime.now() - timedelta(seconds=10)
         Game.objects.filter(last_checked_in__lte=time).delete()
         Game.objects.filter(master=None).delete()
 
