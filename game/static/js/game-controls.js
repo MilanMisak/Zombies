@@ -19,7 +19,7 @@ $(document).ready(function() {
         replaceClass(selector, notPressed, pressed);
     };
 
-    // Untoggles a button with a given selector 
+    // Untoggles a button with a given selector
     var untoggle = function(aux, selector) {
         replaceClass(selector, pressed, notPressed);
     };
@@ -80,7 +80,7 @@ $(document).ready(function() {
         });
         selectedDirection = null;
     });
-    
+
     // A callback for enabling the GO button and flashing action instructions
     var enableGoAndFlashActionInstructions = function(e) {
         if (this == undefined)
@@ -110,7 +110,7 @@ $(document).ready(function() {
         $('#btn_arrow_go').removeClass('disabled');
     };
     $.each(arrowIDs, function(i, v) {
-        $(v).click(flashArrowInstructions); 
+        $(v).click(flashArrowInstructions);
     });
 
     // Showing the instructions modal
@@ -132,7 +132,7 @@ $(document).ready(function() {
         if (isToggled(selector))
             untoggle(null, selector);
     };
-    
+
     // Disable a button
     var disable = function(aux, selector) {
         $(selector).addClass('disabled');
@@ -144,7 +144,7 @@ $(document).ready(function() {
     $('#btn_arrow_go').click(function(e) {
         if (isDisabled(this))
             return false;
-        
+
         switch (selectedAction) {
         case 'Move':
             if (canMove(selectedDirection))
