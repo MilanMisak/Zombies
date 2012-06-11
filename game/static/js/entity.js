@@ -301,7 +301,7 @@ entitySetup = function() {
         this.gunArm = ghostGunSymbol.place(position);
         this.boxArm = ghostBoxSymbol.place(position);
         this.boxArm.visible = false;
-        this.flash = flashSymbol.place(position.add(new Point(80,0)));
+        this.flash = flashSymbol.place(position.add(new Point(82,-2)));
         this.flash.visible = false;
         this.armGroup = new Group (this.gunArm, this.boxArm, this.flash);
         this.hat.position = position.add(new Point(11, -75));
@@ -443,7 +443,7 @@ entitySetup = function() {
         }
 
         this.canShoot = function(direction) {
-            if (this.ammo == 0 || this.holdingBox)
+            /*if (this.ammo == 0 || this.holdingBox)
                 return false;
 
             switch(direction) {
@@ -459,7 +459,8 @@ entitySetup = function() {
                 case "Down":
                     return (this.room.down != null && this.room.containsSnails())
                     break;
-            }
+            }*/ return true;
+
         }
 
         this.canBreak = function(direction) {
