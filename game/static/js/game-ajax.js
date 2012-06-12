@@ -19,7 +19,6 @@ var updateGameState = function() {
             for(var newPlayer in data.players) {
 		        if (newPlayer != data.yourPk) {
                     addPlayer('green' ,mainRoom, newPlayer);
-                    addPlayer('red' ,mainRoom, newPlayer+1);
                 }
             }
 	        initialisedPlayers = true;
@@ -42,7 +41,7 @@ var updateGameState = function() {
                 switch(data.lastAction) {
                     case "Move":
                         movingPlayer = getPlayer(lastPlayerToMove);
-                        movingPlayer.move(movingPlayer, data.lastDirection);
+                        Move(movingPlayer, data.lastDirection);
                         break;
                     default:
                         break;

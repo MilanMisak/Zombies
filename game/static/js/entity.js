@@ -297,10 +297,6 @@ entitySetup = function() {
 
     this.Ghost = function(colour, room, id) {
         var position = room.position;
-	/* Fix for strange ghost position bug. */
-	if (id != 0) {
-	    position = position.add(new Point(0, 13));
-	}
         this.hat = triangle(colour);
         this.hat.scale(0.6);
         this.raster = ghostSymbol.place(position);
