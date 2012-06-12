@@ -222,13 +222,14 @@ $(document).ready(function() {
 
 
         // Put buttons in their initial state
+        // TODO - Signal end of turn
         if (actionAccepted)
             disableControls();
 
         return false;
     });
 
-    var disableControls = function() {
+    disableControls = function() {
         $.each(actionIDs, disable);
         $.each(arrowIDs, disable);
         $('#btn_arrow_go').addClass('disabled');
@@ -236,10 +237,8 @@ $(document).ready(function() {
     }
     disableControls();
 
-    var enableControls = function() {
+    enableControls = function() {
         $.each(actionIDs, enable);
-        /*$.each(arrowIDs, disable);
-        selectedAction = null;*/
     }	
 
 });
