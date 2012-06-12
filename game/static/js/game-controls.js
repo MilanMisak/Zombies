@@ -225,7 +225,7 @@ $(document).ready(function() {
         // TODO - Signal end of turn
         if (actionAccepted) {
             disableControls();
-            player.isTurn = false;
+            isTurn = false;
 	}
 
         return false;
