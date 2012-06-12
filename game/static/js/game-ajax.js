@@ -11,7 +11,7 @@ var updateGameState = function() {
 
         if (data.yourTurn) {
             $('#your_turn_display').fadeIn('fast');
-	        if (!isTurn && enableControls != undefined) {
+	        if (!isTurn && ALL_LOADED) {
                 isTurn = true;
                 enableControls();
 	        }
