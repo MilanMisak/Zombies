@@ -89,7 +89,7 @@ class Game(models.Model):
         self.last_player = player
         self.last_action = action
         self.last_direction = direction
-        self.update(turns_played=F('turns_played')+1)
+        self.turns_played = self.turns_played + 1
         self.save()
 
     def get_list_of_players(self):
