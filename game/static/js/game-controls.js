@@ -159,11 +159,25 @@ $(document).ready(function() {
                 Move(selectedDirection);
                 actionAccepted = true;
             } else {
-               invalidSelection("Yo, you cant move there brah"); 
+               invalidSelection('Yo, you cant move there brah'); 
             }
             break;
         case 'Ammo':
-            alert('Ammo');
+            if (player.holdingBox) { 
+                if (canDrop()) {
+                    drop();
+                    $('#btn_ammo').html('Pick up Box');
+                } else {
+                    invalidSelection('Serious problems if this is displayed');
+                }
+            } else {
+                if (canPickUp()) {
+                    pickUp();
+                    $('#btn_ammo').html('Drop Box');
+                } else {
+                    invalidSelection('You cant pick up the box.');
+                }
+            }
             break;
         case 'Shoot':
             if (canShoot(selectedDirection)) {
