@@ -7,9 +7,9 @@ var updateGameState = function() {
         ajaxErrorCount = 0;
 
         if (data)
-            $('#your_turn_display').show('fast');
+            $('#your_turn_display').fadeIn('fast');
         else
-            $('#your_turn_display').hide('slow');
+            $('#your_turn_display').fadeOut('slow');
     }).error(function(xhr, status, data) {
         ajaxErrorCount++;
         if (ajaxErrorCount < AJAX_ERROR_ALLOWANCE)
