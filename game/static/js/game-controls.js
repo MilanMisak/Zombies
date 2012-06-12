@@ -160,25 +160,25 @@ $(document).ready(function() {
 
         switch (selectedAction) {
         case 'Move':
-            if (canMove(selectedDirection)) {
-                Move(selectedDirection);
+            if (canMove(localPlayer, selectedDirection)) {
+                Move(localPlayer, selectedDirection);
                 actionAccepted = true;
             } else {
                invalidSelection('Yo, you cant move there brah'); 
             }
             break;
         case 'Ammo':
-            if (player.holdingBox) { 
-                if (canDrop()) {
-                    drop();
+            if (localPlayer.holdingBox) { 
+                if (canDrop(localPlayer)) {
+                    drop(localPlayer);
                     $('#btn_ammo').html('Pick up Box');
                     actionAccepted = true;
                 } else {
                     invalidSelection('Serious problems if this is displayed');
                 }
             } else {
-                if (canPickUp()) {
-                    pickUp();
+                if (canPickUp(localPlayer)) {
+                    pickUp(localPlayer);
                     $('#btn_ammo').html('Drop Box');
                     actionAccepted = true;
                 } else {
@@ -187,34 +187,34 @@ $(document).ready(function() {
             }
             break;
         case 'Shoot':
-            if (canShoot(selectedDirection)) {
-                shoot(selectedDirection);
-                $('#ammo_display').html(player.ammo);
+            if (canShoot(localPlayer, selectedDirection)) {
+                shoot(localPlayer, selectedDirection);
+                $('#ammo_display').html(localPlayer.ammo);
                 actionAccepted = true;
             } else {
                 invalidSelection("You can't shoot there"); 
             }
             break;
         case 'Reload':
-            if (canReload()) {
-                reload();
-                $('#ammo_display').html(player.ammo);
+            if (canReload(localPlayer)) {
+                reload(localPlayer);
+                $('#ammo_display').html(localPlayer.ammo);
                 actionAccepted = true;
             } else {
                 invalidSelection("You can't reload"); 
             }
             break;
         case 'Barricade':
-            if (canBarricade(selectedDirection)) {
-                Barricade(selectedDirection);
+            if (canBarricade(localPlayer, selectedDirection)) {
+                Barricade(localPlayer, selectedDirection);
                 actionAccepted = true;
             } else {
                 invalidSelection("You can't barricade there"); 
             }
             break;
         case 'Debarricade':
-            if (canBreakBarricade(selectedDirection)) {
-                breakBarricade(selectedDirection);
+            if (canBreakBarricade(localPlayer, selectedDirection)) {
+                breakBarricade(localPlayer, selectedDirection);
                 actionAccepted = true;
             } else {
                 invalidSelection("There is nothing to break"); 

@@ -5,32 +5,49 @@ var ajaxErrorCount = 0;
 isTurn = false;
 initialisedPlayers = false;
 ALL_LOADED = false;
+lastPlayerToMove = null;
 
 var updateGameState = function() {
+    if (!ALL_LOADED)
+	return;
+
     $.getJSON('/ajax-game-state', function(data) {
         ajaxErrorCount = 0;
-        //console.log(data)
+        console.log(data)
 
-        if (!initialisedPlayers && ALL_LOADED) {
+        if (!initialisedPlayers) {
             for(var newPlayer in data.players) {
-		if (newPlayer != data.yourPk) {
+		        if (newPlayer != data.yourPk) {
                     addPlayer('green' ,mainRoom, newPlayer);
                     addPlayer('red' ,mainRoom, newPlayer+1);
-	        }
+                }
             }
-	    initialisedPlayers = true;
+	        initialisedPlayers = true;
         }
-
+	
         if (data.yourTurn) {
-            $('#your_turn_display').fadeIn('fast');
-	        if (!isTurn && ALL_LOADED) {
+	        if (!isTurn) {
+                $('#your_turn_display').fadeIn('fast');
                 isTurn = true;
                 enableControls();
-	        }
+            }
         } else {
-            $('#your_turn_display').fadeOut('slow');
-	        disableControls();
-            isTurn = false;
+	        if (isTurn) {
+                $('#your_turn_display').fadeOut('slow');
+	            disableControls();
+                isTurn = false;
+	        } else if (lastPlayerToMove != data.lastPlayersPk) {
+            	lastPlayerToMove = data.lastPlayersPk;
+                
+                switch(data.lastAction) {
+                    case "Move":
+                        movingPlayer = getPlayer(lastPlayerToMove);
+                        movingPlayer.move(movingPlayer, data.lastDirection);
+                        break;
+                    default:
+                        break;
+                }   
+            }
         }
     }).error(function(xhr, status, data) {
         ajaxErrorCount++;

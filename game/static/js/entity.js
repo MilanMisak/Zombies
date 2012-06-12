@@ -877,14 +877,14 @@ entitySetup = function() {
 
 
     /* Entity for the local player. */
-    player = new Ghost('blue', mainRoom, 0);
+    localPlayer = new Ghost('blue', mainRoom, 0);
 
     /* Action code. */
-    this.canMove = function(direction) {
+    this.canMove = function(player, direction) {
         return player.canMove(direction);
     }	
 
-    this.Move = function(direction) {
+    this.Move = function(player, direction) {
         switch (direction) {
             case "Left":
                 player.moveLeft();
@@ -902,11 +902,11 @@ entitySetup = function() {
                 
     }
 
-    this.canBarricade = function(direction) {
+    this.canBarricade = function(player, direction) {
         return player.canBarricade(direction);
     }
 
-    this.Barricade = function(direction) {
+    this.Barricade = function(player, direction) {
         switch (direction) {
             case "Left":
                 player.barricadeLeft();
@@ -923,43 +923,43 @@ entitySetup = function() {
         }
     }
     
-    this.canShoot = function(direction) {
+    this.canShoot = function(player, direction) {
         return player.canShoot(direction);
     }
 
-    this.shoot = function(direction) {
+    this.shoot = function(player, direction) {
         player.shoot(direction);
     }
 
-    this.canReload = function() {
+    this.canReload = function(player) {
         return player.canReload();   
     }
 
-    this.reload = function() {
+    this.reload = function(player) {
         player.reload();
     }
 
-    this.canPickUp = function() {
+    this.canPickUp = function(player) {
         return player.canPickUp();
     }
     
-    this.pickUp = function() {
+    this.pickUp = function(player) {
         player.pickUp();
     }
     
-    this.canDrop = function() {
+    this.canDrop = function(player) {
         return player.canDrop();
     }
     
-    this.drop = function() {
+    this.drop = function(player) {
         player.drop();
     }
     
-    this.canBreakBarricade = function(direction) {
+    this.canBreakBarricade = function(player, direction) {
         return player.canBreak(direction);
     }   
     
-    this.breakBarricade = function(direction) {
+    this.breakBarricade = function(player, direction) {
         player.breakBarricade(direction);
     }
 
