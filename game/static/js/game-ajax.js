@@ -3,11 +3,18 @@ var instructionsModalShown = false;
 var ajaxErrorCount = 0;
 
 isTurn = false;
+initialisedPlayers = false;
 
 var updateGameState = function() {
     $.getJSON('/ajax-game-state', function(data) {
         ajaxErrorCount = 0;
         console.log(data)
+
+        if (!initialisedPlayers && ALL_LOADED) {
+            for(var newPlayer in data.players) {
+                addPlayer(mainRoom, 'pink', newPlayer);
+            }
+        }
 
         if (data.yourTurn) {
             $('#your_turn_display').fadeIn('fast');
