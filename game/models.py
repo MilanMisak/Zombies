@@ -102,6 +102,12 @@ class Game(models.Model):
         """
         return [str(player) for player in self.get_list_of_players()]
 
+    def get_hash_of_players_names(self):
+        """
+        Returns a hash with players PKs and names.
+        """
+        return {player.pk : str(player) for player in self.get_list_of_players()}
+
     def get_max_player_index(self):
         """
         Returns the maximum player index in this game.
