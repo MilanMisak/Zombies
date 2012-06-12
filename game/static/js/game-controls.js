@@ -222,9 +222,8 @@ $(document).ready(function() {
 
 
         // Put buttons in their initial state
-        if (actionAccepted) {
+        if (actionAccepted)
             disableControls();
-        }
 
         return false;
     });
