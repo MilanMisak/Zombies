@@ -113,6 +113,20 @@ padding-top: 10px;
 display: none;
 }
 
+
+#your_turn_display {
+margin-top: 10px;
+padding: 5px;
+color: #fff;
+background-color: green;
+display: none;
+}
+
+#ammo_display {
+color: green;
+font-size: 250%;
+}
+
 .control_btn_left {
 width: 71px;
 margin-right: 10px;
