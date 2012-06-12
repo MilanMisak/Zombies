@@ -6,10 +6,13 @@ var updateGameState = function() {
     $.getJSON('/ajax-game-state', function(data) {
         ajaxErrorCount = 0;
 
-        if (data)
+        if (data) {
             $('#your_turn_display').fadeIn('fast');
-        else
+            //TODO
+        } else {
             $('#your_turn_display').fadeOut('slow');
+            //TODO
+        }
     }).error(function(xhr, status, data) {
         ajaxErrorCount++;
         if (ajaxErrorCount < AJAX_ERROR_ALLOWANCE)
