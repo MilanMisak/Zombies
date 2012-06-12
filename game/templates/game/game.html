@@ -29,71 +29,24 @@ $(function() {
     }
 
     tool.onKeyDown = function(event) {
-        if (event.key == 'w') {
-            player.moveUp();
-        }
-        if (event.key == 'a') {
-            player.moveLeft();
-        }
-        if (event.key == 's') {
-            player.moveDown();
-        }
-        if (event.key == 'd') {
-            player.moveRight();
-        }
+	/* Scrolling and zooming controls. */
         if ((event.key == '=') && (scaleCount < 2)) {
             project.activeLayer.scale(1.25, view.center);
             weight *= 0.9;
             scaleCount++;
-        }
-        if ((event.key == '-') && (scaleCount > -7)) {
+        } else if ((event.key == '-') && (scaleCount > -7)) {
             project.activeLayer.scale(0.8, view.center);
             weight *= 1 / 0.9;
             scaleCount--;
-        }
-        if (event.key == 'right') {
+        } else if (event.key == 'right') {
             scroll(new Point(-100 * weight, 0));
-        }
-        if (event.key == 'left') {
+        } else if (event.key == 'left') {
             scroll(new Point(100 * weight, 0));
-        }
-        if (event.key == 'up') {
+        } else if (event.key == 'up') {
             scroll(new Point(0, 100 * weight));
-        }
-        if (event.key == 'down') {
+        } else if (event.key == 'down') {
             scroll(new Point(0, -100 * weight));
         }
-        if (event.key == 'n') {
-            player.pickUp();
-        }
-        if (event.key == 'm') {
-            player.drop();
-        }
-        if (event.key == 't') {
-            player.barricadeUp();
-        }
-        if (event.key == 'f') {
-            player.barricadeLeft();
-        }
-        if (event.key == 'g') {
-            player.barricadeDown();
-        }
-        if (event.key == 'h') {
-            player.barricadeRight();
-        }
-        if (event.key == 'i') {
-            player.breakBarUp();
-        }
-        if (event.key == 'j') {
-            player.breakBarLeft();
-        }
-        if (event.key == 'k') {
-            player.breakBarDown();
-        }
-        if (event.key == 'l') {
-            player.breakBarRight();
-        }
-
     }
 
 });
@@ -109,11 +62,6 @@ $(function() {
         <p>
             <span class="control_key big">=</span> Zoom In<br>
             <span class="control_key big">-</span> Zoom Out<br>
-            <span class="control_key big">WASD</span> Move Player<br>
-            <span class="control_key big">TFGH</span> Make Barricades<br>
-            <span class="control_key big">IJKL</span> Break Barricades<br>
-            <span class="control_key big">N</span> Pick Up Ammo Crate<br>
-            <span class="control_key big">M</span> Drop Ammo Crate<br>
             <span class="control_key">arrow keys</span> Move Camera
         </p>
     </div>

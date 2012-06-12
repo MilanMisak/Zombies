@@ -5,6 +5,7 @@ $(document).ready(function() {
             return false;
     });
 
+
     // Replaces a class of a given object
     var replaceClass = function(obj, whatClass, withClass) {
         var classes = $(obj).attr('class');
@@ -159,11 +160,27 @@ $(document).ready(function() {
                 Move(selectedDirection);
                 actionAccepted = true;
             } else {
-               invalidSelection("Yo, you cant move there brah"); 
+               invalidSelection('Yo, you cant move there brah'); 
             }
             break;
         case 'Ammo':
-            alert('Ammo');
+            if (player.holdingBox) { 
+                if (canDrop()) {
+                    drop();
+                    $('#btn_ammo').html('Pick up Box');
+                    actionAccepted = true;
+                } else {
+                    invalidSelection('Serious problems if this is displayed');
+                }
+            } else {
+                if (canPickUp()) {
+                    pickUp();
+                    $('#btn_ammo').html('Drop Box');
+                    actionAccepted = true;
+                } else {
+                    invalidSelection('You cant pick up the box.');
+                }
+            }
             break;
         case 'Shoot':
             if (canShoot(selectedDirection)) {
@@ -205,13 +222,24 @@ $(document).ready(function() {
 
 
         // Put buttons in their initial state
-        if (actionAccepted) {
-            $.each(actionIDs, enable);
-            $.each(arrowIDs, disable);
-            $('#btn_arrow_go').addClass('disabled');
-            selectedAction = null;
-        }
+        if (actionAccepted)
+            disableControls();
 
         return false;
     });
+
+    var disableControls = function() {
+        $.each(actionIDs, disable);
+        $.each(arrowIDs, disable);
+        $('#btn_arrow_go').addClass('disabled');
+        selectedAction = null;
+    }
+    disableControls();
+
+    var enableControls = function() {
+        $.each(actionIDs, enable);
+        /*$.each(arrowIDs, disable);
+        selectedAction = null;*/
+    }	
+
 });

@@ -312,6 +312,7 @@ entitySetup = function() {
         this.room = room;
         this.holdingBox = false;
         this.ammo = 5;
+	this.isTurn = false;
 
         /* Animation for ghost picking up box */
         this.pickUp = function() {
