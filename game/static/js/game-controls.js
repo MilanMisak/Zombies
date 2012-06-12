@@ -228,6 +228,9 @@ $(document).ready(function() {
         // Put buttons in their initial state
         // TODO - Signal end of turn
         if (actionAccepted) {
+            selectedDirection = selectedDirection || '';
+            $.getJSON('/ajax-game-state/' + selectedAction + '/' + selectedDirection, function(data) {});
+
             disableControls();
             isTurn = false;
         }
@@ -240,11 +243,11 @@ $(document).ready(function() {
         $.each(arrowIDs, disable);
         $('#btn_arrow_go').addClass('disabled');
         selectedAction = null;
-    }
+    };
     disableControls();
 
     enableControls = function() {
         $.each(actionIDs, enable);
-    }	
+    };	
 
 });

@@ -77,6 +77,16 @@ class Game(models.Model):
         self.status = 1
         self.save()
 
+    def make_turn(self, player, action, direction):
+        """
+        Makes the turn with the given player.
+        """
+        if self.current_player_index != player.index:
+            return
+
+        self.last_action = action
+        self.last_direction = direction
+
     def get_list_of_players(self):
         """
         Returns a list of players in the order they joined the game in.

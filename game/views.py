@@ -149,6 +149,24 @@ def ajax_game_state(request):
     json = simplejson.dumps(this_players_turn)
     return HttpResponse(json, mimetype='application/json')
 
+def ajax_make_turn(request, action, direction):
+    player = get_player(request)
+    if player is None:
+        print 'NO-PLAYER'
+        return HttpResponseBadRequest('NO-PLAYER')
+
+    print 'MAKE-TURN {} {} {}'.format(player, action, direction)
+
+    game = player.game
+    if game is None:
+        print 'NO-GAME'
+        return HttpResponseBadRequest('NO-GAME')
+
+    # Make the turn
+    game.make_turn(player, action, direction)
+
+    return HttpResponse()
+
 # Utility functions
 
 def get_player(request):
