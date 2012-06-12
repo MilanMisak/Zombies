@@ -880,7 +880,7 @@ entitySetup = function() {
         return player.canMove(direction);
     }	
 
-    this.Move = function(player, direction) {
+    this.move = function(player, direction) {
         switch (direction) {
             case "Left":
                 player.moveLeft();

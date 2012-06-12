@@ -41,7 +41,7 @@ var updateGameState = function() {
                 switch(data.lastAction) {
                     case "Move":
                         movingPlayer = getPlayer(lastPlayerToMove);
-                        Move(movingPlayer, data.lastDirection);
+                        move(movingPlayer, data.lastDirection);
                         break;
                     default:
                         break;

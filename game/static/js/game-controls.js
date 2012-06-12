@@ -161,7 +161,7 @@ $(document).ready(function() {
         switch (selectedAction) {
         case 'Move':
             if (canMove(localPlayer, selectedDirection)) {
-                Move(localPlayer, selectedDirection);
+                move(localPlayer, selectedDirection);
                 actionAccepted = true;
             } else {
                invalidSelection('Yo, you cant move there brah'); 
