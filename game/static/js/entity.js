@@ -297,6 +297,10 @@ entitySetup = function() {
 
     this.Ghost = function(colour, room, id) {
         var position = room.position;
+	/* Fix for strange ghost position bug. */
+	if (id != 0) {
+	    position = position.add(new Point(0, 13));
+	}
         this.hat = triangle(colour);
         this.hat.scale(0.6);
         this.raster = ghostSymbol.place(position);
@@ -692,9 +696,9 @@ entitySetup = function() {
     DoorBarricade.prototype = new Barricade();
     
     /* Declaration of room positions */
-    mainRoom = new Room(view.center.add(new Point(0, 753)));
-    outsideLeft = new Room(view.center.add(new Point(-1600, 755)));
-    outsideRight = new Room(view.center.add(new Point(1600, 755)));
+    this.mainRoom = new Room(view.center.add(new Point(0, 753)));
+    this.outsideLeft = new Room(view.center.add(new Point(-1600, 755)));
+    this.outsideRight = new Room(view.center.add(new Point(1600, 755)));
     floor1Room1 = new Room(view.center.add(new Point(-1130, 755)));
     floor1Room2 = new Room(view.center.add(new Point(-680, 755)));
     floor1Room3 = new Room(view.center.add(new Point(680, 755)));
@@ -873,7 +877,7 @@ entitySetup = function() {
 
 
     /* Entity for the local player. */
-    player = new Ghost('blue', mainRoom);
+    player = new Ghost('blue', mainRoom, 0);
 
     /* Action code. */
     this.canMove = function(direction) {
@@ -971,8 +975,8 @@ entitySetup = function() {
     }
 
     this.addPlayer = function(room, colour, id) {
-        var player = new Ghost(room, colour, id);
-        playerList.push(player); 
+        var newPlayer = new Ghost(room, colour, id);
+        playerList.push(newPlayer); 
     }
 
     this.getPlayer = function(id) {

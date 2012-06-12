@@ -4,16 +4,21 @@ var ajaxErrorCount = 0;
 
 isTurn = false;
 initialisedPlayers = false;
+ALL_LOADED = false;
 
 var updateGameState = function() {
     $.getJSON('/ajax-game-state', function(data) {
         ajaxErrorCount = 0;
-        console.log(data)
+        //console.log(data)
 
         if (!initialisedPlayers && ALL_LOADED) {
             for(var newPlayer in data.players) {
-                addPlayer(mainRoom, 'pink', newPlayer);
+		if (newPlayer != data.yourPk) {
+                    addPlayer('green' ,mainRoom, newPlayer);
+                    addPlayer('red' ,mainRoom, newPlayer+1);
+	        }
             }
+	    initialisedPlayers = true;
         }
 
         if (data.yourTurn) {
