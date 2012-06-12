@@ -7,9 +7,9 @@ var updateGameState = function() {
         ajaxErrorCount = 0;
 
         if (data)
-            $('#your_turn_display').css('display', 'inline');
+            $('#your_turn_display').show();
         else
-            $('#your_turn_display').css('display', 'none');
+            $('#your_turn_display').hide();
     }).error(function(xhr, status, data) {
         ajaxErrorCount++;
         if (ajaxErrorCount < AJAX_ERROR_ALLOWANCE)
@@ -40,3 +40,8 @@ $('#instructions_modal').on('show', function() {
     instructionsModalShown = true;
 });
 $('#instructions_modal').modal('show');
+
+
+$(document).ready(function() {
+    $('#your_turn_display').hide();
+});

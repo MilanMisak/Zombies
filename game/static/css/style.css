@@ -115,11 +115,16 @@ display: none;
 
 
 #your_turn_display {
-margin-top: 10px;
+width: 82px;
 padding: 5px;
 color: #fff;
 background-color: green;
-display: none;
+text-align: center;
+font-weight: bold;
+display: inline-block;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+border-radius: 20px;
 }
 
 #ammo_display {
