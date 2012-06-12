@@ -230,7 +230,7 @@ $(document).ready(function() {
         if (actionAccepted) {
             disableControls();
             isTurn = false;
-	}
+        }
 
         return false;
     });
