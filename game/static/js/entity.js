@@ -75,6 +75,8 @@ entitySetup = function() {
     /* List for all snail groups. */
     snailGroupList = new Array();
 
+    /* List for all other players. */
+    playerList = new Array();
 
     /* Virtual class, adds attributes to an item. (this.item must be defined) */
     this.Entity = function() {
@@ -293,7 +295,7 @@ entitySetup = function() {
     }
     Snail.prototype = new Entity();
 
-    this.Ghost = function(colour, room) {
+    this.Ghost = function(colour, room, id) {
         var position = room.position;
         this.hat = triangle(colour);
         this.hat.scale(0.6);
@@ -312,7 +314,8 @@ entitySetup = function() {
         this.room = room;
         this.holdingBox = false;
         this.ammo = 5;
-	this.isTurn = false;
+    	this.isTurn = false;
+        this.id = id;
 
         /* Animation for ghost picking up box */
         this.pickUp = function() {
@@ -965,6 +968,25 @@ entitySetup = function() {
                 SnailGroup.spawn(id, outsideRight, strength, noOfEntities);
             break;
         }
+    }
+
+    this.addPlayer = function(room, colour, id) {
+        var player = new Ghost(room, colour, id);
+        playerList.push(player); 
+    }
+
+    this.getPlayer = function(id) {
+        for (var i = 0; i < playerList.length; i++) {
+            var player = playerList[i];
+            if (player.id == id)
+                return player;
+        }
+        return null;
+    }
+    
+    this.removePlayer = function(id) {
+        var player = getPlayer(id);
+        playerList.remove(player);
     }   
 
 }
