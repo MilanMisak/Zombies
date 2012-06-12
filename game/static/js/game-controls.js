@@ -57,7 +57,7 @@ $(document).ready(function() {
     var arrowIDs = ['#btn_arrow_left', '#btn_arrow_up', '#btn_arrow_right', '#btn_arrow_down'];
     var untoggleArrowButtons = function(e) {
         if (isDisabled(this))
-            return;
+            return false;
         selectedDirection = $(this).attr('data-direction');
         $.each(arrowIDs, untoggle);
         if (this != undefined)
@@ -70,11 +70,15 @@ $(document).ready(function() {
 
     // Disabling and enabling the arrow buttons depending on the selected action
     $('#btn_move, #btn_shoot, #btn_barricade, #btn_debarricade').click(function() {
+	if (isDisabled(this))
+            return false;
         $.each(arrowIDs, function(i, v) {
              $(v).removeClass('disabled');
         });
     });
     $('#btn_ammo, #btn_reload').click(function() {
+	if (isDisabled(this))
+            return false;
         $.each(arrowIDs, function(i, v) {
              $(v).addClass('disabled');
              untoggle(null, v);
@@ -240,7 +244,7 @@ $(document).ready(function() {
     disableControls();
 
     enableControls = function() {
-        $.each(actionIDs, enable);
+        //$.each(actionIDs, enable);
     }	
 
 });
