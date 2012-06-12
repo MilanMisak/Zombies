@@ -42,7 +42,7 @@ $(document).ready(function() {
     var actionIDs = ['#btn_move', '#btn_shoot', '#btn_ammo', '#btn_reload', '#btn_barricade', '#btn_debarricade'];
     var untoggleActionButtons = function(e) {
         if (isDisabled(this))
-            return;
+            return false;
         selectedAction = $(this).attr('data-action');
         $.each(actionIDs, untoggle);
         if (this != undefined)
@@ -74,7 +74,7 @@ $(document).ready(function() {
              $(v).removeClass('disabled');
         });
     });
-    $('#btn_ammo').click(function() {
+    $('#btn_ammo, #btn_reload').click(function() {
         $.each(arrowIDs, function(i, v) {
              $(v).addClass('disabled');
              untoggle(null, v);
@@ -84,8 +84,8 @@ $(document).ready(function() {
 
     // A callback for enabling the GO button and flashing action instructions
     var enableGoAndFlashActionInstructions = function(e) {
-        if (this == undefined)
-            return;
+        if (this == undefined || isDisabled(this))
+            return false;
         var id = $(this).attr('id');
         if (id === 'btn_ammo' || id === 'btn_reload') {
             $('#btn_arrow_go').removeClass('disabled');
@@ -223,8 +223,10 @@ $(document).ready(function() {
 
         // Put buttons in their initial state
         // TODO - Signal end of turn
-        if (actionAccepted)
+        if (actionAccepted) {
             disableControls();
+            isTurn = false;
+	}
 
         return false;
     });
