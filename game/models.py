@@ -48,6 +48,7 @@ class Game(models.Model):
     last_player          = models.OneToOneField(Player, related_name='last_game', null=True)
     last_action          = models.CharField(max_length=20, null=True)
     last_direction       = models.CharField(max_length=5, null=True)
+    turns_played         = models.PositiveIntegerField(default=0)
     last_checked_in      = models.DateTimeField(auto_now=True)
    
     @staticmethod
@@ -88,6 +89,7 @@ class Game(models.Model):
         self.last_player = player
         self.last_action = action
         self.last_direction = direction
+        self.update(turns_played=F('turns_played')+1)
         self.save()
 
     def get_list_of_players(self):
