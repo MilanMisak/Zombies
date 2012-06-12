@@ -9,9 +9,15 @@ var updateGameState = function() {
 
         if (data) {
             $('#your_turn_display').fadeIn('fast');
-	    enableControls();
+	        if (!player.isTurn) {
+                player.isTurn = true;
+	            enableControls();
+                alert('poo');
+	        }
         } else {
             $('#your_turn_display').fadeOut('slow');
+	        disableControls();
+            player.isTurn = false;
         }
     }).error(function(xhr, status, data) {
         ajaxErrorCount++;
