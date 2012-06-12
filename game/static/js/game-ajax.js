@@ -2,16 +2,16 @@ var instructionsModalShown = false;
 
 var ajaxErrorCount = 0;
 
+
 var updateGameState = function() {
     $.getJSON('/ajax-game-state', function(data) {
         ajaxErrorCount = 0;
 
         if (data) {
             $('#your_turn_display').fadeIn('fast');
-            //TODO
+	    enableControls();
         } else {
             $('#your_turn_display').fadeOut('slow');
-            //TODO
         }
     }).error(function(xhr, status, data) {
         ajaxErrorCount++;
