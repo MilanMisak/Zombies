@@ -4,7 +4,7 @@ var ajaxErrorCount = 0;
 
 isTurn = false;
 
-enableControls = function() {};
+//enableControls = function() {};
 
 var updateGameState = function() {
     $.getJSON('/ajax-game-state', function(data) {
@@ -12,15 +12,14 @@ var updateGameState = function() {
 
         if (data) {
             $('#your_turn_display').fadeIn('fast');
-	        if (!isTurn) {
-                    isTurn = true;
-	            enableControls();
-                alert('poo');
+	        if (!isTurn && enableControls != undefined) {
+                isTurn = true;
+                enableControls();
 	        }
         } else {
             $('#your_turn_display').fadeOut('slow');
 	        disableControls();
-                isTurn = false;
+            isTurn = false;
         }
     }).error(function(xhr, status, data) {
         ajaxErrorCount++;

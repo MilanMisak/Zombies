@@ -244,7 +244,7 @@ $(document).ready(function() {
     disableControls();
 
     enableControls = function() {
-        //$.each(actionIDs, enable);
+        $.each(actionIDs, enable);
     }	
 
 });
