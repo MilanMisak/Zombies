@@ -153,7 +153,7 @@ def ajax_game_state(request):
     last_direction = game.last_direction or ''
     players = game.get_hash_of_players_names()
 
-    json = simplejson.dumps({'yourTurn': this_players_turn, 'lastPlayersPk': last_players_pk,
+    json = simplejson.dumps({'yourTurn': this_players_turn, 'yourPk': player.pk, 'lastPlayersPk': last_players_pk,
         'lastAction': last_action, 'lastDirection': last_direction, 'players': players})
     return HttpResponse(json, mimetype='application/json')
 
