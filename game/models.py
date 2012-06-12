@@ -90,7 +90,7 @@ class Game(models.Model):
         self.last_action = action
         self.last_direction = direction
         self.turns_played = self.turns_played + 1
-        self.save()
+        self.change_turns() # This does the save()
 
     def get_list_of_players(self):
         """
@@ -124,30 +124,28 @@ class Game(models.Model):
         timeout_time = self.current_player_start + timedelta(seconds=10)
         if timeout_time < datetime.now():
             # Current player timed out, change him
-            results = self.players.order_by('index').filter(index__gt=self.current_player_index)
-            if results.exists():
-                next_player = results[0]
-            else:
-                next_player = self.players.order_by('index')[0]
-            self.current_player_index = next_player.index
-            self.current_player_start = datetime.now()
-            self.save()
-            return next_player
+            return self.change_turns()
         else:
             try:
                 current_player = self.players.get(index=self.current_player_index)
                 return current_player
             except ObjectDoesNotExist:
                 # Current player got removed
-                results = self.players.order_by('index').filter(index__gt=self.current_player_index)
-                if results.exists():
-                    next_player = results[0]
-                else:
-                    next_player = self.players.order_by('index')[0]
-                self.current_player_index = next_player.index
-                self.current_player_start = datetime.now()
-                self.save()
-                return next_player
+                return self.change_turns()
+
+    def change_turns(self):
+        """
+        Ensures that it is the next player's turn now. Returns the next player.
+        """
+        results = self.players.order_by('index').filter(index__gt=self.current_player_index)
+        if results.exists():
+            next_player = results[0]
+        else:
+            next_player = self.players.order_by('index')[0]
+        self.current_player_index = next_player.index
+        self.current_player_start = datetime.now()
+        self.save()
+        return next_player
 
     def __unicode__(self):
         if self.players.count() == 0:
