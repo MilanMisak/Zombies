@@ -5,6 +5,7 @@ $(document).ready(function() {
             return false;
     });
 
+
     // Replaces a class of a given object
     var replaceClass = function(obj, whatClass, withClass) {
         var classes = $(obj).attr('class');
@@ -167,6 +168,7 @@ $(document).ready(function() {
                 if (canDrop()) {
                     drop();
                     $('#btn_ammo').html('Pick up Box');
+                    actionAccepted = true;
                 } else {
                     invalidSelection('Serious problems if this is displayed');
                 }
@@ -174,6 +176,7 @@ $(document).ready(function() {
                 if (canPickUp()) {
                     pickUp();
                     $('#btn_ammo').html('Drop Box');
+                    actionAccepted = true;
                 } else {
                     invalidSelection('You cant pick up the box.');
                 }
@@ -220,12 +223,24 @@ $(document).ready(function() {
 
         // Put buttons in their initial state
         if (actionAccepted) {
-            $.each(actionIDs, enable);
-            $.each(arrowIDs, disable);
-            $('#btn_arrow_go').addClass('disabled');
-            selectedAction = null;
+            disableControls();
         }
 
         return false;
     });
+
+    var disableControls = function() {
+        $.each(actionIDs, disable);
+        $.each(arrowIDs, disable);
+        $('#btn_arrow_go').addClass('disabled');
+        selectedAction = null;
+    }
+    disableControls();
+
+    var enableControls = function() {
+        $.each(actionIDs, enable);
+        /*$.each(arrowIDs, disable);
+        selectedAction = null;*/
+    }	
+
 });
