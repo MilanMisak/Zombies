@@ -4,13 +4,12 @@ var ajaxErrorCount = 0;
 
 isTurn = false;
 
-//enableControls = function() {};
-
 var updateGameState = function() {
     $.getJSON('/ajax-game-state', function(data) {
         ajaxErrorCount = 0;
+        console.log(data)
 
-        if (data) {
+        if (data.yourTurn) {
             $('#your_turn_display').fadeIn('fast');
 	        if (!isTurn && enableControls != undefined) {
                 isTurn = true;

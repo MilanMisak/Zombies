@@ -88,6 +88,7 @@ class Game(models.Model):
         self.last_player = player
         self.last_action = action
         self.last_direction = direction
+        self.save()
 
     def get_list_of_players(self):
         """

@@ -30,7 +30,7 @@ urlpatterns = patterns('game.views',
     url(r'^ajax-game-state$',
         'ajax_game_state',
     ),
-    url(r'^make-turn/(?P<action>\w+)/(?P<direction>\w+)$',
+    url(r'^ajax-make-turn/(?P<action>\w+)/(?P<direction>\w*)$',
         'ajax_make_turn',
     ),
 )

@@ -144,12 +144,19 @@ def ajax_game_state(request):
         return HttpResponseBadRequest('NO-GAME')
 
     current_player = game.get_current_player()
-    this_players_turn = player.pk == current_player.pk and player.rand_id == current_player.rand_id
+    this_players_turn = player.pk == current_player.pk
+    last_players_pk = game.last_player.pk if game.last_player else -1
+    if last_players_pk == player.pk:
+        # Set last player's PK to 0 if it was a move of the player sending the request
+        last_players_pk = 0
+    last_action = game.last_action or ''
+    last_direction = game.last_direction or ''
 
-    json = simplejson.dumps(this_players_turn)
+    json = simplejson.dumps({'yourTurn': this_players_turn, 'lastPlayersPk': last_players_pk,
+        'lastAction': last_action, 'lastDirection': last_direction})
     return HttpResponse(json, mimetype='application/json')
 
-def ajax_make_turn(request, action, direction):
+def ajax_make_turn(request, action, direction=''):
     player = get_player(request)
     if player is None:
         print 'NO-PLAYER'
