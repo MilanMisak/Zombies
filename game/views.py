@@ -75,8 +75,7 @@ def start_game(request):
     if game is None:
         return redirect('/')
 
-    game.status = 1
-    game.save()
+    game.start()
 
     return redirect('/game')
 
@@ -144,8 +143,10 @@ def ajax_game_state(request):
         print 'NO-GAME'
         return HttpResponseBadRequest('NO-GAME')
 
-    # TODO - something useful posted here
-    json = simplejson.dumps([])
+    current_player = game.get_current_player()
+    this_players_turn = player.pk == current_player.pk and player.rand_id == current_player.rand_id
+
+    json = simplejson.dumps(this_players_turn)
     return HttpResponse(json, mimetype='application/json')
 
 # Utility functions

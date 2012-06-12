@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.signals import pre_delete
+from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
 
 from datetime import datetime, timedelta
@@ -37,11 +38,14 @@ class Player(models.Model):
 
     def __unicode__(self):
         return self.name
+        #return '{} {}'.format(self.name, self.index)
 
 class Game(models.Model):
-    master          = models.OneToOneField(Player, related_name='mastered_game', null=True)
-    status          = models.PositiveSmallIntegerField(default=0) # 0 = not started, 1 = started
-    last_checked_in = models.DateTimeField(auto_now=True)
+    master               = models.OneToOneField(Player, related_name='mastered_game', null=True)
+    status               = models.PositiveSmallIntegerField(default=0) # 0 = not started, 1 = started
+    current_player_index = models.PositiveSmallIntegerField(null=True)
+    current_player_start = models.DateTimeField(null=True)
+    last_checked_in      = models.DateTimeField(auto_now=True)
    
     @staticmethod
     def clean_up():
@@ -62,6 +66,15 @@ class Game(models.Model):
         exclude_pk = player.game.pk if player.game is not None else -1
         return {game.pk : str(game) for game in Game.objects.exclude(pk=exclude_pk)}
 
+    def start(self):
+        """
+        Starts the game.
+        """
+        self.current_player_index = 1
+        self.current_player_start = datetime.now()
+        self.status = 1
+        self.save()
+
     def get_list_of_players(self):
         """
         Returns a list of players in the order they joined the game in.
@@ -79,6 +92,39 @@ class Game(models.Model):
         Returns the maximum player index in this game.
         """
         return self.players.order_by('-index')[0].index
+
+    def get_current_player(self):
+        """
+        Returns the player, whose turn it is.
+        """
+        # Timeout after 20 seconds
+        timeout_time = self.current_player_start + timedelta(seconds=10)
+        if timeout_time < datetime.now():
+            # Current player timed out, change him
+            results = self.players.order_by('index').filter(index__gt=self.current_player_index)
+            if results.exists():
+                next_player = results[0]
+            else:
+                next_player = self.players.order_by('index')[0]
+            self.current_player_index = next_player.index
+            self.current_player_start = datetime.now()
+            self.save()
+            return next_player
+        else:
+            try:
+                current_player = self.players.get(index=self.current_player_index)
+                return current_player
+            except ObjectDoesNotExist:
+                # Current player got removed
+                results = self.players.order_by('index').filter(index__gt=self.current_player_index)
+                if results.exists():
+                    next_player = results[0]
+                else:
+                    next_player = self.players.order_by('index')[0]
+                self.current_player_index = next_player.index
+                self.current_player_start = datetime.now()
+                self.save()
+                return next_player
 
     def __unicode__(self):
         if self.players.count() == 0:

@@ -6,7 +6,10 @@ var updateGameState = function() {
     $.getJSON('/ajax-game-state', function(data) {
         ajaxErrorCount = 0;
 
-        //TODO - something useful here
+        if (data)
+            $('#your_turn_display').css('display', 'inline');
+        else
+            $('#your_turn_display').css('display', 'none');
     }).error(function(xhr, status, data) {
         ajaxErrorCount++;
         if (ajaxErrorCount < AJAX_ERROR_ALLOWANCE)
