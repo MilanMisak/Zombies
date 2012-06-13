@@ -78,6 +78,12 @@ entitySetup = function() {
     /* List for all other players. */
     playerList = new Array();
 
+    /* List for rooms. */
+    roomList = new Array();
+
+    /* List of all Barricades. */
+    barricadeList = new Array();
+
     /* Virtual class, adds attributes to an item. (this.item must be defined) */
     this.Entity = function() {
         
@@ -101,7 +107,7 @@ entitySetup = function() {
             if (vector.length < 1) {
                 if (this.destinations.length > 0) {
                     this.setDestination(this.destinations.shift());
-		    this.faceTarget();
+		        this.faceTarget();
                 } else {
                     this.moving = false;
                 }
@@ -140,16 +146,12 @@ entitySetup = function() {
             switch (direction) {
                 case "Left":
                     return (this.room.left != null && !this.room.leftBarricade.exists)
-                    break;
                 case "Right":
                     return (this.room.right != null && !this.room.rightBarricade.exists)
-                    break;
                 case "Up":
                     return (this.room.up != null && !this.room.upStairs.barricade.exists)
-                    break;
                 case "Down":
                     return (this.room.down != null && !this.room.downStairs.barricade.exists)
-                    break;
             }          
         }
 
@@ -375,16 +377,12 @@ entitySetup = function() {
             switch (direction) {
                 case "Left":
                     return (this.room.left != null && !this.room.left.containsSnails())
-                    break;
                 case "Right":
                     return (this.room.right != null && !this.room.right.containsSnails())
-                    break;
                 case "Up":
                     return (this.room.up != null && !this.room.up.containsSnails())
-                    break;
                 case "Down":
                     return (this.room.down != null && !this.room.down.containsSnails())
-                    break;
             }
         }
 
@@ -453,16 +451,12 @@ entitySetup = function() {
             switch(direction) {
                 case "Left":
                     return (this.room.left != null && this.room.containsSnails())
-                    break;
                 case "Right":
                     return (this.room.right != null && this.room.containsSnails())
-                    break;
                 case "Up":
                     return (this.room.up != null && this.room.containsSnails())
-                    break;
                 case "Down":
                     return (this.room.down != null && this.room.containsSnails())
-                    break;
             }
         }
 
@@ -473,16 +467,12 @@ entitySetup = function() {
             switch(direction) {
                 case "Left":
                     return (this.room.left != null && this.room.leftBarricade.exists)
-                    break;
                 case "Right":
                     return (this.room.right != null && this.room.rightBarricade.exists)
-                    break;
                 case "Up":
                     return (this.room.up != null && this.room.upStairs.barricade.exists)
-                    break;
                 case "Down":
                     return (this.room.down != null && this.room.downStairs.barricade.exists)
-                    break;
             }
         }
         
@@ -599,6 +589,7 @@ entitySetup = function() {
         this.left = null;
         this.right = null;
         this.snails = new Array();
+        roomList.push(this);
 
         this.setUpStairs = function(room, stairs) {
             this.up = room;
@@ -647,6 +638,7 @@ entitySetup = function() {
         this.item = doorBarricadeSymbol.place(view.center);
         this.exists = false;
         this.health = 0;
+        barricadeList.push(this);
 
         /* Repairs or makes the Barricade */
         this.make = function() {
@@ -692,13 +684,13 @@ entitySetup = function() {
     DoorBarricade.prototype = new Barricade();
     
     /* Declaration of room positions */
-    this.mainRoom = new Room(view.center.add(new Point(0, 753)));
-    this.outsideLeft = new Room(view.center.add(new Point(-1600, 755)));
-    this.outsideRight = new Room(view.center.add(new Point(1600, 755)));
+    outsideLeft = new Room(view.center.add(new Point(-1600, 755)));
     floor1Room1 = new Room(view.center.add(new Point(-1130, 755)));
     floor1Room2 = new Room(view.center.add(new Point(-680, 755)));
+    mainRoom = new Room(view.center.add(new Point(0, 753)));
     floor1Room3 = new Room(view.center.add(new Point(680, 755)));
     floor1Room4 = new Room(view.center.add(new Point(1130, 755)));
+    outsideRight = new Room(view.center.add(new Point(1600, 755)));
     floor2Room1 = new Room(view.center.add(new Point(-680, 450)));
     floor2Room2 = new Room(view.center.add(new Point(680, 450)));
     floor2Room3 = new Room(view.center.add(new Point(1130, 450)));
@@ -716,7 +708,29 @@ entitySetup = function() {
     floor6Room1 = new Room(view.center.add(new Point(-100, -750)));
 
 
+    /* Stair Initialization.    
+       Stairs are numbered left to right, bottom to top. */
+    stairs1 = new Stairs(floor1Room2.position.add(new Point(110, 0)),
+                         floor2Room1.position.add(new Point(-175, 0)));
+    stairs2 = new Stairs(floor1Room3.position.add(new Point(110, 0)),
+                         floor2Room2.position.add(new Point(-185, 0)));
+    stairs3 = new Stairs(floor2Room1.position.add(new Point(110, 0)),
+                         floor3Room1.position.add(new Point(-175, 0)));
+    stairs4 = new Stairs(floor2Room3.position.add(new Point(-110, 0)),
+                         floor3Room5.position.add(new Point(175, 0)));
+    stairs5 = new Stairs(floor3Room1.position.add(new Point(110, 0)),
+                         floor4Room1.position.add(new Point(-175, 0)));
+    stairs6 = new Stairs(floor3Room4.position.add(new Point(-110, 0)),
+                         floor4Room4.position.add(new Point(35, 0)));
+    stairs7 = new Stairs(floor4Room1.position.add(new Point(120, 0)),
+                         floor5Room1.position.add(new Point(-615, 0)));
+    stairs8 = new Stairs(floor4Room3.position.add(new Point(100, 0)),
+                         floor5Room2.position.add(new Point(-385, 0)));
+    stairs9 = new Stairs(floor5Room1.position.add(new Point(-95, 0)),
+                         floor6Room1.position.add(new Point(60, 0)));
+
     /* Barricade Initialization. */    
+    
 
     /* First Floor Barricades. */
     doorBarricade1 = new DoorBarricade(floor1Room1.position.add(new Point(-250, 10)));
@@ -725,28 +739,50 @@ entitySetup = function() {
     doorBarricade4 = new DoorBarricade(floor1Room3.position.add(new Point(-230, 10)));
     doorBarricade5 = new DoorBarricade(floor1Room4.position.add(new Point(-230, 10)));
     doorBarricade6 = new DoorBarricade(floor1Room4.position.add(new Point(250, 10)));
+    
+    stairBarricade1 = new StairBarricade(stairs1.startPoint.add(new Point(-100, -50)));
+    stairs1.setBarricade(stairBarricade1);
+    stairBarricade2 = new StairBarricade(stairs2.startPoint.add(new Point(-110, -50)));
+    stairs2.setBarricade(stairBarricade2);
 
     /* Second Floor Barricades. */
     doorBarricade7 = new DoorBarricade(floor2Room2.position.add(new Point(230, 10)));
    
+    stairBarricade3 = new StairBarricade(stairs3.startPoint.add(new Point(-100, -50)));
+    stairs3.setBarricade(stairBarricade3);
+    stairBarricade4 = new StairBarricade(stairs4.startPoint.add(new Point(100, -50)));
+    stairBarricade4.flip();
+    stairs4.setBarricade(stairBarricade4);
+    
     /* Third Floor Barricades. */
     doorBarricade8 = new DoorBarricade(floor3Room1.position.add(new Point(230, 10)));
     doorBarricade9 = new DoorBarricade(floor3Room2.position.add(new Point(230, 10)));
     doorBarricade10 = new DoorBarricade(floor3Room3.position.add(new Point(230, 10)));
     doorBarricade11 = new DoorBarricade(floor3Room4.position.add(new Point(230, 10)));
 
+    stairBarricade5 = new StairBarricade(stairs5.startPoint.add(new Point(-100, -50)));
+    stairs5.setBarricade(stairBarricade5);
+    stairBarricade6 = new StairBarricade(stairs6.startPoint.add(new Point(100, -50)));
+    stairs6.setBarricade(stairBarricade6);
+    
     /* Fourth Floor Barricades. */
     doorBarricade12 = new DoorBarricade(floor4Room1.position.add(new Point(230, 10)));
     doorBarricade13 = new DoorBarricade(floor4Room2.position.add(new Point(230, 10)));
     doorBarricade14 = new DoorBarricade(floor4Room3.position.add(new Point(230, 10)));
 
+    stairBarricade7 = new StairBarricade(stairs7.startPoint.add(new Point(-110, -50)));
+    stairs7.setBarricade(stairBarricade7);
+    stairBarricade8 = new StairBarricade(stairs8.startPoint.add(new Point(-100, -50)));
+    stairs8.setBarricade(stairBarricade8);
+
     /* Fifth Floor Barricades. */
     doorBarricade15 = new DoorBarricade(floor5Room1.position.add(new Point(240, 10)));
 
-
+    stairBarricade9 = new StairBarricade(stairs9.startPoint.add(new Point(120, -50)));
+    stairBarricade9.flip();
+    stairs9.setBarricade(stairBarricade9);
 
     /*First floor initialisation */
-    /* Stairs are numbered left to right, bottom to top. */
     mainRoom.setDoorLeadingLeft(floor1Room2, doorBarricade3);
     mainRoom.setDoorLeadingRight(floor1Room3, doorBarricade4);
 
@@ -755,14 +791,10 @@ entitySetup = function() {
     floor1Room1.setDoorLeadingRight(floor1Room2, doorBarricade2);
     floor1Room1.setDoorLeadingLeft(outsideLeft, doorBarricade1);
     
-    stairs1 = new Stairs(floor1Room2.position.add(new Point(110, 0)),
-                         floor2Room1.position.add(new Point(-175, 0)));
     floor1Room2.setUpStairs(floor2Room1, stairs1);
     floor1Room2.setDoorLeadingLeft(floor1Room1, doorBarricade2);
     floor1Room2.setDoorLeadingRight(mainRoom, doorBarricade3);
     
-    stairs2 = new Stairs(floor1Room3.position.add(new Point(110, 0)),
-                         floor2Room2.position.add(new Point(-185, 0)));
     floor1Room3.setUpStairs(floor2Room2, stairs2);
     floor1Room3.setDoorLeadingLeft(mainRoom, doorBarricade4);
     floor1Room3.setDoorLeadingRight(floor1Room4, doorBarricade5);
@@ -774,22 +806,16 @@ entitySetup = function() {
 
 
     /* Second Floor initialisation. */
-    stairs3 = new Stairs(floor2Room1.position.add(new Point(110, 0)),
-                         floor3Room1.position.add(new Point(-175, 0)));
     floor2Room1.setUpStairs(floor3Room1, stairs3);
     floor2Room1.setDownStairs(floor1Room2, stairs1);
     
     floor2Room2.setDownStairs(floor1Room3, stairs2);
     floor2Room2.setDoorLeadingRight(floor2Room3, doorBarricade7);
 
-    stairs4 = new Stairs(floor2Room3.position.add(new Point(-110, 0)),
-                         floor3Room5.position.add(new Point(175, 0)));
     floor2Room3.setUpStairs(floor3Room5, stairs4);
     floor2Room3.setDoorLeadingLeft(floor2Room2, doorBarricade7);
 
     /* Third Floor initialization. */
-    stairs5 = new Stairs(floor3Room1.position.add(new Point(110, 0)),
-                         floor4Room1.position.add(new Point(-175, 0)));
     floor3Room1.setUpStairs(floor4Room1, stairs5);
     floor3Room1.setDownStairs(floor2Room1, stairs3);
     floor3Room1.setDoorLeadingRight(floor3Room2, doorBarricade8);
@@ -800,8 +826,6 @@ entitySetup = function() {
     floor3Room3.setDoorLeadingLeft(floor3Room2, doorBarricade9);
     floor3Room3.setDoorLeadingRight(floor3Room4, doorBarricade10);
 
-    stairs6 = new Stairs(floor3Room4.position.add(new Point(-110, 0)),
-                         floor4Room4.position.add(new Point(35, 0)));
     floor3Room4.setUpStairs(floor4Room4, stairs6);
     floor3Room4.setDoorLeadingLeft(floor3Room3, doorBarricade10);
     floor3Room4.setDoorLeadingRight(floor3Room5, doorBarricade11);
@@ -811,8 +835,6 @@ entitySetup = function() {
 
 
     /* Fourth Floor initialization. */
-    stairs7 = new Stairs(floor4Room1.position.add(new Point(120, 0)),
-                         floor5Room1.position.add(new Point(-615, 0)));
     floor4Room1.setUpStairs(floor5Room1, stairs7);
     floor4Room1.setDownStairs(floor3Room1, stairs5);
     floor4Room1.setDoorLeadingRight(floor4Room2, doorBarricade12);
@@ -820,8 +842,6 @@ entitySetup = function() {
     floor4Room2.setDoorLeadingLeft(floor4Room1, doorBarricade12);
     floor4Room2.setDoorLeadingRight(floor4Room3, doorBarricade13);
 
-    stairs8 = new Stairs(floor4Room3.position.add(new Point(100, 0)),
-                         floor5Room2.position.add(new Point(-385, 0)));
     floor4Room3.setUpStairs(floor5Room2, stairs8);
     floor4Room3.setDoorLeadingLeft(floor4Room2, doorBarricade13);
     floor4Room3.setDoorLeadingRight(floor4Room4, doorBarricade14);
@@ -830,8 +850,6 @@ entitySetup = function() {
     floor4Room4.setDoorLeadingLeft(floor4Room3, doorBarricade14);
 
     /* Fifth Floor initialization. */
-    stairs9 = new Stairs(floor5Room1.position.add(new Point(-95, 0)),
-                         floor6Room1.position.add(new Point(60, 0)));
     floor5Room1.setUpStairs(floor6Room1, stairs9);
     floor5Room1.setDownStairs(floor4Room1, stairs7);
     floor5Room1.setDoorLeadingRight(floor5Room2, doorBarricade15);
@@ -843,28 +861,6 @@ entitySetup = function() {
     floor6Room1.setDownStairs(floor5Room1, stairs9);
 
 
-    /* Stair Barricade initialization. */
-    stairBarricade1 = new StairBarricade(stairs1.startPoint.add(new Point(-100, -50)));
-    stairs1.setBarricade(stairBarricade1);
-    stairBarricade2 = new StairBarricade(stairs2.startPoint.add(new Point(-110, -50)));
-    stairs2.setBarricade(stairBarricade2);
-    stairBarricade3 = new StairBarricade(stairs3.startPoint.add(new Point(-100, -50)));
-    stairs3.setBarricade(stairBarricade3);
-    stairBarricade4 = new StairBarricade(stairs4.startPoint.add(new Point(100, -50)));
-    stairBarricade4.flip();
-    stairs4.setBarricade(stairBarricade4);
-    stairBarricade5 = new StairBarricade(stairs5.startPoint.add(new Point(-100, -50)));
-    stairs5.setBarricade(stairBarricade5);
-    stairBarricade6 = new StairBarricade(stairs6.startPoint.add(new Point(100, -50)));
-
-    stairs6.setBarricade(stairBarricade6);
-    stairBarricade7 = new StairBarricade(stairs7.startPoint.add(new Point(-110, -50)));
-    stairs7.setBarricade(stairBarricade7);
-    stairBarricade8 = new StairBarricade(stairs8.startPoint.add(new Point(-100, -50)));
-    stairs8.setBarricade(stairBarricade8);
-    stairBarricade9 = new StairBarricade(stairs9.startPoint.add(new Point(120, -50)));
-    stairBarricade9.flip();
-    stairs9.setBarricade(stairBarricade9);
 
 
     /* Ammo box initialization. */
@@ -958,10 +954,10 @@ entitySetup = function() {
         switch (side) {
             case "Left" :
                 SnailGroup.spawn(id, outsideLeft, strength, noOfEntities);
-            break;
+                break;
             case "Right":
                 SnailGroup.spawn(id, outsideRight, strength, noOfEntities);
-            break;
+                break;
         }
     }
 
