@@ -222,11 +222,13 @@ class Game(models.Model):
             player.delete()
             return False
 
-        if self.barricades.filter(index=barricade_index).count() > 0:
-            # Barricade already exists
-            print 'BARRICADE EXISTS'
-            player.delete()
-            return False
+        query = self.barricades.filter(index=barricade_index)
+        if query.count() > 0:
+            # Barricade already exists - repair it
+            barricade = query[0]
+            barricade.health = 100
+            barricade.save()
+            return True
 
         # Create a new barricade
         barricade = Barricade(game=self, index=barricade_index)
