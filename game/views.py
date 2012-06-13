@@ -110,7 +110,7 @@ def ajax_game_info(request):
     
     game = player.game
     if game is None:
-        print 'NO-GAME'
+        print 'NO-GAME FOR {}'.format(player)
         return HttpResponseBadRequest('NO-GAME')
 
     json = simplejson.dumps([str(game), game.status, game.get_list_of_players_names()])
@@ -140,7 +140,7 @@ def ajax_game_state(request):
 
     game = player.game
     if game is None:
-        print 'NO-GAME'
+        print 'NO-GAME FOR {}'.format(player)
         return HttpResponseBadRequest('NO-GAME')
 
     current_player = game.get_current_player()
@@ -170,7 +170,7 @@ def ajax_make_turn(request, action, direction=''):
 
     game = player.game
     if game is None:
-        print 'NO-GAME'
+        print 'NO-GAME FOR {}'.format(player)
         return HttpResponseBadRequest('NO-GAME')
 
     # Make the turn

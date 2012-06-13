@@ -98,7 +98,11 @@ class Player(models.Model):
         Deletes players not checked-in for 10 seconds or more.
         """
         time = datetime.now() - timedelta(seconds=10)
+        count = Player.objects.all().count()
         Player.objects.filter(last_checked_in__lte=time).delete()
+        count2 = Player.objects.all().count()
+        if count != count2:
+            print 'DELETED {} PLAYERS'.format(count - count2)
 
     def check_in(self):
         """
