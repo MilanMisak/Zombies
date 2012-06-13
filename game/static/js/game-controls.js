@@ -197,8 +197,7 @@ $(document).ready(function() {
             break;
         case 'Reload':
             if (canReload(localPlayer)) {
-                localPlayer.reload();
-                //reload(localPlayer);
+                reload(localPlayer);
                 $('#ammo_display').html(localPlayer.ammo);
                 actionAccepted = true;
             } else {

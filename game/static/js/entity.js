@@ -463,7 +463,7 @@ entitySetup = function() {
         }
 
         this.animateShoot = function() {
-           if (this.shootDirection == null)
+            if (this.shootDirection == null)
                 return;
             var shootMod = this.shootCounter % 20;
             if (shootMod < 5)
