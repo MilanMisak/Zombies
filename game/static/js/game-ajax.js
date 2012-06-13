@@ -24,6 +24,7 @@ var executeMoves = function(data) {
                 localPlayer = new Ghost(playerColours[newPlayer.index - 1], roomList[newPlayer.room], 0, newPlayer.ammo);
             }
         }
+	turnNumber = data.turnsPlayed;
         initialisedPlayers = true;
     }
 
@@ -69,6 +70,16 @@ var executeMoves = function(data) {
         }
     }
 };
+
+/* Check the game state is the same as on the server. */
+var gameStateIsConsistent = function {
+}
+
+var makeGameStateConsistent = function {
+}
+
+
+
 
 var updateGameState = function() {
     if (!ALL_LOADED)
