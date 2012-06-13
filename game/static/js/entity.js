@@ -638,7 +638,6 @@ entitySetup = function() {
         this.item = doorBarricadeSymbol.place(view.center);
         this.exists = false;
         this.health = 0;
-        barricadeList.push(this);
 
         /* Repairs or makes the Barricade */
         this.make = function() {
@@ -671,6 +670,7 @@ entitySetup = function() {
         this.item = stairBarricadeSymbol.place(position);
         this.item.visible = false;
         this.exsts = false;
+        barricadeList.push(this);
     }
     StairBarricade.prototype = new Barricade(); 
 
@@ -680,6 +680,7 @@ entitySetup = function() {
         this.item = doorBarricadeSymbol.place(position);
         this.item.visible = false;
         this.exists = false;
+        barricadeList.push(this);
     }
     DoorBarricade.prototype = new Barricade();
     
@@ -978,7 +979,9 @@ entitySetup = function() {
     this.removePlayer = function(id) {
         var player = getPlayer(id);
         playerList.remove(player);
-    } 
+    }
+
+    entityLoaded = true; 
 }
 
 /* Removes an element from an array by value. */

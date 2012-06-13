@@ -15,16 +15,24 @@ var executeMoves = function(data) {
     if (!ALL_LOADED)
         return;
 
-    if (!initialisedPlayers) {
+    if (!initialisedPlayers && entityLoaded != undefined) {
         for (var i = 0; i < data.players.length; i++) {
-            newPlayer = data.players[i];
+            var newPlayer = data.players[i];
             if (newPlayer.pk != data.yourPk) {
                 addPlayer(playerColours[newPlayer.index - 1], roomList[newPlayer.room], newPlayer.pk, newPlayer.ammo);
             } else {
                 localPlayer = new Ghost(playerColours[newPlayer.index - 1], roomList[newPlayer.room], 0, newPlayer.ammo);
             }
         }
-	turnNumber = data.turnsPlayed;
+		turnNumber = data.turnsPlayed;
+
+        for (var i = 0; i < data.barricades.length; i++) {
+            newBarricade = barricadeList[data.barricades[i].index];
+            newBarricade.health = data.barricades[i].health;
+            newBarricade.exists = true;
+            newBarricade.item.visible = true;
+        }
+	
         initialisedPlayers = true;
     }
 
@@ -74,11 +82,6 @@ var executeMoves = function(data) {
 };
 
 /* Check the game state is the same as on the server. */
-var gameStateIsConsistent = function {
-}
-
-var makeGameStateConsistent = function {
-}
 
 
 
