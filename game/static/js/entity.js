@@ -153,10 +153,10 @@ entitySetup = function() {
             }          
         }
 
-        this.kill = function() {
+        this.die = function() {
             //TODO - remove from whatever list is containing it, maybe not here. */
             this.item.remove();
-        }	
+        }
 
         this.moveLeft = function() {
             this.setRoom(this.room.left);
@@ -316,6 +316,48 @@ entitySetup = function() {
         this.ammo = 5;
         this.isTurn = false;
         this.id = id;
+        this.isDead = false;
+        this.deathCounter = 0;
+
+        this.die = function() {
+            if (this.holdingBox)
+                this.drop();
+            this.raster.visible = false;
+            this.armGroup.visible = false;
+            this.isDead = true;
+        }
+
+        this.animateDeath = function() {
+            if (!this.isDead || this.deathCounter>160)
+                return;
+            var deathMod = this.deathCounter % 60;
+            if (this.deathCounter>140) {
+                this.hat.position = this.hat.position.add(new Point(-2,0));
+            } else if (this.deathCounter>119) {
+                this.hat.position = this.hat.position.add(new Point(-2,1));
+            } else if (deathMod < 10) {
+                this.hat.rotate(1);
+                this.hat.position = this.hat.position.add(new Point(-2,1));
+            } else if (deathMod < 15) {
+                this.hat.rotate(3);
+                this.hat.position = this.hat.position.add(new Point(-1,1));
+            } else if (deathMod < 20) {
+                this.hat.position = this.hat.position.add(new Point(1,1));
+            } else if (deathMod < 40) {
+                this.hat.rotate(-1);
+                this.hat.position = this.hat.position.add(new Point(2,1));
+            } else if (deathMod < 45) {
+                this.hat.rotate(-3);
+                this.hat.position = this.hat.position.add(new Point(1,1));
+            } else if (deathMod < 50) {
+                this.hat.position = this.hat.position.add(new Point(-1,1));
+            } else {
+                this.hat.rotate(1);
+                this.hat.position = this.hat.position.add(new Point(-2,1));
+            }
+            this.deathCounter++;
+            return;
+        }
 
         /* Animation for ghost picking up box */
         this.pickUp = function() {
@@ -423,16 +465,16 @@ entitySetup = function() {
         }
 
         this.animateShoot = function() {
-            if (this.shootDirection == null)
+           if (this.shootDirection == null)
                 return;
-            var countMod = this.shootCounter % 20;
-            if (countMod < 5)
+            var shootMod = this.shootCounter % 20;
+            if (shootMod < 5)
                 this.flash.visible = true;
             else
                 this.flash.visible = false;
-            if (countMod < 9)
+            if (shootMod < 9)
                 this.armGroup.rotate(-1);
-            else if (countMod>10)
+            else if (shootMod>10)
                 this.armGroup.rotate(1);
             if (this.shootCounter == 120) {
                 if (this.shootDirection == "Up")
