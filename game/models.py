@@ -89,6 +89,7 @@ class Player(models.Model):
                           on_delete=models.SET_NULL)
     index           = models.PositiveSmallIntegerField(null=True)
     room            = models.PositiveSmallIntegerField(default=3)
+    ammo            = models.PositiveSmallIntegerField(default=5)
     last_checked_in = models.DateTimeField(auto_now=True)
     
     @staticmethod
@@ -212,7 +213,7 @@ class Game(models.Model):
         """
         Returns a hash with players PKs and names.
         """
-        return self.players.values('pk', 'name', 'index', 'room')
+        return self.players.values('pk', 'name', 'index', 'room', 'ammo')
 
     def get_max_player_index(self):
         """
