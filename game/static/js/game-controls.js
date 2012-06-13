@@ -232,6 +232,7 @@ $(document).ready(function() {
             $.getJSON('/ajax-make-turn/' + selectedAction + '/' + selectedDirection, function(data) {});
 
             disableControls();
+            $('#your_turn_display').fadeOut('slow');
             isTurn = false;
         }
 
