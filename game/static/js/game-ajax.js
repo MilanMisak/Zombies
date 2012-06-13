@@ -13,9 +13,12 @@ var executeMoves = function(data) {
 	return;
 
     if (!initialisedPlayers) {
-        for (var newPlayer in data.players) {
-            if (newPlayer != data.yourPk) {
-                addPlayer('green' ,mainRoom, newPlayer);
+        console.log(data.players);
+        for (var i = 0; i < data.players.length; i++) {
+	    newPlayer = data.players[i];
+            if (newPlayer.pk != data.yourPk) {
+                addPlayer('green' ,mainRoom, newPlayer.pk);
+		console.log(newPlayer.pk);
             }
         }
         initialisedPlayers = true;
@@ -35,11 +38,11 @@ var executeMoves = function(data) {
         }
     }
     if (lastPlayerToMove != data.lastPlayersPk) {
-        console.log(data);
+        lastPlayerToMove = data.lastPlayersPk;
+	console.log(lastPlayerToMove);
 	if (lastPlayerToMove == 0 || lastPlayerToMove == -1)
 	    return;
 
-        lastPlayerToMove = data.lastPlayersPk;
         movingPlayer = getPlayer(lastPlayerToMove);
 
         switch(data.lastAction) {
