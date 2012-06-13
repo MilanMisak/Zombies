@@ -9,39 +9,39 @@ def is_valid_direction(direction):
     """
     Checks if a given direction is a valid direction.
     """
-    return True if direction == 'Top' or direction == 'Right' or direction == 'Bottom' or direction == 'Left' else False
+    return True if direction == 'Up' or direction == 'Right' or direction == 'Down' or direction == 'Left' else False
 
 class Room(object):
 
-    def __init__(self, top_room, right_room, bottom_room, left_room,
-        top_barricade, right_barricade, bottom_barricade, left_barricade):
-        self.top_room         = top_room
+    def __init__(self, up_room, right_room, down_room, left_room,
+        up_barricade, right_barricade, down_barricade, left_barricade):
+        self.up_room         = up_room
         self.right_room       = right_room
-        self.bottom_room      = bottom_room
+        self.down_room      = down_room
         self.left_room        = left_room
-        self.top_barricade    = top_barricade
+        self.up_barricade    = up_barricade
         self.right_barricade  = right_barricade
-        self.bottom_barricade = bottom_barricade
+        self.down_barricade = down_barricade
         self.left_barricade   = left_barricade
 
-    def get_room_in_direction(direction):
-        if direction == 'Top':
-            return self.top_room
+    def get_room_in_direction(self, direction):
+        if direction == 'Up':
+            return self.up_room
         elif direction == 'Right':
             return self.right_room
-        elif direction == 'Bottom':
-            return self.bottom_room
+        elif direction == 'Down':
+            return self.down_room
         elif direction == 'Left':
             return self.left_room
         return -1
     
-    def get_barricade_in_direction(direction):
-        if direction == 'Top':
-            return self.top_barricade
+    def get_barricade_in_direction(self, direction):
+        if direction == 'Up':
+            return self.up_barricade
         elif direction == 'Right':
             return self.right_barricade
-        elif direction == 'Bottom':
-            return self.bottom_barricade
+        elif direction == 'Down':
+            return self.down_barricade
         elif direction == 'Left':
             return self.left_barricade
         return -1
@@ -49,7 +49,7 @@ class Room(object):
     def __str__(self):
         return 'Room with {} {} {} {}'.format(self.top, self.right, self.bottom, self.left)
 
-# Top, right, bottom, left
+# Up, right, bottom, left
 ROOMS = [
     Room(-1, 1, -1, -1, -1, 0, -1, -1),
     Room(-1, 2, -1, 0, -1, 1, -1, 0),
@@ -157,14 +157,15 @@ class Game(models.Model):
             return
 
         if action == 'Move':
-            new_room = player.room.get_room_in_direction(direction)
+            new_room = ROOMS[player.room].get_room_in_direction(direction)
             if new_room == -1:
-                print 'INVALID ROOM'
+                print 'INVALID ROOM: from {} going {}'.format(player.room, direction)
                 player.delete()
                 return
 
             # Assign a new room to the player
-            self.room = new_room
+            player.room = new_room
+            player.save()
         elif action == 'Barricade':
             if not is_valid_direction(direction):
                 print 'INVALID DIRECTION'
