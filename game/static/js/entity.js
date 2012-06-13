@@ -330,12 +330,23 @@ entitySetup = function() {
         }
 
         this.animateDeath = function() {
-            if (!this.isDead || this.deathCounter>160)
+            if (!this.isDead || this.deathCounter > 180)
                 return;
             var deathMod = this.deathCounter % 60;
-            if (this.deathCounter>140) {
+            if (this.deathCounter > 175) {
+                var rect2 = new Path.Rectangle(
+                    this.hat.position.add(new Point(((this.deathCounter-170)*4),60)),
+                    this.hat.position.add(new Point(((170-this.deathCounter)*4),80)));
+                rect2.fillColor = 'black';
+            } else if (this.deathCounter > 160) {
+                this.hat.position = this.hat.position.add(new Point(0,-8));
+                var rect1 = new Path.Rectangle(
+                    this.hat.position.add(new Point(10,30)),
+                    this.hat.position.add(new Point(-10, (((this.deathCounter-160)*8)+30))));
+                rect1.fillColor = 'black';
+            } else if (this.deathCounter > 140) {
                 this.hat.position = this.hat.position.add(new Point(-2,0));
-            } else if (this.deathCounter>119) {
+            } else if (this.deathCounter > 119) {
                 this.hat.position = this.hat.position.add(new Point(-2,1));
             } else if (deathMod < 10) {
                 this.hat.rotate(1);
