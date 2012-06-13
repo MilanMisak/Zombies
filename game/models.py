@@ -89,6 +89,7 @@ class Player(models.Model):
                           on_delete=models.SET_NULL)
     index           = models.PositiveSmallIntegerField(null=True)
     room            = models.PositiveSmallIntegerField(default=3)
+    ammo            = models.PositiveSmallIntegerField(default=5)
     last_checked_in = models.DateTimeField(auto_now=True)
     
     @staticmethod
@@ -163,6 +164,13 @@ class Game(models.Model):
                 player.delete()
                 return
 
+            barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
+            if barricade_index != -1 and self.barricades.filter(index=barricade_index).count() > 0:
+                # There's a barricade in the way
+                print 'BARRICADE IN THE WAY'
+                player.delete()
+                return
+
             # Assign a new room to the player
             player.room = new_room
             player.save()
@@ -172,8 +180,7 @@ class Game(models.Model):
                 player.delete()
                 return
 
-            players_room = ROOMS[player.room]
-            barricade_index = players_room.get_barricade_in_direction(direction)
+            barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
             if barricade_index == -1:
                 # Can't barricade in this direction
                 print 'INVALID DIRECTION'
@@ -212,7 +219,13 @@ class Game(models.Model):
         """
         Returns a hash with players PKs and names.
         """
-        return self.players.values('pk', 'name', 'index', 'room')
+        return self.players.values('pk', 'name', 'index', 'room', 'ammo')
+
+    def get_list_of_barricades(self):
+        """
+        Returns a list of barricades with their indices and health.
+        """
+        return self.barricades.values('index', 'health')
 
     def get_max_player_index(self):
         """
