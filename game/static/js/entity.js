@@ -871,10 +871,6 @@ entitySetup = function() {
     ammoBox.position = mainRoom.position.add(new Point(0, 70));
     ammoBox.room = mainRoom;
 
-
-    /* Entity for the local player. */
-    localPlayer = new Ghost('blue', mainRoom, 0);
-
     /* Action code. */
     this.canMove = function(player, direction) {
         return player.canMove(direction);
