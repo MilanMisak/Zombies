@@ -9,6 +9,9 @@ lastPlayerToMove = null;
 
 /* Execute moves using data from the server. */
 var executeMoves = function(data) {
+    if (!ALL_LOADED)
+	return;
+
     if (!initialisedPlayers) {
         for (var newPlayer in data.players) {
             if (newPlayer != data.yourPk) {
@@ -32,7 +35,10 @@ var executeMoves = function(data) {
         }
     }
     if (lastPlayerToMove != data.lastPlayersPk) {
-        console.log(data)
+        console.log(data);
+	if (lastPlayerToMove == 0 || lastPlayerToMove == -1)
+	    return;
+
         lastPlayerToMove = data.lastPlayersPk;
         movingPlayer = getPlayer(lastPlayerToMove);
 
