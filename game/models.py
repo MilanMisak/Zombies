@@ -7,11 +7,16 @@ from datetime import datetime, timedelta
 
 class Room(object):
 
-    def __init__(self, top, right, bottom, left):
-        self.top    = top
-        self.right  = right
-        self.bottom = bottom
-        self.left   = left
+    def __init__(self, topRoom, rightRoom, bottomRoom, leftRoom,
+        topBarricade, rightBarricade, bottomBarricade, leftBarricade):
+        self.topRoom         = topRoom
+        self.rightRoom       = rightRoom
+        self.bottomRoom      = bottomRoom
+        self.leftRoom        = leftRoom
+        self.topBarricade    = topBarricade
+        self.rightBarricade  = rightBarricade
+        self.bottomBarricade = bottomBarricade
+        self.leftBarricade   = leftBarricade
 
     def __str__(self):
         return 'Room with {} {} {} {}'.format(self.top, self.right, self.bottom, self.left)
@@ -28,7 +33,7 @@ ROOMS = [
     Room(10, -1, 2, -1, 9, -1, 6, -1),
     Room(-1, 9, 4, -1, -1, 8, 7, -1),
     Room(14, -1, -1, 8, 10, -1, -1, 8),
-    Room(15, 11, 7, -1, 15, 11, 9, -1)
+    Room(15, 11, 7, -1, 15, 11, 9, -1),
     Room(-1, 12, -1, 10, -1, 12, -1, 11),
     Room(-1, 13, -1, 11, -1, 13, -1, 12),
     Room(18, 14, -1, 12, 16, 14, -1, 13),
@@ -55,6 +60,7 @@ class Player(models.Model):
     game            = models.ForeignKey('Game', related_name='players', null=True,
                           on_delete=models.SET_NULL)
     index           = models.PositiveSmallIntegerField(null=True)
+    room            = models.PositiveSmallIntegerField(default=3)
     last_checked_in = models.DateTimeField(auto_now=True)
     
     @staticmethod
@@ -74,7 +80,6 @@ class Player(models.Model):
             self.game.save()
 
     def __unicode__(self):
-        print ROOMS[0]
         return self.name
         #return '{} {}'.format(self.name, self.index)
 
@@ -190,3 +195,10 @@ class Game(models.Model):
             return "Noone's game"
         return "{0!s}'s game".format(self.master)
 
+class Barricade(models.Model):
+    game = models.ForeignKey(Game, related_name='barricades')
+    index = models.PositiveIntegerField()
+    health = models.PositiveIntegerField(default=100)
+
+    def __unicode__(self):
+        return 'Barricade {} with health {}'.format(self.index, self.health)
