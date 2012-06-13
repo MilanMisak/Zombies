@@ -5,6 +5,24 @@ from django.dispatch import receiver
 
 from datetime import datetime, timedelta
 
+class Room(object):
+
+    def __init__(self, top, right, bottom, left):
+        self.top    = top
+        self.right  = right
+        self.bottom = bottom
+        self.left   = left
+
+    def __str__(self):
+        return 'Room with {} {} {} {}'.format(self.top, self.right, self.bottom, self.left)
+
+# Top, right, bottom, left
+ROOMS = [
+    Room(-1, 1, -1, -1),
+    Room(-1, 2, -1, 0),
+    Room(7, 3, -1, 1),
+]
+
 @receiver(pre_delete)
 def pre_delete_callback(sender, instance, **kwargs):
     """
@@ -37,6 +55,7 @@ class Player(models.Model):
             self.game.save()
 
     def __unicode__(self):
+        print ROOMS[0]
         return self.name
         #return '{} {}'.format(self.name, self.index)
 
@@ -151,3 +170,4 @@ class Game(models.Model):
             # For the case when a game is left in the DB for longer than expected
             return "Noone's game"
         return "{0!s}'s game".format(self.master)
+
