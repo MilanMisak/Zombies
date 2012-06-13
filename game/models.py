@@ -200,7 +200,7 @@ class Game(models.Model):
             player.delete()
             return False
 
-        print 'PLAYER {} MOVING TO {}'.format(player.name, room)
+        print 'PLAYER {} MOVING TO {}'.format(player.name, new_room)
         # Assign a new room to the player
         player.room = new_room
         player.save()
