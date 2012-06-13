@@ -233,10 +233,10 @@ entitySetup = function() {
         this.hurt = function(damage) {
             this.strength -= damage;
             if (this.strength <= 0)
-                this.kill;
+                this.die;
         }
         
-        this.kill = function() {
+        this.die = function() {
             this.item.remove();
             this.room.removeSnailGroup(this);
             snailGroupList.remove(this);
