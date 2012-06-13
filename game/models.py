@@ -163,9 +163,13 @@ class Game(models.Model):
         elif action == 'Barricade':
             if not self.action_barricade(player, direction):
                 return
+        elif action == 'Debarricade':
+            if not self.action_debarricade(player, direction):
+                return
         else:
             # Action is not supported
             print 'INVALID ACTION'
+            player.delete()
             return
 
         self.last_player = player
@@ -223,6 +227,35 @@ class Game(models.Model):
         # Create a new barricade
         barricade = Barricade(game=self, index=barricade_index)
         barricade.save()
+        return True
+
+    def action_debarricade(self, player, direction):
+        """
+        Executes the DEBARRICADE action.
+        """
+        if not is_valid_direction(direction):
+            # Invalid direction
+            print 'INVALID DIRECTION'
+            player.delete()
+            return False
+
+        barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
+        if barricade_index == -1:
+            # Can't debarricade in this direction
+            print 'INVALID DIRECTION'
+            player.delete()
+            return False
+
+        query = self.barricades.filter(index=barricade_index)
+        if query.count() == 0:
+            # Barricade does not exist
+            print 'BARRICADE DOES NOT EXIST'
+            player.delete()
+            return False
+
+        # Delete the barricade
+        barricade = query[0]
+        barricade.delete()
         return True
 
     def get_list_of_players(self):
