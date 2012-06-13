@@ -11,19 +11,15 @@ $(function() {
 
     $('#canvas').css('height', '600px');
     paper.view.viewSize = [700, 600];
+    
+    scaleCount = 0; 
+    weight = 1;
 
     entitySetup();
 
-    var scaleCount = 0; 
-    var weight = 1;
-
-    project.activeLayer.scale(0.32768, view.center);
-    weight *= (1/0.59049);
-    scaleCount -= 5;
-
     view.onFrame = function(event) {
         snailUpdate();
-        if (initialisedPlayers != undefined && initialisedPlayers) {
+        if (initialisedPlayers && entityLoaded) {
             localPlayer.move();
             localPlayer.animateShoot();
             localPlayer.animateDeath();
