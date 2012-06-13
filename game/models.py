@@ -166,6 +166,10 @@ class Game(models.Model):
         elif action == 'Debarricade':
             if not self.action_debarricade(player, direction):
                 return
+        elif action == 'Ammo':
+            #if not self.action_debarricade(player, direction):
+            #    return
+            pass
         else:
             # Action is not supported
             print 'INVALID ACTION'
