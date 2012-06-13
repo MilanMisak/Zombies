@@ -314,7 +314,6 @@ entitySetup = function() {
         this.room = room;
         this.holdingBox = false;
         this.ammo = 5;
-    	this.score = 0;
         this.isTurn = false;
         this.id = id;
 
@@ -421,7 +420,6 @@ entitySetup = function() {
             
             this.shootDirection = direction;
             room.snails[0].hurt(20);
-            this.score += (2*20);
         }
 
         this.animateShoot = function() {
@@ -893,9 +891,6 @@ entitySetup = function() {
                 player.moveDown();
                 break;
         }
-        if (this.holdingBox)
-            this.score += 1;
-        player.score += 10;
     }
 
     this.canBarricade = function(player, direction) {
@@ -917,8 +912,6 @@ entitySetup = function() {
                 player.barricadeDown();
                 break;
         }
-        player.score += 1;
-        player.score += 10;
     }
     
     this.canShoot = function(player, direction) {
@@ -927,7 +920,6 @@ entitySetup = function() {
 
     this.shoot = function(player, direction) {
         player.shoot(direction);
-        player.score += 10;
     }
 
     this.canReload = function(player) {
@@ -936,7 +928,6 @@ entitySetup = function() {
 
     this.reload = function(player) {
         player.reload();
-        player.score += 10;
     }
 
     this.canPickUp = function(player) {
@@ -945,7 +936,6 @@ entitySetup = function() {
     
     this.pickUp = function(player) {
         player.pickUp();
-        player.score += 10;
     }
     
     this.canDrop = function(player) {
@@ -954,7 +944,6 @@ entitySetup = function() {
     
     this.drop = function(player) {
         player.drop();
-        player.score += 10;
     }
     
     this.canBreakBarricade = function(player, direction) {
@@ -963,7 +952,6 @@ entitySetup = function() {
     
     this.breakBarricade = function(player, direction) {
         player.breakBarricade(direction);
-        player.score += 10;
     }
 
     this.spawnSnailGroup = function(id, side, strength, noOfEntities) {
