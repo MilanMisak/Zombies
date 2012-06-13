@@ -1026,7 +1026,6 @@ entitySetup = function() {
     project.activeLayer.scale(0.32768, view.center);
     weight *= (1/0.59049);
     scaleCount -= 5;
-    view.draw();
     entityLoaded = true;
 }
 

@@ -32,7 +32,8 @@ var executeMoves = function(data) {
             newBarricade.exists = true;
             newBarricade.item.visible = true;
         }
-	
+
+        view.draw();
         initialisedPlayers = true;
     }
 
