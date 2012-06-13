@@ -95,7 +95,8 @@ $(document).ready(function() {
             $('#btn_arrow_go').removeClass('disabled');
             $('#instruction_label').html('Click GO');
         } else {
-            $('#btn_arrow_go').addClass('disabled');
+	    if (selectedDirection == null)
+                $('#btn_arrow_go').addClass('disabled');
             $('#instruction_label').html('Pick a direction and click GO');
         }
         $('#instruction_label').fadeIn();
