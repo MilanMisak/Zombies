@@ -164,6 +164,13 @@ class Game(models.Model):
                 player.delete()
                 return
 
+            barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
+            if barricade_index != -1 and self.barricades.filter(index=barricade_index).count() > 0:
+                # There's a barricade in the way
+                print 'BARRICADE IN THE WAY'
+                player.delete()
+                return
+
             # Assign a new room to the player
             player.room = new_room
             player.save()
@@ -173,8 +180,7 @@ class Game(models.Model):
                 player.delete()
                 return
 
-            players_room = ROOMS[player.room]
-            barricade_index = players_room.get_barricade_in_direction(direction)
+            barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
             if barricade_index == -1:
                 # Can't barricade in this direction
                 print 'INVALID DIRECTION'
