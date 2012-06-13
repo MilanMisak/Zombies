@@ -67,6 +67,22 @@ $(function() {
 {% endblock %}
 
 {% block content %}
+<div id="score_modal" class="modal hide">
+    <div class="modal-header">
+        <h3>Game Over</h3>
+    </div>
+    <div class="modal-body">
+        <p>You have been eaten by snails... :(</p>
+        <p>&nbsp;</p>
+        <p>Your score:</p>
+        <p>Nothing</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary btn-success" data-dismiss="modal">I am very sad</a>
+    </div>
+</div>
+
+
 <div id="instructions_modal" class="modal hide">
     <div class="modal-header">
         <h3>Game Instructions</h3>
@@ -113,6 +129,8 @@ $(function() {
     <div style="padding: 10px; height: 530px">
         <p style="text-align: right; float: right; margin-top: 5px; margin-bottom: 10px">Ammo: <span id="ammo_display">5</span> / 5</p>
         <p title="It is your turn now. Please choose an action below and click GO."><span id="your_turn_display">YOUR TURN</span></p>
+        <p style="clear: both"></p>
+        <p style="text-align: right; float: right; margin-top: 5px; margin-bottom: 10px">Current score: <span id="score_display">10,000</span></p>
         <p style="clear: both"></p>
 
         <p>&nbsp;</p>

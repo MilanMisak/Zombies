@@ -132,6 +132,11 @@ color: green;
 font-size: 250%;
 }
 
+#score_display {
+color: green;
+font-size: 150%;
+}
+
 .control_btn_left {
 width: 71px;
 margin-right: 10px;
