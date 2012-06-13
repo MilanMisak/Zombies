@@ -7,6 +7,10 @@ initialisedPlayers = false;
 ALL_LOADED = false;
 lastPlayerToMove = null;
 
+var playerColours = ['rgb(192, 192, 64)', 'rgb(192, 64, 64)', 'rgb(64, 64, 192)',
+    'rgb(64, 64, 64)', 'rgb(192, 192, 192)', 'rgb(192, 64, 192)', 'rgb(64, 192, 192)',
+    'rgb(64, 192, 64)'];
+
 /* Execute moves using data from the server. */
 var executeMoves = function(data) {
     if (!ALL_LOADED)
