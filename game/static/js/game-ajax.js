@@ -5,7 +5,7 @@ var ajaxErrorCount = 0;
 isTurn = false;
 initialisedPlayers = false;
 ALL_LOADED = false;
-lastPlayerToMove = null;
+turnNumber = 0;
 
 var playerColours = ['#ff0000', '#0000ff', '#ffff00', '#00ff00',
     '#ff7f00', '#ff00ff', '#00ffff', '#7f00ff', '#005f00', '#000000'];
@@ -37,12 +37,12 @@ var executeMoves = function(data) {
         disableControls();
         isTurn = false;
     }
-    if (lastPlayerToMove != data.lastPlayersPk) {
-        lastPlayerToMove = data.lastPlayersPk;
-        if (lastPlayerToMove == 0 || lastPlayerToMove == -1)
+    if (turnNumber != data.turnsPlayed) {
+        turnNumber = data.turnsPlayed;
+        if (data.lastPlayersPk == 0 || data.lastPlayersPk == -1)
             return;
 
-        movingPlayer = getPlayer(lastPlayerToMove);
+        movingPlayer = getPlayer(data.lastPlayersPk);
 
         switch(data.lastAction) {
         case "Move":
