@@ -1023,10 +1023,11 @@ entitySetup = function() {
         playerList.remove(player);
     }
 
-    entityLoaded = true;
     project.activeLayer.scale(0.32768, view.center);
     weight *= (1/0.59049);
     scaleCount -= 5;
+    view.draw();
+    entityLoaded = true;
 }
 
 /* Removes an element from an array by value. */
