@@ -151,7 +151,7 @@ def ajax_game_state(request):
         last_players_pk = 0
     last_action = game.last_action or ''
     last_direction = game.last_direction or ''
-    players = game.get_hash_of_players_names()
+    players = list(game.get_hash_of_players_names())
 
     json = simplejson.dumps({'yourTurn': this_players_turn, 'yourPk': player.pk,
         'lastPlayersPk': last_players_pk, 'lastAction': last_action,
