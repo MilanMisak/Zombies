@@ -16,13 +16,12 @@ var executeMoves = function(data) {
         return;
 
     if (!initialisedPlayers) {
-
         for (var i = 0; i < data.players.length; i++) {
             newPlayer = data.players[i];
             if (newPlayer.pk != data.yourPk) {
-                addPlayer(playerColours[newPlayer.index - 1], roomList[newPlayer.room], newPlayer.pk);
+                addPlayer(playerColours[newPlayer.index - 1], roomList[newPlayer.room], newPlayer.pk, newPlayer.ammo);
             } else {
-                localPlayer = new Ghost(playerColours[newPlayer.index - 1], roomList[newPlayer.room], 0);
+                localPlayer = new Ghost(playerColours[newPlayer.index - 1], roomList[newPlayer.room], 0, newPlayer.ammo);
             }
         }
         initialisedPlayers = true;

@@ -297,7 +297,7 @@ entitySetup = function() {
     }
     Snail.prototype = new Entity();
 
-    this.Ghost = function(colour, room, id) {
+    this.Ghost = function(colour, room, id, ammo) {
         var position = room.position;
         this.hat = triangle(colour);
         this.hat.scale(0.6);
@@ -315,7 +315,7 @@ entitySetup = function() {
         this.destination = position;
         this.room = room;
         this.holdingBox = false;
-        this.ammo = 5;
+        this.ammo = ammo;
         this.isTurn = false;
         this.id = id;
 
