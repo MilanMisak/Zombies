@@ -212,7 +212,7 @@ class Game(models.Model):
         """
         Returns a hash with players PKs and names.
         """
-        return self.players.values('pk', 'name', 'index')
+        return self.players.values('pk', 'name', 'index', 'room')
 
     def get_max_player_index(self):
         """
