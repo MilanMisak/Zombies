@@ -58,7 +58,6 @@ class Game(models.Model):
         """
         time = datetime.now() - timedelta(seconds=10)
         Game.objects.filter(last_checked_in__lte=time).delete()
-        Game.objects.filter(master=None).delete()
 
     @staticmethod
     def get_dict_of_games(player):
