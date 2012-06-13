@@ -4,29 +4,69 @@ var ajaxErrorCount = 0;
 
 isTurn = false;
 initialisedPlayers = false;
+ALL_LOADED = false;
+lastPlayerToMove = null;
 
 var updateGameState = function() {
+    if (!ALL_LOADED)
+	return;
+
     $.getJSON('/ajax-game-state', function(data) {
         ajaxErrorCount = 0;
-        console.log(data)
 
-        if (!initialisedPlayers && ALL_LOADED) {
+        if (!initialisedPlayers) {
             for(var newPlayer in data.players) {
-                addPlayer(mainRoom, 'pink', newPlayer);
+		        if (newPlayer != data.yourPk) {
+                    addPlayer('green' ,mainRoom, newPlayer);
+                }
             }
+	        initialisedPlayers = true;
         }
-
+	
         if (data.yourTurn) {
-            $('#your_turn_display').fadeIn('fast');
-	        if (!isTurn && ALL_LOADED) {
+	        if (!isTurn) {
+                $('#your_turn_display').fadeIn('fast');
                 isTurn = true;
                 enableControls();
-	        }
+            }
         } else {
-            $('#your_turn_display').fadeOut('slow');
-	        disableControls();
-            isTurn = false;
+	        if (isTurn) {
+                $('#your_turn_display').fadeOut('slow');
+	            disableControls();
+                isTurn = false;
+	        }
         }
+        if (lastPlayerToMove != data.lastPlayersPk) {
+            console.log(data)
+            lastPlayerToMove = data.lastPlayersPk;
+            movingPlayer = getPlayer(lastPlayerToMove);
+
+            switch(data.lastAction) {
+                case "Move":
+                    move(movingPlayer, data.lastDirection);
+                    break;
+                case "Ammo":
+                    if (movingPlayer.holdingBox) {
+                        drop(movingPlayer);
+                    } else {
+                        pickUp(movingPlayer);
+                    }
+                    break;
+                case "Shoot":
+                    shoot(movingPlayer, data.lastDirection);
+                    break;
+                case "Reload":
+                    reload(movingPlayer);
+                    break;
+                case "Barricade":
+                    barricade(movingPlayer, data.lastDirection);
+                    break;
+                case "Debarricade":
+                    breakBarricade(movingPlayer, data.lastDirection);
+                    break;
+            }   
+        }
+        
     }).error(function(xhr, status, data) {
         ajaxErrorCount++;
         if (ajaxErrorCount < AJAX_ERROR_ALLOWANCE)
@@ -51,6 +91,7 @@ var updateGameState = function() {
 
 updateGameState();
 setInterval(updateGameState, 1000);
+
 
 // Show a modal with instructions, other resources are loading in background
 $('#instructions_modal').on('show', function() {
