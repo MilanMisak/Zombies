@@ -5,23 +5,51 @@ from django.dispatch import receiver
 
 from datetime import datetime, timedelta
 
+def is_valid_direction(direction):
+    """
+    Checks if a given direction is a valid direction.
+    """
+    return True if direction == 'Up' or direction == 'Right' or direction == 'Down' or direction == 'Left' else False
+
 class Room(object):
 
-    def __init__(self, topRoom, rightRoom, bottomRoom, leftRoom,
-        topBarricade, rightBarricade, bottomBarricade, leftBarricade):
-        self.topRoom         = topRoom
-        self.rightRoom       = rightRoom
-        self.bottomRoom      = bottomRoom
-        self.leftRoom        = leftRoom
-        self.topBarricade    = topBarricade
-        self.rightBarricade  = rightBarricade
-        self.bottomBarricade = bottomBarricade
-        self.leftBarricade   = leftBarricade
+    def __init__(self, up_room, right_room, down_room, left_room,
+        up_barricade, right_barricade, down_barricade, left_barricade):
+        self.up_room         = up_room
+        self.right_room       = right_room
+        self.down_room      = down_room
+        self.left_room        = left_room
+        self.up_barricade    = up_barricade
+        self.right_barricade  = right_barricade
+        self.down_barricade = down_barricade
+        self.left_barricade   = left_barricade
+
+    def get_room_in_direction(self, direction):
+        if direction == 'Up':
+            return self.up_room
+        elif direction == 'Right':
+            return self.right_room
+        elif direction == 'Down':
+            return self.down_room
+        elif direction == 'Left':
+            return self.left_room
+        return -1
+    
+    def get_barricade_in_direction(self, direction):
+        if direction == 'Up':
+            return self.up_barricade
+        elif direction == 'Right':
+            return self.right_barricade
+        elif direction == 'Down':
+            return self.down_barricade
+        elif direction == 'Left':
+            return self.left_barricade
+        return -1
 
     def __str__(self):
         return 'Room with {} {} {} {}'.format(self.top, self.right, self.bottom, self.left)
 
-# Top, right, bottom, left
+# Up, right, bottom, left
 ROOMS = [
     Room(-1, 1, -1, -1, -1, 0, -1, -1),
     Room(-1, 2, -1, 0, -1, 1, -1, 0),
@@ -61,6 +89,7 @@ class Player(models.Model):
                           on_delete=models.SET_NULL)
     index           = models.PositiveSmallIntegerField(null=True)
     room            = models.PositiveSmallIntegerField(default=3)
+    ammo            = models.PositiveSmallIntegerField(default=5)
     last_checked_in = models.DateTimeField(auto_now=True)
     
     @staticmethod
@@ -128,6 +157,46 @@ class Game(models.Model):
         if self.current_player_index != player.index:
             return
 
+        if action == 'Move':
+            new_room = ROOMS[player.room].get_room_in_direction(direction)
+            if new_room == -1:
+                print 'INVALID ROOM: from {} going {}'.format(player.room, direction)
+                player.delete()
+                return
+
+            barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
+            if barricade_index != -1 and self.barricades.filter(index=barricade_index).count() > 0:
+                # There's a barricade in the way
+                print 'BARRICADE IN THE WAY'
+                player.delete()
+                return
+
+            # Assign a new room to the player
+            player.room = new_room
+            player.save()
+        elif action == 'Barricade':
+            if not is_valid_direction(direction):
+                print 'INVALID DIRECTION'
+                player.delete()
+                return
+
+            barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
+            if barricade_index == -1:
+                # Can't barricade in this direction
+                print 'INVALID DIRECTION'
+                player.delete()
+                return
+
+            if self.barricades.filter(index=barricade_index).count() > 0:
+                # Barricade already exists
+                print 'BARRICADE EXISTS'
+                player.delete()
+                return
+
+            # Create a new barricade
+            barricade = Barricade(game=self, index=barricade_index)
+            barricade.save()
+
         self.last_player = player
         self.last_action = action
         self.last_direction = direction
@@ -150,7 +219,13 @@ class Game(models.Model):
         """
         Returns a hash with players PKs and names.
         """
-        return self.players.values('pk', 'name', 'index')
+        return self.players.values('pk', 'name', 'index', 'room', 'ammo')
+
+    def get_list_of_barricades(self):
+        """
+        Returns a list of barricades with their indices and health.
+        """
+        return self.barricades.values('index', 'health')
 
     def get_max_player_index(self):
         """

@@ -16,7 +16,6 @@ var executeMoves = function(data) {
         return;
 
     if (!initialisedPlayers) {
-
         for (var i = 0; i < data.players.length; i++) {
             newPlayer = data.players[i];
             if (newPlayer.pk != data.yourPk) {
@@ -39,10 +38,12 @@ var executeMoves = function(data) {
     }
     if (turnNumber != data.turnsPlayed) {
         turnNumber = data.turnsPlayed;
-        if (data.lastPlayersPk == 0 || data.lastPlayersPk == -1)
+        if (data.lastPlayersPk <= 0)
             return;
 
         movingPlayer = getPlayer(data.lastPlayersPk);
+
+        console.log(movingPlayer.room);
 
         switch(data.lastAction) {
         case "Move":
