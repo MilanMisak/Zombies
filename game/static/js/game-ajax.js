@@ -14,38 +14,32 @@ var playerColours = ['rgb(192, 192, 64)', 'rgb(192, 64, 64)', 'rgb(64, 64, 192)'
 /* Execute moves using data from the server. */
 var executeMoves = function(data) {
     if (!ALL_LOADED)
-	return;
+        return;
 
     if (!initialisedPlayers) {
         console.log(data.players);
         for (var i = 0; i < data.players.length; i++) {
-	    newPlayer = data.players[i];
+            newPlayer = data.players[i];
             if (newPlayer.pk != data.yourPk) {
-                addPlayer('green' ,mainRoom, newPlayer.pk);
-		console.log(newPlayer.pk);
+                addPlayer(playerColours[newPlayer.index - 1], mainRoom, newPlayer.pk);
             }
         }
         initialisedPlayers = true;
     }
 
-    if (data.yourTurn) {
-        if (!isTurn) {
-            $('#your_turn_display').fadeIn('fast');
-            isTurn = true;
-            enableControls();
-        }
-    } else {
-        if (isTurn) {
-            $('#your_turn_display').fadeOut('slow');
-            disableControls();
-            isTurn = false;
-        }
+    if (data.yourTurn && !isTurn) {
+        $('#your_turn_display').fadeIn('fast');
+        isTurn = true;
+        enableControls();
+    } else if (!data.yourTurn && isTurn) {
+        $('#your_turn_display').fadeOut('slow');
+        disableControls();
+        isTurn = false;
     }
     if (lastPlayerToMove != data.lastPlayersPk) {
         lastPlayerToMove = data.lastPlayersPk;
-	console.log(lastPlayerToMove);
-	if (lastPlayerToMove == 0 || lastPlayerToMove == -1)
-	    return;
+        if (lastPlayerToMove == 0 || lastPlayerToMove == -1)
+            return;
 
         movingPlayer = getPlayer(lastPlayerToMove);
 
