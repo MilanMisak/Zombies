@@ -16,7 +16,6 @@ var executeMoves = function(data) {
         return;
 
     if (!initialisedPlayers) {
-
         for (var i = 0; i < data.players.length; i++) {
             newPlayer = data.players[i];
             if (newPlayer.pk != data.yourPk) {

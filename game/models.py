@@ -221,6 +221,12 @@ class Game(models.Model):
         """
         return self.players.values('pk', 'name', 'index', 'room', 'ammo')
 
+    def get_list_of_barricades(self):
+        """
+        Returns a list of barricades with their indices and health.
+        """
+        return self.barricades.values('index', 'health')
+
     def get_max_player_index(self):
         """
         Returns the maximum player index in this game.
