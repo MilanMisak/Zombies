@@ -206,7 +206,7 @@ $(document).ready(function() {
             break;
         case 'Barricade':
             if (canBarricade(localPlayer, selectedDirection)) {
-                Barricade(localPlayer, selectedDirection);
+                barricade(localPlayer, selectedDirection);
                 actionAccepted = true;
             } else {
                 invalidSelection("You can't barricade there"); 

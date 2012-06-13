@@ -902,7 +902,7 @@ entitySetup = function() {
         return player.canBarricade(direction);
     }
 
-    this.Barricade = function(player, direction) {
+    this.barricade = function(player, direction) {
         switch (direction) {
             case "Left":
                 player.barricadeLeft();
