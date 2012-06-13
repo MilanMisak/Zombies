@@ -69,14 +69,14 @@ $(document).ready(function() {
 
     // Disabling and enabling the arrow buttons depending on the selected action
     $('#btn_move, #btn_shoot, #btn_barricade, #btn_debarricade').click(function() {
-	if (isDisabled(this))
+        if (isDisabled(this))
             return false;
         $.each(arrowIDs, function(i, v) {
              $(v).removeClass('disabled');
         });
     });
     $('#btn_ammo, #btn_reload').click(function() {
-	if (isDisabled(this))
+        if (isDisabled(this))
             return false;
         $.each(arrowIDs, function(i, v) {
              $(v).addClass('disabled');

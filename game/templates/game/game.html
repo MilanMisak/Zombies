@@ -26,10 +26,12 @@ $(function() {
         if (initialisedPlayers != undefined && initialisedPlayers) {
             localPlayer.move();
             localPlayer.animateShoot();
+            localPlayer.animateDeath();
             for (var i = 0; i < playerList.length; i++) {
                 var player = playerList[i];
                 player.move();
-                player.animateShoot();	
+                player.animateShoot();
+                player.animateDeath();
             }
         }
     }
