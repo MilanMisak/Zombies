@@ -20,9 +20,9 @@ var executeMoves = function(data) {
         for (var i = 0; i < data.players.length; i++) {
             newPlayer = data.players[i];
             if (newPlayer.pk != data.yourPk) {
-                addPlayer(playerColours[newPlayer.index - 1], mainRoom, newPlayer.pk);
+                addPlayer(playerColours[newPlayer.index - 1], roomList[newPlayer.room], newPlayer.pk);
             } else {
-                localPlayer = new Ghost(playerColours[newPlayer.index - 1], mainRoom, 0);
+                localPlayer = new Ghost(playerColours[newPlayer.index - 1], roomList[newPlayer.room], 0);
             }
         }
         initialisedPlayers = true;

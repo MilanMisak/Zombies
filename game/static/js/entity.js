@@ -978,8 +978,7 @@ entitySetup = function() {
     this.removePlayer = function(id) {
         var player = getPlayer(id);
         playerList.remove(player);
-    }   
-
+    } 
 }
 
 /* Removes an element from an array by value. */

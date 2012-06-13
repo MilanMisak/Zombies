@@ -23,7 +23,7 @@ $(function() {
 
     view.onFrame = function(event) {
         snailUpdate();
-        if (initialisedPlayers) {
+        if (initialisedPlayers != undefined && initialisedPlayers) {
             localPlayer.move();
             localPlayer.animateShoot();
             for (var i = 0; i < playerList.length; i++) {
