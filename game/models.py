@@ -158,50 +158,72 @@ class Game(models.Model):
             return
 
         if action == 'Move':
-            new_room = ROOMS[player.room].get_room_in_direction(direction)
-            if new_room == -1:
-                print 'INVALID ROOM: from {} going {}'.format(player.room, direction)
-                player.delete()
+            if not self.action_move(player, direction):
                 return
-
-            barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
-            if barricade_index != -1 and self.barricades.filter(index=barricade_index).count() > 0:
-                # There's a barricade in the way
-                print 'BARRICADE IN THE WAY'
-                player.delete()
-                return
-
-            # Assign a new room to the player
-            player.room = new_room
-            player.save()
         elif action == 'Barricade':
-            if not is_valid_direction(direction):
-                print 'INVALID DIRECTION'
-                player.delete()
+            if not self.action_barricade(player, direction):
                 return
-
-            barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
-            if barricade_index == -1:
-                # Can't barricade in this direction
-                print 'INVALID DIRECTION'
-                player.delete()
-                return
-
-            if self.barricades.filter(index=barricade_index).count() > 0:
-                # Barricade already exists
-                print 'BARRICADE EXISTS'
-                player.delete()
-                return
-
-            # Create a new barricade
-            barricade = Barricade(game=self, index=barricade_index)
-            barricade.save()
+        else:
+            # Action is not supported
+            print 'INVALID ACTION'
+            return
 
         self.last_player = player
         self.last_action = action
         self.last_direction = direction
         self.turns_played = self.turns_played + 1
         self.change_turns() # This does the save()
+
+    def action_move(self, player, direction):
+        """
+        Executes the MOVE action.
+        """
+        new_room = ROOMS[player.room].get_room_in_direction(direction)
+        if new_room == -1:
+            # Destination room does not exist
+            print 'INVALID ROOM: from {} going {}'.format(player.room, direction)
+            player.delete()
+            return False
+
+        barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
+        if barricade_index != -1 and self.barricades.filter(index=barricade_index).count() > 0:
+            # There's a barricade in the way
+            print 'BARRICADE IN THE WAY'
+            player.delete()
+            return False
+
+        # Assign a new room to the player
+        player.room = new_room
+        player.save()
+        return True
+
+    def action_barricade(self, player, direction):
+        """
+        Executes the BARRICADE action.
+        """
+        if not is_valid_direction(direction):
+            # Invalid direction
+            print 'INVALID DIRECTION'
+            player.delete()
+            return False
+
+        barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
+        if barricade_index == -1:
+            # Can't barricade in this direction
+            print 'INVALID DIRECTION'
+            player.delete()
+            return False
+
+        if self.barricades.filter(index=barricade_index).count() > 0:
+            # Barricade already exists
+            print 'BARRICADE EXISTS'
+            player.delete()
+            return False
+
+        # Create a new barricade
+        barricade = Barricade(game=self, index=barricade_index)
+        barricade.save()
+        return True
 
     def get_list_of_players(self):
         """
