@@ -154,8 +154,8 @@ def ajax_game_state(request):
     players = list(game.get_hash_of_players_names())
 
     json = simplejson.dumps({'yourTurn': this_players_turn, 'yourPk': player.pk,
-        'lastPlayersPk': last_players_pk, 'lastAction': last_action,
-        'lastDirection': last_direction, 'players': players})
+        'lastPlayersPk': last_players_pk, 'turnsPlayed': game.turns_played,
+        'lastAction': last_action, 'lastDirection': last_direction, 'players': players})
     return HttpResponse(json, mimetype='application/json')
 
 def ajax_make_turn(request, action, direction=''):
