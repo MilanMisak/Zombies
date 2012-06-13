@@ -17,11 +17,13 @@ var executeMoves = function(data) {
         return;
 
     if (!initialisedPlayers) {
-        console.log(data.players);
+
         for (var i = 0; i < data.players.length; i++) {
             newPlayer = data.players[i];
             if (newPlayer.pk != data.yourPk) {
                 addPlayer(playerColours[newPlayer.index - 1], mainRoom, newPlayer.pk);
+            } else {
+                localPlayer = new Ghost(playerColours[newPlayer.index - 1], mainRoom, 0);
             }
         }
         initialisedPlayers = true;

@@ -5,7 +5,6 @@ $(document).ready(function() {
             return false;
     });
 
-
     // Replaces a class of a given object
     var replaceClass = function(obj, whatClass, withClass) {
         var classes = $(obj).attr('class');

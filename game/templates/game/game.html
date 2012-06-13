@@ -23,13 +23,15 @@ $(function() {
 
     view.onFrame = function(event) {
         snailUpdate();
-        localPlayer.move();
-        localPlayer.animateShoot();
-	for (var i = 0; i < playerList.length; i++) {
-	    var player = playerList[i];
-	    player.move();
-	    player.animateShoot();	
-	} 
+        if (initialisedPlayers) {
+            localPlayer.move();
+            localPlayer.animateShoot();
+            for (var i = 0; i < playerList.length; i++) {
+                var player = playerList[i];
+                player.move();
+                player.animateShoot();	
+            }
+        }
     }
 
     scroll = function(movement) {
