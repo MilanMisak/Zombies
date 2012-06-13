@@ -297,7 +297,7 @@ entitySetup = function() {
     }
     Snail.prototype = new Entity();
 
-    this.Ghost = function(colour, room, id) {
+    this.Ghost = function(colour, room, id, ammo) {
         var position = room.position;
         this.hat = triangle(colour);
         this.hat.scale(0.6);
@@ -315,7 +315,7 @@ entitySetup = function() {
         this.destination = position;
         this.room = room;
         this.holdingBox = false;
-        this.ammo = 5;
+        this.ammo = ammo;
         this.isTurn = false;
         this.id = id;
         this.isDead = false;
@@ -691,7 +691,6 @@ entitySetup = function() {
         this.item = doorBarricadeSymbol.place(view.center);
         this.exists = false;
         this.health = 0;
-        barricadeList.push(this);
 
         /* Repairs or makes the Barricade */
         this.make = function() {
@@ -724,6 +723,7 @@ entitySetup = function() {
         this.item = stairBarricadeSymbol.place(position);
         this.item.visible = false;
         this.exsts = false;
+        barricadeList.push(this);
     }
     StairBarricade.prototype = new Barricade(); 
 
@@ -733,6 +733,7 @@ entitySetup = function() {
         this.item = doorBarricadeSymbol.place(position);
         this.item.visible = false;
         this.exists = false;
+        barricadeList.push(this);
     }
     DoorBarricade.prototype = new Barricade();
     
@@ -1031,8 +1032,12 @@ entitySetup = function() {
     this.removePlayer = function(id) {
         var player = getPlayer(id);
         playerList.remove(player);
-    }   
+    }
 
+    entityLoaded = true;
+    project.activeLayer.scale(0.32768, view.center);
+    weight *= (1/0.59049);
+    scaleCount -= 5;
 }
 
 /* Removes an element from an array by value. */

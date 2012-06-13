@@ -6973,7 +6973,11 @@ var View = this.View = Base.extend(Callback, {
 	},
 
 	setCenter: function(center) {
-		this.scrollBy(Point.read(arguments).subtract(this.getCenter()));
+		this.scrollBy((
+		  this.matrix.transform(Point.read(arguments).subtract(this.getCenter()))
+		).subtract(
+		  this._matrix.transform([0, 0])
+		));
 	},
 
 	getZoom: function() {
