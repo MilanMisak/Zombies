@@ -39,10 +39,12 @@ var executeMoves = function(data) {
     }
     if (turnNumber != data.turnsPlayed) {
         turnNumber = data.turnsPlayed;
-        if (data.lastPlayersPk == 0 || data.lastPlayersPk == -1)
+        if (data.lastPlayersPk <= 0)
             return;
 
         movingPlayer = getPlayer(data.lastPlayersPk);
+
+        console.log(movingPlayer.room);
 
         switch(data.lastAction) {
         case "Move":
