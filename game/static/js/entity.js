@@ -222,7 +222,7 @@ entitySetup = function() {
         
         /* Animates the snails, should be called every frame. */
         this.move = function() {
-            for (var i = 0; i < noOfEntities; i++) {
+            for (var i = 0; i < this.item.children.length; i++) {
                 var snail = this.item.children[i].Parent;
                 if (!snail.moving)
                     snail.pushDestination(snail.room.position.add(
@@ -233,10 +233,13 @@ entitySetup = function() {
         
         this.hurt = function(damage) {
             this.strength -= damage;
-            if (this.strength <= 0)
-                this.die;
-            else
-                this.opacity = (strength/100);
+            if (this.strength <= 0) {
+                this.die();
+            } else {
+                //var snail = this.item.children[this.item.children.length - 1];
+                var snail = this.item.removeChildren(this.item.children.length - 1);
+                snail.remove();
+            }
         }
         
         this.die = function() {
