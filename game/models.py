@@ -234,6 +234,12 @@ class Game(models.Model):
             player.delete()
             return False
 
+        if player.carrying_ammo_box:
+            # Can't barricade while carrying the ammo box
+            print 'CANT BARRICADE WITH AMMO BOX'
+            player.delete()
+            return False
+
         barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
         if barricade_index == -1:
             # Can't barricade in this direction
@@ -261,6 +267,12 @@ class Game(models.Model):
         if not is_valid_direction(direction):
             # Invalid direction
             print 'INVALID DIRECTION'
+            player.delete()
+            return False
+
+        if player.carrying_ammo_box:
+            # Can't debarricade while carrying the ammo box
+            print 'CANT DEBARRICADE WITH AMMO BOX'
             player.delete()
             return False
 
