@@ -17,13 +17,13 @@ class Room(object):
 
     def __init__(self, up_room, right_room, down_room, left_room,
         up_barricade, right_barricade, down_barricade, left_barricade):
-        self.up_room         = up_room
+        self.up_room          = up_room
         self.right_room       = right_room
-        self.down_room      = down_room
+        self.down_room        = down_room
         self.left_room        = left_room
-        self.up_barricade    = up_barricade
+        self.up_barricade     = up_barricade
         self.right_barricade  = right_barricade
-        self.down_barricade = down_barricade
+        self.down_barricade   = down_barricade
         self.left_barricade   = left_barricade
 
     def get_room_in_direction(self, direction):
@@ -117,8 +117,6 @@ class Player(models.Model):
         """
         if self.checkin:
             self.checkin.save()
-        else:
-            print 'BOOM'
         if self.game and self.game.master == self:
             self.game.do_check_in()
 
@@ -168,8 +166,6 @@ class Game(models.Model):
         """
         if self.checkin:
             self.checkin.save()
-        else:
-            print 'BOOM'
 
     def start(self):
         """

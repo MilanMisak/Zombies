@@ -797,17 +797,17 @@ entitySetup = function() {
     doorBarricade5 = new DoorBarricade(floor1Room4.position.add(new Point(-230, 10)));
     doorBarricade6 = new DoorBarricade(floor1Room4.position.add(new Point(250, 10)));
     
-    stairBarricade1 = new StairBarricade(stairs1.startPoint.add(new Point(-100, -50)));
+    stairBarricade1 = new StairBarricade(stairs1.startPoint.add(new Point(-150, -100)));
     stairs1.setBarricade(stairBarricade1);
-    stairBarricade2 = new StairBarricade(stairs2.startPoint.add(new Point(-110, -50)));
+    stairBarricade2 = new StairBarricade(stairs2.startPoint.add(new Point(-160, -100)));
     stairs2.setBarricade(stairBarricade2);
 
     /* Second Floor Barricades. */
     doorBarricade7 = new DoorBarricade(floor2Room2.position.add(new Point(230, 10)));
    
-    stairBarricade3 = new StairBarricade(stairs3.startPoint.add(new Point(-100, -50)));
+    stairBarricade3 = new StairBarricade(stairs3.startPoint.add(new Point(-150, -100)));
     stairs3.setBarricade(stairBarricade3);
-    stairBarricade4 = new StairBarricade(stairs4.startPoint.add(new Point(100, -50)));
+    stairBarricade4 = new StairBarricade(stairs4.startPoint.add(new Point(150, -100)));
     stairBarricade4.flip();
     stairs4.setBarricade(stairBarricade4);
     
@@ -817,9 +817,9 @@ entitySetup = function() {
     doorBarricade10 = new DoorBarricade(floor3Room3.position.add(new Point(230, 10)));
     doorBarricade11 = new DoorBarricade(floor3Room4.position.add(new Point(230, 10)));
 
-    stairBarricade5 = new StairBarricade(stairs5.startPoint.add(new Point(-100, -50)));
+    stairBarricade5 = new StairBarricade(stairs5.startPoint.add(new Point(-150, -100)));
     stairs5.setBarricade(stairBarricade5);
-    stairBarricade6 = new StairBarricade(stairs6.startPoint.add(new Point(100, -50)));
+    stairBarricade6 = new StairBarricade(stairs6.startPoint.add(new Point(150, -100)));
     stairs6.setBarricade(stairBarricade6);
     stairBarricade6.flip();
     
@@ -828,15 +828,15 @@ entitySetup = function() {
     doorBarricade13 = new DoorBarricade(floor4Room2.position.add(new Point(230, 10)));
     doorBarricade14 = new DoorBarricade(floor4Room3.position.add(new Point(230, 10)));
 
-    stairBarricade7 = new StairBarricade(stairs7.startPoint.add(new Point(-110, -50)));
+    stairBarricade7 = new StairBarricade(stairs7.startPoint.add(new Point(-160, -100)));
     stairs7.setBarricade(stairBarricade7);
-    stairBarricade8 = new StairBarricade(stairs8.startPoint.add(new Point(-100, -50)));
+    stairBarricade8 = new StairBarricade(stairs8.startPoint.add(new Point(-150, -100)));
     stairs8.setBarricade(stairBarricade8);
 
     /* Fifth Floor Barricades. */
     doorBarricade15 = new DoorBarricade(floor5Room1.position.add(new Point(240, 10)));
 
-    stairBarricade9 = new StairBarricade(stairs9.startPoint.add(new Point(120, -50)));
+    stairBarricade9 = new StairBarricade(stairs9.startPoint.add(new Point(170, -100)));
     stairBarricade9.flip();
     stairs9.setBarricade(stairBarricade9);
 
