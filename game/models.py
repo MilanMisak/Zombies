@@ -135,8 +135,12 @@ class Player(models.Model):
 def pre_save_callback(sender, instance, raw, using, **kwargs):
     print 'SAVING PLAYER {} WITH ROOM {}'.format(instance, instance.room)
 
+class Bot(models.Model):
+    has_played = models.BooleanField(default=False)
+
 class Game(models.Model):
     master               = models.OneToOneField(Player, related_name='mastered_game', null=True)
+    bot                  = models.OneToOneField(Bot, related_name='game', null=True)
     status               = models.PositiveSmallIntegerField(default=0) # 0 = not started, 1 = started
     current_player_index = models.PositiveSmallIntegerField(null=True)
     current_player_start = models.DateTimeField(null=True)
@@ -146,7 +150,6 @@ class Game(models.Model):
     ammo_box_room        = models.PositiveSmallIntegerField(default=3)
     ammo_box_in_transit  = models.BooleanField(default=False)
     turns_played         = models.PositiveIntegerField(default=0)
-    bot_played           = models.BooleanField(default=False)
     checkin              = models.OneToOneField(CheckIn, related_name='game', blank=True, null=True)
    
     @staticmethod
@@ -482,10 +485,10 @@ class Game(models.Model):
             if not current_player.bot:
                 # Timeout after 15 seconds
                 timeout_time = self.current_player_start + timedelta(seconds=15)
-                self.bot_played = False
+                self.bot.played = False
                 self.save()
             else:
-                if not self.bot_played:
+                if not self.bot.played:
                     self.bots_turn()
                 # Timeout after 3 seconds
                 timeout_time = self.current_player_start + timedelta(seconds=3)
@@ -503,7 +506,7 @@ class Game(models.Model):
         Does the turn for bot.
         """
         print 'BOT PLAYING NOW'
-        self.bot_played = True
+        self.bot.played = True
         self.save()
 
     def change_turns(self):

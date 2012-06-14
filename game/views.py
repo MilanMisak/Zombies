@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import RequestContext
 from django.utils import simplejson
 
-from game.models import Player, Game, CheckIn
+from game.models import Player, Game, CheckIn, Bot
 from game.forms import LoginForm
 
 def index(request):
@@ -29,7 +29,7 @@ def index(request):
             if create_game:
                 checkin = CheckIn()
                 checkin.save()
-                game = Game(checkin=checkin)
+                game = Game(checkin=checkin, bot=Bot())
                 game.save()
                 player.game = game
                 player.index = 1
