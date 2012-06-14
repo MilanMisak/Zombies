@@ -335,7 +335,7 @@ class Game(models.Model):
         """
         Returns a hash with players PKs and names.
         """
-        return self.players.values('pk', 'name', 'index', 'room', 'ammo')
+        return self.players.values('pk', 'name', 'index', 'room', 'ammo', 'carrying_ammo_box')
 
     def get_list_of_barricades(self):
         """
@@ -348,6 +348,12 @@ class Game(models.Model):
         Returns the maximum player index in this game.
         """
         return self.players.order_by('-index')[0].index
+
+    def get_ammo_box_info(self):
+        """
+        Returns the ammo box information.
+        """
+        return {'room': self.ammo_box_room, 'in_transit': self.ammo_box_in_transit}
 
     def get_current_player(self):
         """
