@@ -218,14 +218,14 @@ class Game(models.Model):
         """
         if not is_valid_direction(direction):
             # Invalid direction
-            print 'INVALID DIRECTION'
+            print 'INVALID DIRECTION {} FROM {}'.format(direction, player.room)
             player.delete()
             return False
 
         barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
         if barricade_index == -1:
             # Can't barricade in this direction
-            print 'INVALID DIRECTION'
+            print 'INVALID DIRECTION {} FROM {}'.format(direction, player.room)
             player.delete()
             return False
 
