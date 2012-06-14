@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
 
 from datetime import datetime, timedelta
+from random import randint
 
 def is_valid_direction(direction):
     """
@@ -152,6 +153,17 @@ class Game(models.Model):
         """
         Starts the game.
         """
+        # Spawn players randomly
+        rooms_busy = [False] * 22
+        for player in self.get_list_of_players():
+            for i in range(20):
+                room_no = randint(0, 21)
+                if not rooms_busy[room_no] and room_no != 0 and room_no != 6:
+                    rooms_busy[room_no] = True
+                    player.room = room_no
+                    player.save()
+                    break
+
         self.current_player_index = 1
         self.current_player_start = datetime.now()
         self.status = 1
@@ -178,7 +190,7 @@ class Game(models.Model):
                 return
         else:
             # Action is not supported
-            print 'INVALID ACTION'
+            print 'INVALID ACTION {}'.format(action)
             player.delete()
             return
 
@@ -218,14 +230,14 @@ class Game(models.Model):
         """
         if not is_valid_direction(direction):
             # Invalid direction
-            print 'INVALID DIRECTION'
+            print 'INVALID DIRECTION {} FROM {}'.format(direction, player.room)
             player.delete()
             return False
 
         barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
         if barricade_index == -1:
             # Can't barricade in this direction
-            print 'INVALID DIRECTION'
+            print 'INVALID DIRECTION {} FROM {}'.format(direction, player.room)
             player.delete()
             return False
 
@@ -280,9 +292,19 @@ class Game(models.Model):
             player.carrying_ammo_box = False
             self.ammo_box_room = player.room
             self.ammo_box_in_transit = False
+        elif self.ammo_box_in_transit or self.ammo_box_room != player.room:
+            # Ammo box in transit or in a different room than the player
+            print 'AMMO BOX IN TRANSIT OR IN A DIFFERENT ROOM'
+            player.delete()
+            return False
+        else:
+            # Pick up the ammo box
+            player.carrying_ammo_box = True
+            self.ammo_box_in_transit = True
 
-        #TODO
-
+        # Save all the changes
+        player.save()
+        self.save()
         return True
 
     def get_list_of_players(self):
@@ -319,8 +341,8 @@ class Game(models.Model):
         """
         Returns the player, whose turn it is.
         """
-        # Timeout after 20 seconds
-        timeout_time = self.current_player_start + timedelta(seconds=10)
+        # Timeout after 15 seconds
+        timeout_time = self.current_player_start + timedelta(seconds=15)
         if timeout_time < datetime.now():
             # Current player timed out, change him
             return self.change_turns()
