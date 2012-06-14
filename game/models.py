@@ -206,6 +206,12 @@ class Game(models.Model):
         elif action == 'Ammo':
             if not self.action_ammo(player):
                 return
+        elif action == 'Shoot':
+            if not self.action_shoot(player, direction):
+                return
+        elif action == 'Reload':
+            if not self.action_reload(player):
+                return
         else:
             # Action is not supported
             print 'INVALID ACTION {}'.format(action)
@@ -335,6 +341,12 @@ class Game(models.Model):
         # Save all the changes
         player.save()
         self.save()
+        return True
+
+    def action_shoot(self, player, direction):
+        return True
+
+    def action_reload(self, player):
         return True
 
     def get_list_of_players(self):
