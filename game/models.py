@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models import Q
 from django.db.models.signals import pre_save, pre_delete
 from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
@@ -112,11 +111,9 @@ class Player(models.Model):
         Deletes players not checked-in for 10 seconds or more.
         """
         time = datetime.now() - timedelta(seconds=10)
-        count = Player.objects.all().count()
-        # TODO
-        #Player.objects.filter(check_in__time__lte=time).delete()
-        Player.objects.filter(Q(checkin__time__lte=time)).delete()
-        count2 = Player.objects.all().count()
+        count = Player.objects.filter(bot=False).count()
+        Player.objects.filter(bot=False, checkin__time__lte=time).delete()
+        count2 = Player.objects.filter(bot=False).count()
         if count != count2:
             print 'DELETED {} PLAYERS'.format(count - count2)
 
@@ -157,8 +154,7 @@ class Game(models.Model):
         Deletes games not checked-in for 10 seconds or more.
         """
         time = datetime.now() - timedelta(seconds=10)
-        #Game.objects.filter(check_in__time__lte=time).delete()
-        Player.objects.filter(Q(checkin__time__lte=time)).delete()
+        Player.objects.filter(checkin__time__lte=time).delete()
 
     @staticmethod
     def get_dict_of_games(player):
@@ -478,18 +474,24 @@ class Game(models.Model):
         """
         Returns the player, whose turn it is.
         """
-        # Timeout after 15 seconds
-        timeout_time = self.current_player_start + timedelta(seconds=15)
-        if timeout_time < datetime.now():
-            # Current player timed out, change him
-            return self.change_turns()
-        else:
-            try:
-                current_player = self.players.get(index=self.current_player_index)
-                return current_player
-            except ObjectDoesNotExist:
-                # Current player got removed
+        try:
+            # Try getting the current player
+            current_player = self.players.get(index=self.current_player_index)
+
+            if not current_player.bot:
+                # Timeout after 15 seconds
+                timeout_time = self.current_player_start + timedelta(seconds=15)
+            else:
+                # Timeout after 3 seconds
+                timeout_time = self.current_player_start + timedelta(seconds=3)
+
+            if timeout_time < datetime.now():
+                # Timed out
                 return self.change_turns()
+            return current_player
+        except ObjectDoesNotExist:
+            # Current player got removed
+            return self.change_turns()
 
     def change_turns(self):
         """
