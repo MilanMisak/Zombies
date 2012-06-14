@@ -382,10 +382,11 @@ class Game(models.Model):
         if snail.health > 20:
             snail.health = snail.health - 20
             snail.save()
-            player.ammo = player.ammo - 1
-            player.save()
         else:
             snail.delete()
+        # Decrease ammo
+        player.ammo = player.ammo - 1
+        player.save()
         return True
 
     def action_reload(self, player):
