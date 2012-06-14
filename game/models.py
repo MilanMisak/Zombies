@@ -17,13 +17,13 @@ class Room(object):
 
     def __init__(self, up_room, right_room, down_room, left_room,
         up_barricade, right_barricade, down_barricade, left_barricade):
-        self.up_room         = up_room
+        self.up_room          = up_room
         self.right_room       = right_room
-        self.down_room      = down_room
+        self.down_room        = down_room
         self.left_room        = left_room
-        self.up_barricade    = up_barricade
+        self.up_barricade     = up_barricade
         self.right_barricade  = right_barricade
-        self.down_barricade = down_barricade
+        self.down_barricade   = down_barricade
         self.left_barricade   = left_barricade
 
     def get_room_in_direction(self, direction):
@@ -117,8 +117,6 @@ class Player(models.Model):
         """
         if self.checkin:
             self.checkin.save()
-        else:
-            print 'BOOM'
         if self.game and self.game.master == self:
             self.game.do_check_in()
 
@@ -126,6 +124,7 @@ class Player(models.Model):
         return self.name
         #return '{} {}'.format(self.name, self.index)
 
+#TODO - remove
 @receiver(pre_save, sender=Player)
 def pre_save_callback(sender, instance, raw, using, **kwargs):
     print 'SAVING PLAYER {} WITH ROOM {}'.format(instance, instance.room)
@@ -135,7 +134,7 @@ class Game(models.Model):
     status               = models.PositiveSmallIntegerField(default=0) # 0 = not started, 1 = started
     current_player_index = models.PositiveSmallIntegerField(null=True)
     current_player_start = models.DateTimeField(null=True)
-    last_player          = models.OneToOneField(Player, related_name='last_game', null=True)
+    last_player          = models.OneToOneField(Player, related_name='last_game', null=True, on_delete=models.SET_NULL)
     last_action          = models.CharField(max_length=20, null=True)
     last_direction       = models.CharField(max_length=5, null=True)
     ammo_box_room        = models.PositiveSmallIntegerField(default=3)
@@ -168,8 +167,6 @@ class Game(models.Model):
         """
         if self.checkin:
             self.checkin.save()
-        else:
-            print 'BOOM'
 
     def start(self):
         """
@@ -185,6 +182,15 @@ class Game(models.Model):
                     player.room = room_no
                     player.save()
                     break
+
+        # Some initial snails
+        room_no = 3
+        for i in range(20):
+            room_no = randint(0, 21)
+            if not rooms_busy[room_no] and room_no != 0 and room_no != 6:
+                break
+        snail = Snail(game=self, room=room_no)
+        snail.save()
 
         self.current_player_index = 1
         self.current_player_start = datetime.now()
@@ -209,6 +215,12 @@ class Game(models.Model):
                 return
         elif action == 'Ammo':
             if not self.action_ammo(player):
+                return
+        elif action == 'Shoot':
+            if not self.action_shoot(player, direction):
+                return
+        elif action == 'Reload':
+            if not self.action_reload(player):
                 return
         else:
             # Action is not supported
@@ -341,6 +353,12 @@ class Game(models.Model):
         self.save()
         return True
 
+    def action_shoot(self, player, direction):
+        return True
+
+    def action_reload(self, player):
+        return True
+
     def get_list_of_players(self):
         """
         Returns a list of players in the order they joined the game in.
@@ -364,6 +382,12 @@ class Game(models.Model):
         Returns a list of barricades with their indices and health.
         """
         return self.barricades.values('index', 'health')
+
+    def get_list_of_snails(self):
+        """
+        Returns a list of snails with their PKs, rooms and health.
+        """
+        return self.snails.values('pk', 'room', 'health')
 
     def get_max_player_index(self):
         """
@@ -421,3 +445,11 @@ class Barricade(models.Model):
 
     def __unicode__(self):
         return 'Barricade {} with health {}'.format(self.index, self.health)
+
+class Snail(models.Model):
+    game   = models.ForeignKey(Game, related_name='snails')
+    room   = models.PositiveSmallIntegerField()
+    health = models.PositiveIntegerField(default=100)
+
+    def __unicode__(self):
+        return 'Snail in room {} with health {}'.format(self.room, self.health)
