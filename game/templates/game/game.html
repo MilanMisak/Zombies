@@ -19,10 +19,15 @@ $(window).load(function() {
 
     view.onFrame = function(event) {
         if (initialisedPlayers && entityLoaded) {
-            snailUpdate();
+            snailUpdate(0);
+            snailUpdate(1);
+            snailUpdate(2);
             localPlayer.move();
             localPlayer.animateShoot();
             localPlayer.animateDeath();
+            for (var i = 0; i < deadSnailList.length; i++) {
+                deadSnailList[i].animateDeath();
+            }
             for (var i = 0; i < snailGroupList.length; i++) {
                 snailGroupList[i].move();
             }

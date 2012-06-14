@@ -13,8 +13,10 @@ entitySetup = function() {
     house.position = view.center;
     
     /* Code for the snail symbol */
-    var raster = new Raster('snail');
-    raster.position = view.center;
+    var raster1 = new Raster('snail');
+    raster1.position = view.center;
+    var raster2 = raster1.clone();
+    var raster3 = raster1.clone();
 
     var flipHorizontalMatrix = new Matrix(-1, 0, 0, 1, 0, 0);
 
@@ -26,29 +28,86 @@ entitySetup = function() {
     var size = 3;
 
     /* Snail eye initialization. */
-    var rightEye = new Path();
-    rightEye.style = eyeStyle;
+    rightEye = new Array();
+    rightStart = new Array();
+    rightEyeball = new Array();
+
+    var rightEye1 = new Path();
+    rightEye1.style = eyeStyle;
     for (var i = 0; i < size; i++)
-        rightEye.add(new Point(130, (size - (i + 1))-15).add(view.center));
-    var rightStart = new Point(rightEye.segments[0].point);
+        rightEye1.add(new Point(130, (size-(i+1))-15).add(view.center));
+    var rightEye2 = rightEye1.clone();
+    var rightEye3 = rightEye1.clone();
 
-    var rightEyeball = new Path.Circle(rightEye.segments[0].point, 10);
-    rightEyeball.fillColor = 'black';       
+    var rightStart1 = new Point(rightEye1.segments[0].point);
+    var rightStart2 = rightStart1.clone();
+    var rightStart3 = rightStart1.clone();
 
-    var leftEye = new Path();
-    leftEye.style = eyeStyle;
+    var rightEyeball1 = new Path.Circle(rightEye1.segments[0].point, 10);
+    rightEyeball1.fillColor = 'black';
+    var rightEyeball2 = rightEyeball1.clone();
+    var rightEyeball3 = rightEyeball1.clone();
+
+    rightEye.push(rightEye1);
+    rightEye.push(rightEye2);
+    rightEye.push(rightEye3);
+    rightStart.push(rightStart1);
+    rightStart.push(rightStart2);
+    rightStart.push(rightStart3);
+    rightEyeball.push(rightEyeball1);
+    rightEyeball.push(rightEyeball2);
+    rightEyeball.push(rightEyeball3);
+
+
+    leftEye = new Array();
+    leftStart = new Array();
+    leftEyeball = new Array();
+
+    var leftEye1 = new Path();
+    leftEye1.style = eyeStyle;
     for (var i = 0; i < size; i++)
-        leftEye.add(new Point(100, (size - (i + 1))-15).add(view.center));
-    var leftStart = new Point(leftEye.segments[0].point);
+        leftEye1.add(new Point(100, (size-(i+1))-15).add(view.center));
+    var leftEye2 = leftEye1.clone();
+    var leftEye3 = leftEye1.clone();
 
-    var leftEyeball = new Path.Circle(leftEye.segments[0].point, 10);
-    leftEyeball.fillColor = 'black'; 
+    var leftStart1 = new Point(leftEye1.segments[0].point);
+    var leftStart2 = leftStart1.clone();
+    var leftStart3 = leftStart1.clone();
+
+    var leftEyeball1 = new Path.Circle(leftEye1.segments[0].point, 10);
+    leftEyeball1.fillColor = 'black';
+    var leftEyeball2 = leftEyeball1.clone();
+    var leftEyeball3 = leftEyeball1.clone();
+
+    leftEye.push(leftEye1);
+    leftEye.push(leftEye2);
+    leftEye.push(leftEye3);
+    leftStart.push(leftStart1);
+    leftStart.push(leftStart2);
+    leftStart.push(leftStart3);
+    leftEyeball.push(leftEyeball1);
+    leftEyeball.push(leftEyeball2);
+    leftEyeball.push(leftEyeball3);
 
 
     /* Snail Symbol initialization. */
-    var snailGroup = new Group([raster, rightEye, rightEyeball, leftEye, leftEyeball]);
-    var snailSymbol = new Symbol(snailGroup);
-    snailGroup.scale(0.2);
+    snailSymbol = new Array();
+    var snailGroup1 = new Group([raster1, rightEye1, rightEyeball1, leftEye1, leftEyeball1]);
+    var snailSymbol1 = new Symbol(snailGroup1);
+    snailGroup1.scale(0.2);
+
+    var snailGroup2 = new Group([raster2, rightEye2, rightEyeball2, leftEye2, leftEyeball2]);
+    var snailSymbol2 = new Symbol(snailGroup2);
+    snailGroup2.scale(0.2);
+
+    var snailGroup3 = new Group([raster3, rightEye3, rightEyeball3, leftEye3, leftEyeball3]);
+    var snailSymbol3 = new Symbol(snailGroup3);
+    snailGroup3.scale(0.2);
+    
+    snailSymbol.push(snailSymbol1);
+    snailSymbol.push(snailSymbol2);
+    snailSymbol.push(snailSymbol3);
+
 
     /* Code for the ghost symbol */
     ghostSymbol = new Symbol(new Raster('ghost'));
@@ -74,6 +133,9 @@ entitySetup = function() {
 
     /* List for all snail groups. */
     snailGroupList = new Array();
+
+    /* List of all dying snails. */
+    deadSnailList = new Array();
 
     /* List for all other players. */
     playerList = new Array();
@@ -162,6 +224,7 @@ entitySetup = function() {
 
         this.moveLeft = function() {
             this.setRoom(this.room.left);
+            this.lastAction = "Left";	
             this.pushDestination(this.room.position.add(new Point((Math.random()*100 - 50),0)));
         }
         
@@ -179,6 +242,7 @@ entitySetup = function() {
         this.moveDown = function() {
             this.moveDownStairs(this.room.downStairs);
             this.setRoom(this.room.down);
+            this.lastAction = "Down";
             this.pushDestination(this.room.position.add(new Point((Math.random()*100 - 50),0)));
         }
 
@@ -224,22 +288,20 @@ entitySetup = function() {
         this.move = function() {
             for (var i = 0; i < this.item.children.length; i++) {
                 var snail = this.item.children[i].Parent;
-                if (!snail.moving)
+                if (!snail.moving && snail.deathCounter == 0)
                     snail.pushDestination(snail.room.position.add(
-                                new Point(Math.random() * 300 - 150, 0)));
+                        new Point(Math.random() * 300 - 150, 0)));
                 snail.move();
             }
         }
         
         this.hurt = function(damage) {
             this.strength -= damage;
-            if (this.strength <= 0) {
+            var snail = new Snail(this.room);
+            this.item.removeChildren(this.item.children.length-1);
+            deadSnailList.push(snail);
+            if (this.strength <= 0)
                 this.die();
-            } else {
-                //var snail = this.item.children[this.item.children.length - 1];
-                var snail = this.item.removeChildren(this.item.children.length - 1);
-                snail.remove();
-            }
         }
         
         this.die = function() {
@@ -282,15 +344,31 @@ entitySetup = function() {
 
 
     this.Snail = function(room, strength) {
-        this.item = snailSymbol.place(room.position.add(new Point(0, 70)));
+        var randomSet = Math.floor(Math.random()*3);
+        this.item = snailSymbol[randomSet].place(room.position.add(new Point(0, 70)));
         this.item.Parent = this;
         this.room = room;
         this.rotation = 0;
         this.destination = this.item.position;
+        this.deathCounter = 0;
+
         this.pushDestination = function(destination) {
             this.destinations.push(destination.add(new Point(0, 70)));
             this.moving = true;
-        }        
+        }
+
+        this.animateDeath = function() {
+            this.moving = false;
+            if (this.deathCounter < 120) {
+                this.item.opacity *= 0.9;
+                this.item.rotate(10);
+                this.item.position = this.item.position.add(new Point(10,-10));
+            } else {
+                deadSnailList.remove(this);
+                
+            }
+            this.deathCounter++;
+        }
        
         /* Rotates snails for stair movement, MUST move in a zig zag motion. */ 
         this.faceTarget = function() {
@@ -332,7 +410,10 @@ entitySetup = function() {
         this.id = id;
         this.isDead = false;
         this.deathCounter = 0;
+        this.deathDelayCounter = 0;
 	    this.destinations = new Array();
+        this.origin = position;
+	    this.lastAction = null;
 
         this.die = function() {
             if (this.holdingBox)
@@ -343,19 +424,28 @@ entitySetup = function() {
         this.animateDeath = function() {
             if (!this.isDead || this.deathCounter > 180)
                 return;
-            this.raster.opacity *= 0.8;
-            this.armGroup.opacity *= 0.8;
+            this.raster.opacity *= 0.9;
+            this.armGroup.opacity *= 0.9;
+            
+            if (this.deathDelayCounter < 100) {
+                this.deathDelayCounter++;
+                return;
+            }
+
+            var hatPositionTracker = this.item.position.subtract(this.origin);
+	        if (this.lastAction == "Left" || this.lastAction == "Down")	
+		        hatPositionTracker = hatPositionTracker.add(new Point(142, 0));
             var deathMod = this.deathCounter % 60;
             if (this.deathCounter > 175) {
                 var rect2 = new Path.Rectangle(
-                    this.hat.position.add(new Point(((this.deathCounter-170)*4),60)),
-                    this.hat.position.add(new Point(((170-this.deathCounter)*4),80)));
+                    this.hat.position.add(new Point(((this.deathCounter-170)*4),60)).add(hatPositionTracker),
+                    this.hat.position.add(new Point(((170-this.deathCounter)*4),80)).add(hatPositionTracker));
                 rect2.fillColor = 'black';
             } else if (this.deathCounter > 160) {
                 this.hat.position = this.hat.position.add(new Point(0,-8));
                 var rect1 = new Path.Rectangle(
-                    this.hat.position.add(new Point(10,30)),
-                    this.hat.position.add(new Point(-10, (((this.deathCounter-160)*8)+30))));
+                    this.hat.position.add(new Point(10,30)).add(hatPositionTracker),
+                    this.hat.position.add(new Point(-10, (((this.deathCounter-160)*8)+30))).add(hatPositionTracker));
                 rect1.fillColor = 'black';
             } else if (this.deathCounter > 140) {
                 this.hat.position = this.hat.position.add(new Point(-2,0));
@@ -616,31 +706,29 @@ entitySetup = function() {
 
 
     /* Animates the snail's eyes, called every frame */
-    this.snailUpdate = function() {
-        rightEye.segments[0].point = 
-        rightStart.add(new Point(Math.random() * -20 + 50, Math.random() * -150 + 10));
-        
+    this.snailUpdate = function(set) {
+        rightEye[set].segments[0].point = 
+            rightStart[set].add(new Point(Math.random() * -20 + 50, Math.random() * -150 + 10));
         for (var i = 0; i < size - 2; i++) {
-            var nextSegment = rightEye.segments[i + 1];
-            var position = rightEye.segments[i].point;
+            var nextSegment = rightEye[set].segments[i + 1];
+            var position = rightEye[set].segments[i].point;
             var angle = (position.subtract(nextSegment.point)).angle;
             var vector = new Point({ angle: angle, length: 35 });
             nextSegment.point = position.subtract(vector);
         }
 
-        leftEye.segments[0].point = 
-        leftStart.add(new Point(Math.random() * -50 + 20, Math.random() * -150 + 10));
-        
+        leftEye[set].segments[0].point = 
+            leftStart[set].add(new Point(Math.random() * -50 + 20, Math.random() * -150 + 10));
         for (var i = 0; i < size - 2; i++) {
-            var nextSegment = leftEye.segments[i + 1];
-            var position = leftEye.segments[i].point;
+            var nextSegment = leftEye[set].segments[i + 1];
+            var position = leftEye[set].segments[i].point;
             var angle = (position.subtract(nextSegment.point)).angle;
             var vector = new Point({ angle: angle, length: 35 });
             nextSegment.point = position.subtract(vector);
         }
 
-        rightEyeball.position = rightEye.segments[0].point;
-        leftEyeball.position = leftEye.segments[0].point;
+        rightEyeball[set].position = rightEye[set].segments[0].point;
+        leftEyeball[set].position = leftEye[set].segments[0].point;
     }
 
     this.triangle = function(colour) {
