@@ -83,14 +83,15 @@ def pre_delete_callback(sender, instance, **kwargs):
     print 'DELETING {}'.format(instance)
 
 class Player(models.Model):
-    rand_id         = models.PositiveIntegerField()
-    name            = models.CharField(max_length=50)
-    game            = models.ForeignKey('Game', related_name='players', null=True,
-                          on_delete=models.SET_NULL)
-    index           = models.PositiveSmallIntegerField(null=True)
-    room            = models.PositiveSmallIntegerField(default=3)
-    ammo            = models.PositiveSmallIntegerField(default=5)
-    last_checked_in = models.DateTimeField(auto_now=True)
+    rand_id           = models.PositiveIntegerField()
+    name              = models.CharField(max_length=50)
+    game              = models.ForeignKey('Game', related_name='players', null=True,
+                            on_delete=models.SET_NULL)
+    index             = models.PositiveSmallIntegerField(null=True)
+    room              = models.PositiveSmallIntegerField(default=3)
+    ammo              = models.PositiveSmallIntegerField(default=5)
+    carrying_ammo_box = models.BooleanField(default=False)
+    last_checked_in   = models.DateTimeField(auto_now=True)
     
     @staticmethod
     def clean_up():
@@ -124,6 +125,8 @@ class Game(models.Model):
     last_player          = models.OneToOneField(Player, related_name='last_game', null=True)
     last_action          = models.CharField(max_length=20, null=True)
     last_direction       = models.CharField(max_length=5, null=True)
+    ammo_box_room        = models.PositiveSmallIntegerField(default=3)
+    ammo_box_in_transit  = models.BooleanField(default=False)
     turns_played         = models.PositiveIntegerField(default=0)
     last_checked_in      = models.DateTimeField(auto_now=True)
    
@@ -171,9 +174,8 @@ class Game(models.Model):
             if not self.action_debarricade(player, direction):
                 return
         elif action == 'Ammo':
-            #if not self.action_debarricade(player, direction):
-            #    return
-            pass
+            if not self.action_ammo(player):
+                return
         else:
             # Action is not supported
             print 'INVALID ACTION'
@@ -267,6 +269,20 @@ class Game(models.Model):
         # Delete the barricade
         barricade = query[0]
         barricade.delete()
+        return True
+
+    def action_ammo(self, player):
+        """
+        Executes the AMMO action (picking up/dropping the ammo box).
+        """
+        if player.carrying_ammo_box:
+            # Player is carrying the ammo box, so he can drop it
+            player.carrying_ammo_box = False
+            self.ammo_box_room = player.room
+            self.ammo_box_in_transit = False
+
+        #TODO
+
         return True
 
     def get_list_of_players(self):

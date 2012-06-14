@@ -320,6 +320,7 @@ entitySetup = function() {
         this.id = id;
         this.isDead = false;
         this.deathCounter = 0;
+	this.destinations = new Array();
 
         this.die = function() {
             if (this.holdingBox)
