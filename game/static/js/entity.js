@@ -332,7 +332,9 @@ entitySetup = function() {
         this.id = id;
         this.isDead = false;
         this.deathCounter = 0;
+        this.deathDelayCounter = 0;
 	    this.destinations = new Array();
+        this.origin = position;
 
         this.die = function() {
             if (this.holdingBox)
@@ -343,19 +345,26 @@ entitySetup = function() {
         this.animateDeath = function() {
             if (!this.isDead || this.deathCounter > 180)
                 return;
+            
+            if (this.deathDelayCounter < 100) {
+                this.deathDelayCounter++;
+                return;
+            }
+
+            var hatPositionTracker = this.item.position.subtract(this.origin);
             this.raster.opacity *= 0.8;
             this.armGroup.opacity *= 0.8;
             var deathMod = this.deathCounter % 60;
             if (this.deathCounter > 175) {
                 var rect2 = new Path.Rectangle(
-                    this.hat.position.add(new Point(((this.deathCounter-170)*4),60)),
-                    this.hat.position.add(new Point(((170-this.deathCounter)*4),80)));
+                    this.hat.position.add(new Point(((this.deathCounter-170)*4),60)).add(hatPositionTracker),
+                    this.hat.position.add(new Point(((170-this.deathCounter)*4),80)).add(hatPositionTracker));
                 rect2.fillColor = 'black';
             } else if (this.deathCounter > 160) {
                 this.hat.position = this.hat.position.add(new Point(0,-8));
                 var rect1 = new Path.Rectangle(
-                    this.hat.position.add(new Point(10,30)),
-                    this.hat.position.add(new Point(-10, (((this.deathCounter-160)*8)+30))));
+                    this.hat.position.add(new Point(10,30)).add(hatPositionTracker),
+                    this.hat.position.add(new Point(-10, (((this.deathCounter-160)*8)+30))).add(hatPositionTracker));
                 rect1.fillColor = 'black';
             } else if (this.deathCounter > 140) {
                 this.hat.position = this.hat.position.add(new Point(-2,0));
