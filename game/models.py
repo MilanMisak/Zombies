@@ -280,7 +280,7 @@ class Game(models.Model):
             player.carrying_ammo_box = False
             self.ammo_box_room = player.room
             self.ammo_box_in_transit = False
-        else if self.ammo_box_in_transit or self.ammo_box_room != player.room:
+        elif self.ammo_box_in_transit or self.ammo_box_room != player.room:
             # Ammo box in transit or in a different room than the player
             print 'AMMO BOX IN TRANSIT OR IN A DIFFERENT ROOM'
             player.delete()
