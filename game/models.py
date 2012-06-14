@@ -280,9 +280,19 @@ class Game(models.Model):
             player.carrying_ammo_box = False
             self.ammo_box_room = player.room
             self.ammo_box_in_transit = False
+        else if self.ammo_box_in_transit or self.ammo_box_room != player.room:
+            # Ammo box in transit or in a different room than the player
+            print 'AMMO BOX IN TRANSIT OR IN A DIFFERENT ROOM'
+            player.delete()
+            return False
+        else:
+            # Pick up the ammo box
+            player.carrying_ammo_box = True
+            self.ammo_box_in_transit = True
 
-        #TODO
-
+        # Save all the changes
+        player.save()
+        self.save()
         return True
 
     def get_list_of_players(self):
