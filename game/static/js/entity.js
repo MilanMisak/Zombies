@@ -62,7 +62,7 @@ entitySetup = function() {
 
 
     /* First ammo box initialization. */
-    var ammoBox = new Raster('ammobox');
+    ammoBox = new Raster('ammobox');
     ammoBox.scale(0.2);
 
     /* Barricade Symbol initialization. */
@@ -297,7 +297,7 @@ entitySetup = function() {
     }
     Snail.prototype = new Entity();
 
-    this.Ghost = function(colour, room, id, ammo) {
+    this.Ghost = function(colour, room, id, ammo, holdingBox) {
         var position = room.position;
         this.hat = triangle(colour);
         this.hat.scale(0.6);
@@ -314,7 +314,7 @@ entitySetup = function() {
         this.shootCounter = 0;
         this.destination = position;
         this.room = room;
-        this.holdingBox = false;
+        this.holdingBox = holdingBox;
         this.ammo = ammo;
         this.isTurn = false;
         this.id = id;
@@ -375,9 +375,6 @@ entitySetup = function() {
 
         /* Animation for ghost picking up box */
         this.pickUp = function() {
-            if (this.holdingBox)
-                return;
-
             /*var destroy = this.raster;
             this.raster = ghostSymbol.place(this.raster.position);
             this.item.addChild(this.raster);
@@ -922,12 +919,6 @@ entitySetup = function() {
     floor6Room1.setDownStairs(floor5Room1, stairs9);
 
 
-
-
-    /* Ammo box initialization. */
-    ammoBox.position = mainRoom.position.add(new Point(0, 70));
-    ammoBox.room = mainRoom;
-
     /* Action code. */
     this.canMove = function(player, direction) {
         return player.canMove(direction);
@@ -1024,7 +1015,9 @@ entitySetup = function() {
 
     this.addPlayer = function(room, colour, id) {
         var newPlayer = new Ghost(room, colour, id);
-        playerList.push(newPlayer); 
+        playerList.push(newPlayer);
+	if (newPlayer.holdingBox)
+	    newPlayer.pickUp(); 
     }
 
     this.getPlayer = function(id) {
