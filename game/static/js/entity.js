@@ -224,6 +224,7 @@ entitySetup = function() {
 
         this.moveLeft = function() {
             this.setRoom(this.room.left);
+            this.lastAction = "Left";	
             this.pushDestination(this.room.position.add(new Point((Math.random()*100 - 50),0)));
         }
         
@@ -241,6 +242,7 @@ entitySetup = function() {
         this.moveDown = function() {
             this.moveDownStairs(this.room.downStairs);
             this.setRoom(this.room.down);
+            this.lastAction = "Down";
             this.pushDestination(this.room.position.add(new Point((Math.random()*100 - 50),0)));
         }
 
@@ -320,8 +322,13 @@ entitySetup = function() {
             this.room.removeSnailGroup(this);
             this.room = room;
             this.room.addSnailGroup(this);
-            for (var i = 0; i < noOfEntities; i++) 
+            for (var i = 0; i < this.item.children.length; i++) 
                 this.item.children[i].Parent.setRoom(room);
+            for (var i = 0; i < playerList.length; i++) {
+                player = playerList[i];
+                if (player.room == this.room)
+                    player.die();
+            }
         }
 
 
@@ -403,7 +410,10 @@ entitySetup = function() {
         this.id = id;
         this.isDead = false;
         this.deathCounter = 0;
-	this.destinations = new Array();
+        this.deathDelayCounter = 0;
+	    this.destinations = new Array();
+        this.origin = position;
+	    this.lastAction = null;
 
         this.die = function() {
             if (this.holdingBox)
@@ -416,17 +426,26 @@ entitySetup = function() {
                 return;
             this.raster.opacity *= 0.9;
             this.armGroup.opacity *= 0.9;
+            
+            if (this.deathDelayCounter < 100) {
+                this.deathDelayCounter++;
+                return;
+            }
+
+            var hatPositionTracker = this.item.position.subtract(this.origin);
+	        if (this.lastAction == "Left" || this.lastAction == "Down")	
+		        hatPositionTracker = hatPositionTracker.add(new Point(142, 0));
             var deathMod = this.deathCounter % 60;
             if (this.deathCounter > 175) {
                 var rect2 = new Path.Rectangle(
-                    this.hat.position.add(new Point(((this.deathCounter-170)*4),60)),
-                    this.hat.position.add(new Point(((170-this.deathCounter)*4),80)));
+                    this.hat.position.add(new Point(((this.deathCounter-170)*4),60)).add(hatPositionTracker),
+                    this.hat.position.add(new Point(((170-this.deathCounter)*4),80)).add(hatPositionTracker));
                 rect2.fillColor = 'black';
             } else if (this.deathCounter > 160) {
                 this.hat.position = this.hat.position.add(new Point(0,-8));
                 var rect1 = new Path.Rectangle(
-                    this.hat.position.add(new Point(10,30)),
-                    this.hat.position.add(new Point(-10, (((this.deathCounter-160)*8)+30))));
+                    this.hat.position.add(new Point(10,30)).add(hatPositionTracker),
+                    this.hat.position.add(new Point(-10, (((this.deathCounter-160)*8)+30))).add(hatPositionTracker));
                 rect1.fillColor = 'black';
             } else if (this.deathCounter > 140) {
                 this.hat.position = this.hat.position.add(new Point(-2,0));
@@ -1021,6 +1040,8 @@ entitySetup = function() {
                 player.moveDown();
                 break;
         }
+        if (player.room.containsSnails())
+            player.die();
     }
 
     this.canBarricade = function(player, direction) {

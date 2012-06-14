@@ -1,11 +1,10 @@
 from django.db import models
-from django.db.models import Q
 from django.db.models.signals import pre_save, pre_delete
 from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
 
 from datetime import datetime, timedelta
-from random import randint
+from random import getrandbits, randint
 
 def is_valid_direction(direction):
     """
@@ -96,18 +95,25 @@ class Player(models.Model):
     room              = models.PositiveSmallIntegerField(default=3)
     ammo              = models.PositiveSmallIntegerField(default=5)
     carrying_ammo_box = models.BooleanField(default=False)
+    bot               = models.BooleanField(default=False)
     checkin           = models.OneToOneField(CheckIn, related_name='player', blank=True, null=True)
-    
+
+    @staticmethod
+    def generate_rand_id():
+        """
+        Generates a random ID for a new player.
+        """
+        return getrandbits(10)
+
     @staticmethod
     def clean_up():
         """
         Deletes players not checked-in for 10 seconds or more.
         """
         time = datetime.now() - timedelta(seconds=10)
-        count = Player.objects.all().count()
-        #Player.objects.filter(check_in__time__lte=time).delete()
-        Player.objects.filter(Q(checkin__time__lte=time)).delete()
-        count2 = Player.objects.all().count()
+        count = Player.objects.filter(bot=False).count()
+        Player.objects.filter(bot=False, checkin__time__lte=time).delete()
+        count2 = Player.objects.filter(bot=False).count()
         if count != count2:
             print 'DELETED {} PLAYERS'.format(count - count2)
 
@@ -140,6 +146,7 @@ class Game(models.Model):
     ammo_box_room        = models.PositiveSmallIntegerField(default=3)
     ammo_box_in_transit  = models.BooleanField(default=False)
     turns_played         = models.PositiveIntegerField(default=0)
+    bot_played           = models.BooleanField(default=False)
     checkin              = models.OneToOneField(CheckIn, related_name='game', blank=True, null=True)
    
     @staticmethod
@@ -148,8 +155,7 @@ class Game(models.Model):
         Deletes games not checked-in for 10 seconds or more.
         """
         time = datetime.now() - timedelta(seconds=10)
-        #Game.objects.filter(check_in__time__lte=time).delete()
-        Player.objects.filter(Q(checkin__time__lte=time)).delete()
+        Player.objects.filter(checkin__time__lte=time).delete()
 
     @staticmethod
     def get_dict_of_games(player):
@@ -184,6 +190,10 @@ class Game(models.Model):
                     break
 
         self.spawn_snails(5)
+
+        bot_player = Player(name='Bot', rand_id=Player.generate_rand_id(), game=self,
+            index=self.get_max_player_index() + 1, bot=True)
+        bot_player.save()
 
         self.current_player_index = 1
         self.current_player_start = datetime.now()
@@ -429,7 +439,7 @@ class Game(models.Model):
         """
         Returns a list of players' names.
         """
-        return [str(player) for player in self.get_list_of_players()]
+        return [str(player) for player in self.get_list_of_players().filter(bot=False)]
 
     def get_hash_of_players_names(self):
         """
@@ -465,18 +475,36 @@ class Game(models.Model):
         """
         Returns the player, whose turn it is.
         """
-        # Timeout after 15 seconds
-        timeout_time = self.current_player_start + timedelta(seconds=15)
-        if timeout_time < datetime.now():
-            # Current player timed out, change him
-            return self.change_turns()
-        else:
-            try:
-                current_player = self.players.get(index=self.current_player_index)
-                return current_player
-            except ObjectDoesNotExist:
-                # Current player got removed
+        try:
+            # Try getting the current player
+            current_player = self.players.get(index=self.current_player_index)
+
+            if not current_player.bot:
+                # Timeout after 15 seconds
+                timeout_time = self.current_player_start + timedelta(seconds=15)
+                self.bot_played = False
+                self.save()
+            else:
+                if not self.bot_played:
+                    self.bots_turn()
+                # Timeout after 3 seconds
+                timeout_time = self.current_player_start + timedelta(seconds=3)
+
+            if timeout_time < datetime.now():
+                # Timed out
                 return self.change_turns()
+            return current_player
+        except ObjectDoesNotExist:
+            # Current player got removed
+            return self.change_turns()
+
+    def bots_turn(self):
+        """
+        Does the turn for bot.
+        """
+        print 'BOT PLAYING NOW'
+        self.bot_played = True
+        self.save()
 
     def change_turns(self):
         """
