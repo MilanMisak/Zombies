@@ -24,7 +24,7 @@ var executeMoves = function(data) {
                 localPlayer = new Ghost(playerColours[newPlayer.index - 1], roomList[newPlayer.room], 0, newPlayer.ammo);
             }
         }
-		turnNumber = data.turnsPlayed;
+	turnNumber = data.turnsPlayed;
 
         for (var i = 0; i < data.barricades.length; i++) {
             newBarricade = barricadeList[data.barricades[i].index];
@@ -32,6 +32,8 @@ var executeMoves = function(data) {
             newBarricade.exists = true;
             newBarricade.item.visible = true;
         }
+	
+	console.log(data);
 
         view.draw();
         initialisedPlayers = true;
