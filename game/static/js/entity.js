@@ -162,24 +162,24 @@ entitySetup = function() {
 
         this.moveLeft = function() {
             this.setRoom(this.room.left);
-            this.pushDestination(this.room.position);
+            this.pushDestination(this.room.position.add((Math.random()*100 - 50),0));
         }
         
         this.moveRight = function() {
             this.setRoom(this.room.right);
-            this.pushDestination(this.room.position);
+            this.pushDestination(this.room.position.add((Math.random()*100 - 50),0));
         }
         
         this.moveUp = function() {
             this.moveUpStairs(this.room.upStairs);
             this.setRoom(this.room.up);
-            this.pushDestination(this.room.position);
+            this.pushDestination(this.room.position.add((Math.random()*100 - 50),0));
         }
         
         this.moveDown = function() {
             this.moveDownStairs(this.room.downStairs);
             this.setRoom(this.room.down);
-            this.pushDestination(this.room.position);
+            this.pushDestination(this.room.position.add((Math.random()*100 - 50),0));
         }
 
         this.moveUpStairs = function(stairs) {
@@ -428,6 +428,9 @@ entitySetup = function() {
         }
 
         this.canBarricade = function(direction) {
+	    if (this.holdingBox)
+		return false;
+
             switch (direction) {
                 case "Left":
                     return (this.room.left != null && !this.room.left.containsSnails())
@@ -554,7 +557,7 @@ entitySetup = function() {
         /* Can only reload if ammo is not full, and the ammo box is on the floor in the same room
             as the ghost. */
         this.canReload = function() {
-            return ((this.room == ammoBox.room) && this.ammo < 5);
+            return ((this.room == ammoBox.room) && this.ammo < 5 && !this.holdingBox);
         }
 
         this.barricadeUp = function() {
@@ -821,6 +824,7 @@ entitySetup = function() {
     stairs5.setBarricade(stairBarricade5);
     stairBarricade6 = new StairBarricade(stairs6.startPoint.add(new Point(100, -50)));
     stairs6.setBarricade(stairBarricade6);
+    stairBarricade6.flip();
     
     /* Fourth Floor Barricades. */
     doorBarricade12 = new DoorBarricade(floor4Room1.position.add(new Point(230, 10)));
