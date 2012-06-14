@@ -146,6 +146,7 @@ class Game(models.Model):
     ammo_box_room        = models.PositiveSmallIntegerField(default=3)
     ammo_box_in_transit  = models.BooleanField(default=False)
     turns_played         = models.PositiveIntegerField(default=0)
+    bot_played           = models.BooleanField(default=False)
     checkin              = models.OneToOneField(CheckIn, related_name='game', blank=True, null=True)
    
     @staticmethod
@@ -481,7 +482,11 @@ class Game(models.Model):
             if not current_player.bot:
                 # Timeout after 15 seconds
                 timeout_time = self.current_player_start + timedelta(seconds=15)
+                self.bot_played = False
+                self.save()
             else:
+                if not self.bot_played:
+                    self.bots_turn()
                 # Timeout after 3 seconds
                 timeout_time = self.current_player_start + timedelta(seconds=3)
 
@@ -492,6 +497,14 @@ class Game(models.Model):
         except ObjectDoesNotExist:
             # Current player got removed
             return self.change_turns()
+
+    def bots_turn(self):
+        """
+        Does the turn for bot.
+        """
+        print 'BOT PLAYING NOW'
+        self.bot_played = True
+        self.save()
 
     def change_turns(self):
         """
