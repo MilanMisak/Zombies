@@ -4,8 +4,6 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import RequestContext
 from django.utils import simplejson
 
-from random import getrandbits
-
 from game.models import Player, Game, CheckIn
 from game.forms import LoginForm
 
@@ -26,7 +24,7 @@ def index(request):
 
             checkin = CheckIn()
             checkin.save()
-            player = Player(name=name, rand_id=getrandbits(10), checkin=checkin)
+            player = Player(name=name, rand_id=Player.generate_rand_id(), checkin=checkin)
 
             if create_game:
                 checkin = CheckIn()
