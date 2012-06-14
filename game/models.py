@@ -124,6 +124,8 @@ class Game(models.Model):
     last_player          = models.OneToOneField(Player, related_name='last_game', null=True)
     last_action          = models.CharField(max_length=20, null=True)
     last_direction       = models.CharField(max_length=5, null=True)
+    ammo_room            = models.PositiveSmallIntegerField(default=3)
+    ammo_in_transit      = models.BooleanField(default=False)
     turns_played         = models.PositiveIntegerField(default=0)
     last_checked_in      = models.DateTimeField(auto_now=True)
    
