@@ -230,12 +230,14 @@ entitySetup = function() {
         
         this.moveRight = function() {
             this.setRoom(this.room.right);
+            this.lastAction = "Right";	
             this.pushDestination(this.room.position.add(new Point((Math.random()*100 - 50),0)));
         }
         
         this.moveUp = function() {
             this.moveUpStairs(this.room.upStairs);
             this.setRoom(this.room.up);
+            this.lastAction = "Up";	
             this.pushDestination(this.room.position.add(new Point((Math.random()*100 - 50),0)));
         }
         
@@ -424,17 +426,19 @@ entitySetup = function() {
         this.animateDeath = function() {
             if (!this.isDead || this.deathCounter > 180)
                 return;
-            this.raster.opacity *= 0.9;
-            this.armGroup.opacity *= 0.9;
             
             if (this.deathDelayCounter < 100) {
                 this.deathDelayCounter++;
                 return;
             }
 
+            this.raster.opacity *= 0.9;
+            this.armGroup.opacity *= 0.9;
+
             var hatPositionTracker = this.item.position.subtract(this.origin);
 	        if (this.lastAction == "Left" || this.lastAction == "Down")	
 		        hatPositionTracker = hatPositionTracker.add(new Point(142, 0));
+
             var deathMod = this.deathCounter % 60;
             if (this.deathCounter > 175) {
                 var rect2 = new Path.Rectangle(
