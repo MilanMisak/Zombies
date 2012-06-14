@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_save, pre_delete
 from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
 
@@ -118,6 +118,10 @@ class Player(models.Model):
         return self.name
         #return '{} {}'.format(self.name, self.index)
 
+@receiver(pre_save, sender=Player)
+def pre_save_callback(sender, instance, raw, using, **kwargs):
+    print 'SAVING PLAYER {} WITH ROOM {}'.format(instance, instance.room)
+
 class Game(models.Model):
     master               = models.OneToOneField(Player, related_name='mastered_game', null=True)
     status               = models.PositiveSmallIntegerField(default=0) # 0 = not started, 1 = started
@@ -234,6 +238,12 @@ class Game(models.Model):
             player.delete()
             return False
 
+        if player.carrying_ammo_box:
+            # Can't barricade while carrying the ammo box
+            print 'CANT BARRICADE WITH AMMO BOX'
+            player.delete()
+            return False
+
         barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
         if barricade_index == -1:
             # Can't barricade in this direction
@@ -261,6 +271,12 @@ class Game(models.Model):
         if not is_valid_direction(direction):
             # Invalid direction
             print 'INVALID DIRECTION'
+            player.delete()
+            return False
+
+        if player.carrying_ammo_box:
+            # Can't debarricade while carrying the ammo box
+            print 'CANT DEBARRICADE WITH AMMO BOX'
             player.delete()
             return False
 
@@ -323,7 +339,7 @@ class Game(models.Model):
         """
         Returns a hash with players PKs and names.
         """
-        return self.players.values('pk', 'name', 'index', 'room', 'ammo')
+        return self.players.values('pk', 'name', 'index', 'room', 'ammo', 'carrying_ammo_box')
 
     def get_list_of_barricades(self):
         """
@@ -336,6 +352,12 @@ class Game(models.Model):
         Returns the maximum player index in this game.
         """
         return self.players.order_by('-index')[0].index
+
+    def get_ammo_box_info(self):
+        """
+        Returns the ammo box information.
+        """
+        return {'room': self.ammo_box_room, 'in_transit': self.ammo_box_in_transit}
 
     def get_current_player(self):
         """

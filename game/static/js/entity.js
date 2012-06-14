@@ -428,6 +428,9 @@ entitySetup = function() {
         }
 
         this.canBarricade = function(direction) {
+	    if (this.holdingBox)
+		return false;
+
             switch (direction) {
                 case "Left":
                     return (this.room.left != null && !this.room.left.containsSnails())
@@ -554,7 +557,7 @@ entitySetup = function() {
         /* Can only reload if ammo is not full, and the ammo box is on the floor in the same room
             as the ghost. */
         this.canReload = function() {
-            return ((this.room == ammoBox.room) && this.ammo < 5);
+            return ((this.room == ammoBox.room) && this.ammo < 5 && !this.holdingBox);
         }
 
         this.barricadeUp = function() {
