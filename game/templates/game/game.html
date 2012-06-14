@@ -18,11 +18,14 @@ $(window).load(function() {
     entitySetup();
 
     view.onFrame = function(event) {
-        snailUpdate();
         if (initialisedPlayers && entityLoaded) {
+            snailUpdate();
             localPlayer.move();
             localPlayer.animateShoot();
             localPlayer.animateDeath();
+            for (var i = 0; i < snailGroupList.length; i++) {
+                snailGroupList[i].move();
+            }
             for (var i = 0; i < playerList.length; i++) {
                 var player = playerList[i];
                 player.move();

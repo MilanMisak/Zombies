@@ -198,7 +198,8 @@ entitySetup = function() {
     }
 
     /* Creates a group of entities. (used for groups of snails) */
-    this.SnailGroup = function(noOfEntities, room, strength) {
+    this.SnailGroup = function(id, noOfEntities, room, strength) {
+        this.id = id;
         this.room = room;
         this.strength = strength;
         this.item = new Group();
@@ -1005,10 +1006,10 @@ entitySetup = function() {
     this.spawnSnailGroup = function(id, side, strength, noOfEntities) {
         switch (side) {
             case "Left" :
-                SnailGroup.spawn(id, outsideLeft, strength, noOfEntities);
+                SnailGroup.spawn(id, noOfEntities, outsideLeft, strength);
                 break;
             case "Right":
-                SnailGroup.spawn(id, outsideRight, strength, noOfEntities);
+                SnailGroup.spawn(id, noOfEntities, outsideRight, strength);
                 break;
         }
     }
