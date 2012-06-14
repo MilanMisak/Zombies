@@ -279,10 +279,24 @@ entitySetup = function() {
         this.room = room;
         this.rotation = 0;
         this.destination = this.item.position;
+        this.deathCounter = 0;
+        this.isDead = false;
+
         this.pushDestination = function(destination) {
             this.destinations.push(destination.add(new Point(0, 70)));
             this.moving = true;
-        }        
+        }
+
+        this.animateDeath = function() {
+            if (!this.isDead)
+                return;
+            if (this.deathCounter < 120) {
+                this.item.opacity *= 0.8;
+                this.item.rotate(1);
+                this.item.position = this.item.position.add(new Point(2,-2));
+            }
+            this.deathCounter++;
+        }
        
         /* Rotates snails for stair movement, MUST move in a zig zag motion. */ 
         this.faceTarget = function() {
