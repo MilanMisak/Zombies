@@ -151,13 +151,14 @@ def ajax_game_state(request):
         last_players_pk = 0
     last_action = game.last_action or ''
     last_direction = game.last_direction or ''
+    ammo_box = game.get_ammo_box_info()
     players = list(game.get_hash_of_players_names())
     barricades = list(game.get_list_of_barricades())
 
     json = simplejson.dumps({'yourTurn': this_players_turn, 'yourPk': player.pk,
         'lastPlayersPk': last_players_pk, 'turnsPlayed': game.turns_played,
-        'lastAction': last_action, 'lastDirection': last_direction, 'players': players,
-        'barricades': barricades})
+        'lastAction': last_action, 'lastDirection': last_direction, 'ammo_box': ammo_box,
+        'players': players, 'barricades': barricades})
     return HttpResponse(json, mimetype='application/json')
 
 def ajax_make_turn(request, action, direction=''):
