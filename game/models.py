@@ -354,6 +354,15 @@ class Game(models.Model):
         return True
 
     def action_shoot(self, player, direction):
+        """
+        Executes the SHOOT action.
+        """
+        if player.ammo <= 0:
+            # Player has no ammo
+            print 'PLAYER HAS NO AMMO'
+            player.delete()
+            return False
+
         return True
 
     def action_reload(self, player):
