@@ -124,6 +124,7 @@ class Player(models.Model):
         return self.name
         #return '{} {}'.format(self.name, self.index)
 
+#TODO - remove
 @receiver(pre_save, sender=Player)
 def pre_save_callback(sender, instance, raw, using, **kwargs):
     print 'SAVING PLAYER {} WITH ROOM {}'.format(instance, instance.room)
@@ -429,3 +430,8 @@ class Barricade(models.Model):
 
     def __unicode__(self):
         return 'Barricade {} with health {}'.format(self.index, self.health)
+
+class Snail(models.Model):
+    game   = models.ForeignKey(Game, related_name='snails')
+    room   = models.PositiveSmallIntegerField()
+    health = models.PositiveIntegerField(default=100)
