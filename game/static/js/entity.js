@@ -580,22 +580,22 @@ entitySetup = function() {
 
         this.breakBarUp = function() {
             if (this.room.up != null) {
-                this.room.upStairs.barricade.destroy();
+                this.room.upStairs.barricade.damage(100);
             }
         }
         this.breakBarDown = function() {
             if (this.room.down != null) {
-                this.room.downStairs.barricade.destroy();
+                this.room.downStairs.barricade.damage(100);
             }
         }
         this.breakBarLeft = function() {
             if (this.room.left != null) {
-                this.room.leftBarricade.destroy();
+                this.room.leftBarricade.damage(100);
             }
         }
         this.breakBarRight = function() {
             if (this.room.right != null) {
-                this.room.rightBarricade.destroy();
+                this.room.rightBarricade.damage(100);
             }
         }
     }
@@ -703,15 +703,17 @@ entitySetup = function() {
             this.item.visible = true;
         }
    
-        /* Damages the barricade, TODO - increase optipacy. */ 
         this.damage = function(damageDealt) {
             this.health -= damageDealt;
-            if (this.health <= 0)
-                this.destroy;
+            if (this.health < 1)
+                this.destroy();
+            else
+                this.opacity = (this.health/100);
         }
     
         /* Destroys the barricade image, the object still exits with 0 health. */
         this.destroy = function() {
+            this.opacity = 1;
             this.health = 0;
             this.exists = false;
             this.item.visible = false;
