@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
 
 from datetime import datetime, timedelta
+from random import randint
 
 def is_valid_direction(direction):
     """
@@ -152,6 +153,17 @@ class Game(models.Model):
         """
         Starts the game.
         """
+        # Spawn players randomly
+        rooms_busy = [False] * 22
+        for player in self.get_list_of_players():
+            for i in range(20):
+                room_no = randint(0, 21)
+                if not rooms_busy[room_no] and room_no != 0 and room_no != 6:
+                    rooms_busy[room_no] = True
+                    player.room = room_no
+                    player.save()
+                    break
+
         self.current_player_index = 1
         self.current_player_start = datetime.now()
         self.status = 1
