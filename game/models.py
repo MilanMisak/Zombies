@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
 
 from datetime import datetime, timedelta
-from random import randint
+from random import getrandbits, randint
 
 def is_valid_direction(direction):
     """
@@ -96,8 +96,16 @@ class Player(models.Model):
     room              = models.PositiveSmallIntegerField(default=3)
     ammo              = models.PositiveSmallIntegerField(default=5)
     carrying_ammo_box = models.BooleanField(default=False)
+    bot               = models.BooleanField(default=False)
     checkin           = models.OneToOneField(CheckIn, related_name='player', blank=True, null=True)
-    
+
+    @staticmethod
+    def generate_rand_id():
+        """
+        Generates a random ID for a new player.
+        """
+        return getrandbits(10)
+
     @staticmethod
     def clean_up():
         """
@@ -105,6 +113,7 @@ class Player(models.Model):
         """
         time = datetime.now() - timedelta(seconds=10)
         count = Player.objects.all().count()
+        # TODO
         #Player.objects.filter(check_in__time__lte=time).delete()
         Player.objects.filter(Q(checkin__time__lte=time)).delete()
         count2 = Player.objects.all().count()
@@ -184,6 +193,10 @@ class Game(models.Model):
                     break
 
         self.spawn_snails(5)
+
+        bot_player = Player(name='Bot', rand_id=Player.generate_rand_id(), game=self,
+            index=self.get_max_player_index() + 1, bot=True)
+        bot_player.save()
 
         self.current_player_index = 1
         self.current_player_start = datetime.now()
@@ -429,7 +442,7 @@ class Game(models.Model):
         """
         Returns a list of players' names.
         """
-        return [str(player) for player in self.get_list_of_players()]
+        return [str(player) for player in self.get_list_of_players().filter(bot=False)]
 
     def get_hash_of_players_names(self):
         """
