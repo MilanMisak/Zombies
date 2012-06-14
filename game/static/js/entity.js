@@ -235,6 +235,8 @@ entitySetup = function() {
             this.strength -= damage;
             if (this.strength <= 0)
                 this.die;
+            else
+                this.opacity = (strength/100);
         }
         
         this.die = function() {
@@ -248,7 +250,7 @@ entitySetup = function() {
         }
         
         this.attack = function(barricade) {
-            barricade.damage(this.strength);
+            barricade.damage(this.strength/2);
         }
 
         this.setRoom = function(room) {
