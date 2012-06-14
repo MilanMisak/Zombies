@@ -325,14 +325,14 @@ entitySetup = function() {
         this.die = function() {
             if (this.holdingBox)
                 this.drop();
-            this.raster.visible = false;
-            this.armGroup.visible = false;
             this.isDead = true;
         }
 
         this.animateDeath = function() {
             if (!this.isDead || this.deathCounter > 180)
                 return;
+            this.raster.opacity *= 0.8;
+            this.armGroup.opacity *= 0.8;
             var deathMod = this.deathCounter % 60;
             if (this.deathCounter > 175) {
                 var rect2 = new Path.Rectangle(
