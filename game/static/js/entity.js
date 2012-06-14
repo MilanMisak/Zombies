@@ -819,6 +819,7 @@ entitySetup = function() {
     stairs5.setBarricade(stairBarricade5);
     stairBarricade6 = new StairBarricade(stairs6.startPoint.add(new Point(100, -50)));
     stairs6.setBarricade(stairBarricade6);
+    stairBarricade6.flip();
     
     /* Fourth Floor Barricades. */
     doorBarricade12 = new DoorBarricade(floor4Room1.position.add(new Point(230, 10)));
