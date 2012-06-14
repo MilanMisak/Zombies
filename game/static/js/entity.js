@@ -1013,8 +1013,8 @@ entitySetup = function() {
         }
     }
 
-    this.addPlayer = function(room, colour, id) {
-        var newPlayer = new Ghost(room, colour, id);
+    this.addPlayer = function(room, colour, id, holdingBox) {
+        var newPlayer = new Ghost(room, colour, id, holdingBox);
         playerList.push(newPlayer);
 	if (newPlayer.holdingBox)
 	    newPlayer.pickUp(); 

@@ -16,31 +16,31 @@ var executeMoves = function(data) {
         return;
 
     if (!initialisedPlayers && entityLoaded != undefined) {
-		for (var i = 0; i < data.players.length; i++) {
-			var newPlayer = data.players[i];
-			if (newPlayer.pk != data.yourPk) {
-				addPlayer(playerColours[newPlayer.index - 1], roomList[newPlayer.room], newPlayer.pk, newPlayer.ammo, newPlayer.carrying_ammo_box);
-			} else {
-				localPlayer = new Ghost(playerColours[newPlayer.index - 1], roomList[newPlayer.room], 0, newPlayer.ammo, newPlayer.carrying_ammo_box);
-				if (localPlayer.holdingBox) {
-					localPlayer.pickUp();
+        for (var i = 0; i < data.players.length; i++) {
+            var newPlayer = data.players[i];
+            if (newPlayer.pk != data.yourPk) {
+                addPlayer(playerColours[newPlayer.index - 1], roomList[newPlayer.room], newPlayer.pk, newPlayer.ammo, newPlayer.carrying_ammo_box);
+            } else {
+                localPlayer = new Ghost(playerColours[newPlayer.index - 1], roomList[newPlayer.room], 0, newPlayer.ammo, newPlayer.carrying_ammo_box);
+                if (localPlayer.holdingBox) {
+                    localPlayer.pickUp();
                     $('#btn_ammo').html('Drop Box');
                 }
-			}
-		}
-		turnNumber = data.turnsPlayed;
+            }
+        }
+        turnNumber = data.turnsPlayed;
 
-		for (var i = 0; i < data.barricades.length; i++) {
-			newBarricade = barricadeList[data.barricades[i].index];
-			newBarricade.health = data.barricades[i].health;
-			newBarricade.exists = true;
-			newBarricade.item.visible = true;
-		}
+        for (var i = 0; i < data.barricades.length; i++) {
+            newBarricade = barricadeList[data.barricades[i].index];
+            newBarricade.health = data.barricades[i].health;
+            newBarricade.exists = true;
+            newBarricade.item.visible = true;
+        }
 
-		console.log(data);
-		ammoBox.room = roomList[data.ammo_box.room];
-	ammoBox.position = ammoBox.room.position.add(new Point(0, 70));
-	ammoBox.visible = !data.ammo_box.in_transit;
+        console.log(data);
+        ammoBox.room = roomList[data.ammo_box.room];
+        ammoBox.position = ammoBox.room.position.add(new Point(0, 70));
+        ammoBox.visible = !data.ammo_box.in_transit;
 
         view.draw();
         initialisedPlayers = true;
