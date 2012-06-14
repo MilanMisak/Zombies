@@ -162,6 +162,7 @@ entitySetup = function() {
 
         this.moveLeft = function() {
             this.setRoom(this.room.left);
+            this.lastAction = "Left";	
             this.pushDestination(this.room.position.add(new Point((Math.random()*100 - 50),0)));
         }
         
@@ -179,6 +180,7 @@ entitySetup = function() {
         this.moveDown = function() {
             this.moveDownStairs(this.room.downStairs);
             this.setRoom(this.room.down);
+            this.lastAction = "Down";
             this.pushDestination(this.room.position.add(new Point((Math.random()*100 - 50),0)));
         }
 
@@ -335,6 +337,7 @@ entitySetup = function() {
         this.deathDelayCounter = 0;
 	    this.destinations = new Array();
         this.origin = position;
+	    this.lastAction = null;
 
         this.die = function() {
             if (this.holdingBox)
@@ -352,6 +355,9 @@ entitySetup = function() {
             }
 
             var hatPositionTracker = this.item.position.subtract(this.origin);
+	        if (this.lastAction == "Left" || this.lastAction == "Down")	
+		        hatPositionTracker = hatPositionTracker.add(new Point(142, 0));
+	
             this.raster.opacity *= 0.8;
             this.armGroup.opacity *= 0.8;
             var deathMod = this.deathCounter % 60;
