@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_save, pre_delete
 from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
 
@@ -117,6 +117,10 @@ class Player(models.Model):
     def __unicode__(self):
         return self.name
         #return '{} {}'.format(self.name, self.index)
+
+@receiver(pre_save, sender=Player)
+def pre_save_callback(sender, instance, raw, using, **kwargs):
+    print 'SAVING PLAYER {} WITH ROOM {}'.format(instance, instance.room)
 
 class Game(models.Model):
     master               = models.OneToOneField(Player, related_name='mastered_game', null=True)
