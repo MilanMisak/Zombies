@@ -268,6 +268,7 @@ entitySetup = function() {
     /* Snail factory. */
     SnailGroup.spawn = function(id, noOfEntities, room, strength) {
         var snails =  new SnailGroup(id, noOfEntities, room, strength);
+        snails.setRoom(room);
         snailGroupList.push(snails);
     }
 
@@ -475,6 +476,7 @@ entitySetup = function() {
             
             this.shootDirection = direction;
             room.snails[0].hurt(20);
+	    this.ammo--;
         }
 
         this.animateShoot = function() {
@@ -507,13 +509,13 @@ entitySetup = function() {
 
             switch(direction) {
                 case "Left":
-                    return (this.room.left != null && this.room.containsSnails())
+                    return (this.room.left != null && this.room.left.containsSnails())
                 case "Right":
-                    return (this.room.right != null && this.room.containsSnails())
+                    return (this.room.right != null && this.room.right.containsSnails())
                 case "Up":
-                    return (this.room.up != null && this.room.containsSnails())
+                    return (this.room.up != null && this.room.up.containsSnails())
                 case "Down":
-                    return (this.room.down != null && this.room.containsSnails())
+                    return (this.room.down != null && this.room.down.containsSnails())
             }
         }
 
