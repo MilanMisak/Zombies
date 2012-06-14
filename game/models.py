@@ -191,6 +191,15 @@ class Game(models.Model):
                 break
         snail = Snail(game=self, room=room_no)
         snail.save()
+        snail = Snail(game=self, room=room_no)
+        snail.save()
+        room_no = 3
+        for i in range(20):
+            room_no = randint(0, 21)
+            if not rooms_busy[room_no] and room_no != 0 and room_no != 6:
+                break
+        snail = Snail(game=self, room=room_no)
+        snail.save()
 
         self.current_player_index = 1
         self.current_player_start = datetime.now()
