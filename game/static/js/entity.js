@@ -167,19 +167,19 @@ entitySetup = function() {
         
         this.moveRight = function() {
             this.setRoom(this.room.right);
-            this.pushDestination(this.room.position.add(new Point(Math.random()*100 - 50),0)));
+            this.pushDestination(this.room.position.add(new Point((Math.random()*100 - 50),0)));
         }
         
         this.moveUp = function() {
             this.moveUpStairs(this.room.upStairs);
             this.setRoom(this.room.up);
-            this.pushDestination(this.room.position.add(new Point(Math.random()*100 - 50),0)));
+            this.pushDestination(this.room.position.add(new Point((Math.random()*100 - 50),0)));
         }
         
         this.moveDown = function() {
             this.moveDownStairs(this.room.downStairs);
             this.setRoom(this.room.down);
-            this.pushDestination(this.room.position.add(new Point(Math.random()*100 - 50),0)));
+            this.pushDestination(this.room.position.add(new Point((Math.random()*100 - 50),0)));
         }
 
         this.moveUpStairs = function(stairs) {
