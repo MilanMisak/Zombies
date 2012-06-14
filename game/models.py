@@ -329,8 +329,8 @@ class Game(models.Model):
         """
         Returns the player, whose turn it is.
         """
-        # Timeout after 20 seconds
-        timeout_time = self.current_player_start + timedelta(seconds=10)
+        # Timeout after 15 seconds
+        timeout_time = self.current_player_start + timedelta(seconds=15)
         if timeout_time < datetime.now():
             # Current player timed out, change him
             return self.change_turns()
