@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.db.models.signals import pre_save, pre_delete
 from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
@@ -83,6 +84,9 @@ def pre_delete_callback(sender, instance, **kwargs):
     """
     print 'DELETING {}'.format(instance)
 
+class CheckIn(models.Model):
+    time = models.DateTimeField(auto_now=True)
+    
 class Player(models.Model):
     rand_id           = models.PositiveIntegerField()
     name              = models.CharField(max_length=50)
@@ -92,7 +96,7 @@ class Player(models.Model):
     room              = models.PositiveSmallIntegerField(default=3)
     ammo              = models.PositiveSmallIntegerField(default=5)
     carrying_ammo_box = models.BooleanField(default=False)
-    last_checked_in   = models.DateTimeField(auto_now=True)
+    checkin           = models.OneToOneField(CheckIn, related_name='player', blank=True, null=True)
     
     @staticmethod
     def clean_up():
@@ -101,18 +105,22 @@ class Player(models.Model):
         """
         time = datetime.now() - timedelta(seconds=10)
         count = Player.objects.all().count()
-        Player.objects.filter(last_checked_in__lte=time).delete()
+        #Player.objects.filter(check_in__time__lte=time).delete()
+        Player.objects.filter(Q(checkin__time__lte=time)).delete()
         count2 = Player.objects.all().count()
         if count != count2:
             print 'DELETED {} PLAYERS'.format(count - count2)
 
-    def check_in(self):
+    def do_check_in(self):
         """
         Checks-in a player informing the system that the player is still online.
         """
-        self.save()
+        if self.checkin:
+            self.checkin.save()
+        else:
+            print 'BOOM'
         if self.game and self.game.master == self:
-            self.game.save()
+            self.game.do_check_in()
 
     def __unicode__(self):
         return self.name
@@ -133,7 +141,7 @@ class Game(models.Model):
     ammo_box_room        = models.PositiveSmallIntegerField(default=3)
     ammo_box_in_transit  = models.BooleanField(default=False)
     turns_played         = models.PositiveIntegerField(default=0)
-    last_checked_in      = models.DateTimeField(auto_now=True)
+    checkin              = models.OneToOneField(CheckIn, related_name='game', blank=True, null=True)
    
     @staticmethod
     def clean_up():
@@ -141,7 +149,8 @@ class Game(models.Model):
         Deletes games not checked-in for 10 seconds or more.
         """
         time = datetime.now() - timedelta(seconds=10)
-        Game.objects.filter(last_checked_in__lte=time).delete()
+        #Game.objects.filter(check_in__time__lte=time).delete()
+        Player.objects.filter(Q(checkin__time__lte=time)).delete()
 
     @staticmethod
     def get_dict_of_games(player):
@@ -152,6 +161,15 @@ class Game(models.Model):
         # Exclude the game joined by the player
         exclude_pk = player.game.pk if player.game is not None else -1
         return {game.pk : str(game) for game in Game.objects.exclude(pk=exclude_pk)}
+    
+    def do_check_in(self):
+        """
+        Checks-in a game informing the system that the game is still on.
+        """
+        if self.checkin:
+            self.checkin.save()
+        else:
+            print 'BOOM'
 
     def start(self):
         """
