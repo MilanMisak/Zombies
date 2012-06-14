@@ -6,7 +6,7 @@ from django.utils import simplejson
 
 from random import getrandbits
 
-from game.models import Player, Game
+from game.models import Player, Game, CheckIn
 from game.forms import LoginForm
 
 def index(request):
@@ -24,10 +24,14 @@ def index(request):
             name = form.cleaned_data['player_name']
             create_game = form.cleaned_data['create_game']
 
-            player = Player(name=name, rand_id=getrandbits(10))
+            checkin = CheckIn()
+            checkin.save()
+            player = Player(name=name, rand_id=getrandbits(10), checkin=checkin)
 
             if create_game:
-                game = Game()
+                checkin = CheckIn()
+                checkin.save()
+                game = Game(checkin=checkin)
                 game.save()
                 player.game = game
                 player.index = 1
@@ -190,7 +194,7 @@ def get_player(request):
 
     try:
         player = Player.objects.get(pk=request.session['player_pk'], rand_id=request.session['player_rand_id'])
-        player.check_in()
+        player.do_check_in()
         return player
     except ObjectDoesNotExist:
         return None
