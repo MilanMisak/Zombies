@@ -178,7 +178,7 @@ class Game(models.Model):
                 return
         else:
             # Action is not supported
-            print 'INVALID ACTION'
+            print 'INVALID ACTION {}'.format(action)
             player.delete()
             return
 
