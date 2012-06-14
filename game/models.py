@@ -183,19 +183,30 @@ class Game(models.Model):
                     player.save()
                     break
 
-        # Some initial snails
-        room_no = 3
-        for i in range(20):
-            room_no = randint(0, 21)
-            if not rooms_busy[room_no] and room_no != 0 and room_no != 6:
-                break
-        snail = Snail(game=self, room=room_no)
-        snail.save()
+        self.spawn_snails(5)
 
         self.current_player_index = 1
         self.current_player_start = datetime.now()
         self.status = 1
         self.save()
+
+    def spawn_snails(self, how_many=1):
+        """
+        Spawns snails randomly.
+        """
+        # Initialise the occupancy of rooms
+        rooms_busy = [False] * 22
+        for i in range(22):
+            rooms_busy[i] = self.players.filter(room=i).count() > 0
+
+        for n in range(how_many):
+            # Try spawning 100 times
+            for i in range(100):
+                room_no = randint(0, 21)
+                if not rooms_busy[room_no]:
+                    snail = Snail(game=self, room=room_no)
+                    snail.save()
+                    break
 
     def make_turn(self, player, action, direction):
         """
