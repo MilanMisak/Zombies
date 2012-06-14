@@ -390,6 +390,22 @@ class Game(models.Model):
         return True
 
     def action_reload(self, player):
+        """
+        Executes the RELOAD action.
+        """
+        if self.ammo_box_in_transit or self.ammo_box_room != player.room:
+            print 'AMMO BOX NOT AVAILABLE FOR RELOADING'
+            player.delete()
+            return False
+
+        if player.ammo == 5:
+            print 'CANT RELOAD WITH FULL AMMO'
+            player.delete()
+            return False
+
+        # Reload
+        player.ammo = 5
+        player.save()
         return True
 
     def get_list_of_players(self):
