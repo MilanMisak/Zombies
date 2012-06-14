@@ -260,8 +260,13 @@ entitySetup = function() {
             this.room.removeSnailGroup(this);
             this.room = room;
             this.room.addSnailGroup(this);
-            for (var i = 0; i < noOfEntities; i++) 
+            for (var i = 0; i < this.item.children.length; i++) 
                 this.item.children[i].Parent.setRoom(room);
+            for (var i = 0; i < playerList.length; i++) {
+                player = playerList[i];
+                if (player.room == this.room)
+                    player.die();
+            }
         }
 
 
@@ -327,7 +332,7 @@ entitySetup = function() {
         this.id = id;
         this.isDead = false;
         this.deathCounter = 0;
-	this.destinations = new Array();
+	    this.destinations = new Array();
 
         this.die = function() {
             if (this.holdingBox)
@@ -947,6 +952,8 @@ entitySetup = function() {
                 player.moveDown();
                 break;
         }
+        if (player.room.containsSnails())
+            player.die();
     }
 
     this.canBarricade = function(player, direction) {
