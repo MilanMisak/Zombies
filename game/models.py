@@ -133,7 +133,7 @@ class Game(models.Model):
     status               = models.PositiveSmallIntegerField(default=0) # 0 = not started, 1 = started
     current_player_index = models.PositiveSmallIntegerField(null=True)
     current_player_start = models.DateTimeField(null=True)
-    last_player          = models.OneToOneField(Player, related_name='last_game', null=True, on_delete=SET_NULL)
+    last_player          = models.OneToOneField(Player, related_name='last_game', null=True, on_delete=models.SET_NULL)
     last_action          = models.CharField(max_length=20, null=True)
     last_direction       = models.CharField(max_length=5, null=True)
     ammo_box_room        = models.PositiveSmallIntegerField(default=3)
