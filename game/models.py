@@ -383,6 +383,12 @@ class Game(models.Model):
         """
         return self.barricades.values('index', 'health')
 
+    def get_list_of_snails(self):
+        """
+        Returns a list of snails with their PKs, rooms and health.
+        """
+        return self.snails.values('pk', 'room', 'health')
+
     def get_max_player_index(self):
         """
         Returns the maximum player index in this game.
