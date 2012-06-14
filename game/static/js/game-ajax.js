@@ -39,7 +39,7 @@ var executeMoves = function(data) {
 
         for (var i = 0; i < data.snails.length; i++) {
             var snails = data.snails[i];
-            SnailGroup.spawn(snails.pk, 5, roomList[snails.room], snails.health);
+            SnailGroup.spawn(snails.pk, 10, roomList[snails.room], snails.health);
         }
 
         console.log(data);
