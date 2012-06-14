@@ -75,6 +75,9 @@ entitySetup = function() {
     /* List for all snail groups. */
     snailGroupList = new Array();
 
+    /* List of all dying snails. */
+    deadSnailList = new Array();
+
     /* List for all other players. */
     playerList = new Array();
 
@@ -238,7 +241,7 @@ entitySetup = function() {
             } else {
                 //var snail = this.item.children[this.item.children.length - 1];
                 var snail = this.item.removeChildren(this.item.children.length - 1);
-                snail.remove();
+                deadSnailList.push(snail);
             }
         }
         
@@ -297,6 +300,9 @@ entitySetup = function() {
                 this.item.opacity *= 0.8;
                 this.item.rotate(1);
                 this.item.position = this.item.position.add(new Point(2,-2));
+            } else {
+                deadSnailList.remove(this);
+                this.remove();
             }
             this.deathCounter++;
         }
