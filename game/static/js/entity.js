@@ -1013,11 +1013,11 @@ entitySetup = function() {
         }
     }
 
-    this.addPlayer = function(room, colour, id, holdingBox) {
-        var newPlayer = new Ghost(room, colour, id, holdingBox);
+    this.addPlayer = function(room, colour, id, ammo, holdingBox) {
+        var newPlayer = new Ghost(room, colour, id, ammo, holdingBox);
         playerList.push(newPlayer);
-	if (newPlayer.holdingBox)
-	    newPlayer.pickUp(); 
+        if (newPlayer.holdingBox) 
+            newPlayer.pickUp(); 
     }
 
     this.getPlayer = function(id) {
