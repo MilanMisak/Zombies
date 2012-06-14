@@ -275,6 +275,14 @@ class Game(models.Model):
         """
         Executes the AMMO action (picking up/dropping the ammo box).
         """
+        if player.carrying_ammo_box:
+            # Player is carrying the ammo box, so he can drop it
+            player.carrying_ammo_box = False
+            self.ammo_box_room = player.room
+            self.ammo_box_in_transit = False
+
+        #TODO
+
         return True
 
     def get_list_of_players(self):
