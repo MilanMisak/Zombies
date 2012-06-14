@@ -357,15 +357,55 @@ class Game(models.Model):
         """
         Executes the SHOOT action.
         """
+        if not is_valid_direction(direction):
+            # Invalid direction
+            print 'INVALID DIRECTION'
+            player.delete()
+            return False
+
         if player.ammo <= 0:
             # Player has no ammo
             print 'PLAYER HAS NO AMMO'
             player.delete()
             return False
 
+        snails_room = ROOMS[player.room].get_room_in_direction(direction)
+        query = self.snails.filter(room=snails_room)
+        if query.count() == 0:
+            # There are no snails in the neighbouring room to shoot at
+            print 'NO SNAILS TO SHOOT AT'
+            player.delete()
+            return False
+
+        # Shoot at snails
+        snail = query[0]
+        if snail.health > 20:
+            snail.health = snail.health - 20
+            snail.save()
+        else:
+            snail.delete()
+        # Decrease ammo
+        player.ammo = player.ammo - 1
+        player.save()
         return True
 
     def action_reload(self, player):
+        """
+        Executes the RELOAD action.
+        """
+        if self.ammo_box_in_transit or self.ammo_box_room != player.room:
+            print 'AMMO BOX NOT AVAILABLE FOR RELOADING'
+            player.delete()
+            return False
+
+        if player.ammo == 5:
+            print 'CANT RELOAD WITH FULL AMMO'
+            player.delete()
+            return False
+
+        # Reload
+        player.ammo = 5
+        player.save()
         return True
 
     def get_list_of_players(self):
