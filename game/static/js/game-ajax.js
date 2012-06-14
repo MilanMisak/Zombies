@@ -37,6 +37,11 @@ var executeMoves = function(data) {
             newBarricade.item.visible = true;
         }
 
+        for (var i = 0; i < data.snails.length; i++) {
+            var snails = data.snails[i];
+            SnailGroup.spawn(snails.pk, 5, roomList[snails.room], snails.health);
+        }
+
         console.log(data);
         ammoBox.room = roomList[data.ammo_box.room];
         ammoBox.position = ammoBox.room.position.add(new Point(0, 70));
