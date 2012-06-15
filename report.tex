@@ -37,6 +37,10 @@ To organise our team, we used a website called Pivotal Tracker. This allowed us 
 Snails, and lots of them.
 \subsection{Rules}
 \subsection{Aesthetics}
+We used Gimp to create all of the art for the game. We had to balance the performance issues of including large files, with the need for the game to look polished. Because the game includes variable zoom levels, we needed to make sure that the art looked acceptable from any distance. This has lead to some large image files needing to be loaded, though using javascript 'symbols' means that each only needs to be loaded once. To help reduce loading time, the largest image (the house background) was compressed, which has caused some lost data - though not enough to be easily noticed. // // 
+
+Animations were added for certain actions, such as player death, shooting, and the idle snail movements. These were simply added to make the game more interesting for players waiting for their turn; instead of simply watching a static screen, there would always be movement. However, it was decided early on that player and enemy movement should be fairly simple to implement, which was one of the reasons for choosing ghosts and snails (both using a gliding motion to move - no additional moving parts).
+
 \subsection{Front end}
 :O
 \subsection{Back end}
