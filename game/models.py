@@ -95,6 +95,7 @@ class Player(models.Model):
     room              = models.PositiveSmallIntegerField(default=3)
     ammo              = models.PositiveSmallIntegerField(default=5)
     carrying_ammo_box = models.BooleanField(default=False)
+    alive             = models.BooleanField(default=True)
     checkin           = models.OneToOneField(CheckIn, related_name='player', blank=True, null=True)
 
     @staticmethod
