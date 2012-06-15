@@ -20,8 +20,7 @@ Eventually we settled on making a game based on defending a certain location, an
 \section{Project Management}
 
 \subsection{Group Structure}
-Initially, we split into a pair and a single person, with Craig and Jack working on the graphics, artwork and game representation of the game. Milan focused on creating the layout for the website, and lay a structure for the back end Django application. As the project has progressed everybody has been working slightly in other areas as the areas overlap.
-
+Initially, we split into a pair and a single person, with Craig and Jack working on the graphics, artwork and client-side representation of the game. Milan focused on creating the layout for the website, and lay a structure for the back end Django application. As the project progressed, everybody began to help with anything that needed doing, as many areas of work overlapped.
 
 \subsection{Git}
 We used git as the version control for our project; more specifically the online git hosting service, github. Git is simple and easy to use, and we have become very familiar with it from previous group projects. It is a distributed version control system which makes it great for working independently of other team members.
@@ -30,10 +29,11 @@ We used git as the version control for our project; more specifically the online
 To organise our team, we used a project management software called Pivotal Tracker. This allowed us to create tasks, set a priority and a difficulty for each task, and to assign group members to complete each task. Pivotal Tracker automatically arranges tasks to maximise efficient time use, based on previous performance. A list of current tasks is maintained, along with a backlog. Tasks are made 'current' when it is predicted that there is enough free space (For example, if the group works quickly, there will be a larger capacity in 'current tasks'. If the group works slowly, Pivotal Tracker makes sure there are fewer current tasks to complete).
 
 \subsection{Other tools}
+TODO: this?
 
 \subsection{Implementation Languages}
-We chose to write the front end in Javascript and HTML5, obviously, and we chose to use this as a basis for the graphics also. Instead of using Flash or a Java applet. This is because unlike the previous 2 choices, a HTML5-based game will load faster and as a new technology standard it is gaining good webbrowser support. People are already talking about stopping flash support, on mobile devices in particular. \\ \\
-We chose to use Django for the back end because some of us have previous experience using the platform and because of its many useful features. For example, Object-relational mapping (ORM) allows us to effectively deal with database queries while also having a good object-oriented design for the application's entities. With view templates we can easily create HTML parts of the website and with URL mapping we have full control over the URLs used by the website (so AJAX calls can be prefixed with 'ajax-' for example).
+We chose to write the front end in Javascript and HTML5, and we chose to also use this as a basis for the graphics instead of using Flash or a Java applet. This is because unlike the previous 2 choices, a HTML5-based game will load faster and, as a new technology standard, it is gaining good web browser support. People are already talking about stopping flash support - on mobile devices in particular. \\ \\
+We chose to use Django for the back end because some of us have had previous experience using the platform, and because of its many useful features. For example, Object-relational mapping (ORM) allows us to effectively deal with database queries while also having a good object-oriented design for the application's entities. With view templates we can easily create HTML parts of the website and with URL mapping we have full control over the URLs used by the website (so AJAX calls can be prefixed with 'ajax-', for example).
 
 \section{Program Description}
 
@@ -55,7 +55,6 @@ Snails spawn in groups of variable size outside the house. Groups of snails will
 The ghosts 'die' (descend to hell) when they are in the same room as any number of snails. The game is over when all ghosts are dead.
 
 \subsection{Aesthetics}
-TODO - JS symbols?, 'lost data'?
 We used Gimp to create all of the artwork for the game. We had to balance the performance issues of including large files (transfer time over the Internet), with the need for the game to look polished. Because the game includes variable zoom levels, we needed to make sure that the art looked acceptable from any distance. This has lead to some large image files needing to be loaded, though using paper.js 'symbols' means that each only needs to be loaded once. To help reduce loading time, the largest image (the house background) was compressed, which has caused some data loss in the image (that is, there is some loss of small details) - though not enough to be easily noticed. \\ \\
 Animations were added for certain actions, such as player death, shooting, and the idle snail movements. These were simply added to make the game more interesting for players waiting for their turn; instead of simply watching a static screen, there would always be movement. However, it was decided early on that player and enemy movement should be fairly simple to implement, which was one of the reasons for choosing ghosts and snails (both using a gliding motion to move - no additional moving parts).
 
@@ -69,8 +68,10 @@ TODO: Lol, back end ;)
 We used Twitter Bootstrap CSS, Javascript, and glyphicons for the website layout. We also used some Javascript libraries: jQuery and Paper.js, for DOM (Document Object Model) handling, AJAX calls and for working with the HTML5 canvas. The Django framework was used for the server-side part of the website. All of the artwork within the canvas is original.
 
 \section{Conclusion}
-In conclusion, we are the best. Also talk about chat feature. :D
 TODO: done, not done, would do differently in future, learned from the project \\ \\
 \textbf{What we have learned} \\
-We only started using Pivotal tracker after the milstone report when it was suggested we use some project management software. We were sceptical at first, but after using it for a week or so it has been noticably beneficial to the project. Not only to assign work to each other and keep the work organised, but also to predict what stages we will be by monitoring our working velocity.
+We only started using Pivotal tracker after the milestone report, when it was suggested we use some project management software. We were sceptical at first, but after using it for a week or so it has been noticably beneficial to the project. Not only was it helpful to assign work to each other and to keep the work organised, but also to predict what stages we should be at, by monitoring our working velocity. \\ \\
+\textbf{What we would do differently in future} \\
+If we were to do this project again, we would need to organise ourselves more effectively in the early stages of development. For example, had the team members working on the client and the server communicated more effectively, many parts of the code could have been considerably cleaner. \\
+Also, there are one or two different features that we would have liked to add to the game, to expand it. For example, a chat feature would have been useful for co-ordinating team movements. The ability to pick or customise player characters could help to make the game more immersive, and, if we were to develop this game much more for distribution, it could help to add a login system to keep track of personal best scores and other individual player stats.
 \end{document}
