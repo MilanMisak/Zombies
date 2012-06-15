@@ -22,7 +22,7 @@ entitySetup = function() {
 
     /* Snail eye stalk style. */
     var eyeStyle = {
-    strokeColor: 'green',
+    strokeColor: '#7a9c30',
     strokeWidth: 5,
     };
     var size = 3;
