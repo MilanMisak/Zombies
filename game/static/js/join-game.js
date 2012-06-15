@@ -22,7 +22,7 @@ var updateGameInfo = function() {
             items.push('<li>' + v + '</li>');
         });
 
-        $('#game_name').html(data[0]);
+        $('#joined_game').html('Currently in ' + data[0] + ':');
         $('#joined_game_instructions').fadeIn();
         $('#player_list').html('<ul>' + items.join('') + '</ul>');
     }).error(function(xhr, status, data) {
@@ -38,11 +38,11 @@ var updateGameInfo = function() {
 
             // No game associated with this player anymore
             hasJoinedGameYet = false;
-            $('#game_name').html('');
+            $('#joined_game').html('No game joined');
             $('#joined_game_instructions').fadeOut();
         }
 
-        $('#player_list').html('<p>No game joined</p>');
+        $('#player_list').html('');
     });
 };
 
@@ -67,7 +67,7 @@ $(document).ready(function() {
 
             $('#game_list').html('<ul>' + items.join('') + '</ul>');
             if (items.length == 0)
-                $('#game_list').html('<p>No available games</p>');
+                $('#game_list').html('<p>None. Why don\'t you <a href="/">create one</a>?</p>');
 
             $('.btn_join_game').click(function() {
                 var game_id = $(this).attr('data-game-id');
