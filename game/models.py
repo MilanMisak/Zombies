@@ -121,6 +121,21 @@ class Player(models.Model):
         if count != count2:
             print 'DELETED {} PLAYERS'.format(count - count2)
 
+    def update_score(self, action):
+        """
+        Updates player's score based on the action.
+        """
+        if action == 'Move':
+            delta = 10 + (1 if self.carrying_ammo_box else 0)
+        elif action == 'Shoot':
+            delta = 12
+        elif action == 'Barricade':
+            delta = 11
+        else:
+            delta = 10
+        self.score = self.score + delta * (1 + 1 / self.game.players.count())
+        self.save()
+
     def do_check_in(self):
         """
         Checks-in a player informing the system that the player is still online.
@@ -254,6 +269,9 @@ class Game(models.Model):
             print 'INVALID ACTION {}'.format(action)
             player.delete()
             return
+
+        player.update_score(action)
+        print player.score
 
         self.last_player = player
         self.last_action = action
