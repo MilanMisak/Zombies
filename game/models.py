@@ -126,7 +126,7 @@ class Player(models.Model):
         Updates player's score based on the action.
         """
         if action == 'Move':
-            delta = 10 + (1 if self.carrying_ammo_box else 0)
+            delta = 8 + (2 if self.carrying_ammo_box else 0)
         elif action == 'Shoot':
             delta = 15
         elif action == 'Barricade':
