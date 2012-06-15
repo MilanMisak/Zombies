@@ -164,6 +164,22 @@ margin-left: 10px;
 text-align: center;
 }
 
+#players_list li {
+list-style-type: none;
+}
+
+.player span {
+height: 15px;
+width: 15px;
+display: inline-block;
+}
+.dead {
+font-style: italic;
+}
+.current {
+font-weight: bold;
+}
+
 .control_key {
 width: 80px;
 text-align: right;

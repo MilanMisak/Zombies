@@ -15,6 +15,15 @@ var executeMoves = function(data) {
     if (!ALL_LOADED)
         return;
 
+    // Update the list of players
+    var playersList = [];
+    $.each(data.players, function(i, v) {
+        playersList.push('<li class="player' + (!v.alive ? ' dead' : '') +
+            (data.currentPlayersPk == v.pk ? ' current' : '') + '"><span style="background-color: ' +
+            playerColours[v.index] + '">&nbsp;</span>&nbsp;' + v.name + '</li>');
+    });
+    $('#players_list').html(playersList.join(''));
+
     if (!initialisedPlayers && entityLoaded != undefined) {
         for (var i = 0; i < data.players.length; i++) {
             var newPlayer = data.players[i];

@@ -192,7 +192,7 @@ class Game(models.Model):
                     player.save()
                     break
 
-        self.spawn_snails(5)
+        self.spawn_snails(1)
 
         self.current_player_index = 1
         self.current_player_start = datetime.now()
