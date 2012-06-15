@@ -518,8 +518,12 @@ class Game(models.Model):
                 # Try getting the current player
                 current_player = self.players.get(index=self.current_player_index)
 
-                # Timeout after 15 seconds
-                timeout_time = self.current_player_start + timedelta(seconds=15)
+                if self.turns_played == 0:
+                    # The first player gets 30 seconds
+                    timeout_time = self.current_player_start + timedelta(seconds=30)
+                else:
+                    # Timeout after 15 seconds
+                    timeout_time = self.current_player_start + timedelta(seconds=15)
             except ObjectDoesNotExist:
                 # Current player got removed
                 return self.change_turns()
