@@ -24,7 +24,8 @@ Eventually we settled on making a game based on defending a certain location, an
 \section{Project Management}
 
 \subsection{Group Structure}
-TODO: We need to whack this report out quickly because england are playing.
+Initially, we split into a pair and a single person, with Craig and Jack working on the graphics, artwork and game representation of the game. Milan focused on creating the layout for the website, and Lay a structure for the back end Django code. As the project has progressed everybody has been working slightly in other areas as the areas overlap.
+
 
 \subsection{Git}
 We used git as the version control for our project; more specifically the online git hosting service, github. Git is simple and easy to use, and we have become very familiar with it from previous group projects. It includes the ability to rollback to previous commits to correct mistakes, which is very useful when starting a project from scratch.
@@ -34,6 +35,10 @@ To organise our team, we used a website called Pivotal Tracker. This allowed us 
 
 \subsection{Other tools}
 
+\subsection{Implementation Languages}
+We chose to write the front end in Javascript, obviously, and we chose to use this as a basis for the graphics also. Instead of using flash or a java applet. This is because unlike the previous 2 choices, HTML5 will load faster and it is a new technology which will continue to be supported by browsers for some time. People are already talking about stopping flash support, on mobile devices in particular.
+
+We chose to use Django for the back end because some of us have previous experience using the platform, TODO - Milan: write more.
 
 \section{Program Description}
 
@@ -50,12 +55,12 @@ Ghosts are equiped with pistols, which they may choose to shoot at snails in adj
 \textbf{Ammo box} \\
 There is one ammo box in the house, which holds an infinite supply of ammo clips. Ghosts can only reload when in the same room as the ammo box, and only if the ammo box is on the floor. Ghosts can pick up the ammo box, consuming one turn, in order to move it to a different room. While holding the box ghosts can only move around or drop the box. Only one ghost can be holding the box at any one time, and if the box is being held by a player then nobody can use it to replenish their ammo. \\ \\
 \textbf{Snail behaviour} \\
-Snails spawn in groups of variable size outside the house. Groups of snails will attack and move as one, and snails can only move/spawn/attack when it is their turn.
+Snails spawn in groups of variable size outside the house. Groups of snails will attack and move as one, and snails can only move/spawn/attack when it is their turn. \\ \\
 \textbf{Ghost death} \\
 The ghosts 'die' (descend to hell) when they are in the same room as any number of snails. The game is over when all ghosts are dead.
 
 \subsection{Aesthetics}
-We used Gimp to create all of the art for the game. We had to balance the performance issues of including large files, with the need for the game to look polished. Because the game includes variable zoom levels, we needed to make sure that the art looked acceptable from any distance. This has lead to some large image files needing to be loaded, though using javascript 'symbols' means that each only needs to be loaded once. To help reduce loading time, the largest image (the house background) was compressed, which has caused some lost data - though not enough to be easily noticed. // // 
+We used Gimp to create all of the art for the game. We had to balance the performance issues of including large files, with the need for the game to look polished. Because the game includes variable zoom levels, we needed to make sure that the art looked acceptable from any distance. This has lead to some large image files needing to be loaded, though using javascript 'symbols' means that each only needs to be loaded once. To help reduce loading time, the largest image (the house background) was compressed, which has caused some lost data - though not enough to be easily noticed. \\
 
 Animations were added for certain actions, such as player death, shooting, and the idle snail movements. These were simply added to make the game more interesting for players waiting for their turn; instead of simply watching a static screen, there would always be movement. However, it was decided early on that player and enemy movement should be fairly simple to implement, which was one of the reasons for choosing ghosts and snails (both using a gliding motion to move - no additional moving parts).
 
