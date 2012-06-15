@@ -444,7 +444,7 @@ class Game(models.Model):
         """
         Returns a hash with players PKs and names.
         """
-        return self.players.values('pk', 'name', 'index', 'room', 'ammo', 'carrying_ammo_box', 'alive')
+        return self.get_list_of_players().values('pk', 'name', 'index', 'room', 'ammo', 'carrying_ammo_box', 'alive')
 
     def get_list_of_barricades(self):
         """
