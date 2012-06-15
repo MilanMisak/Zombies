@@ -24,8 +24,18 @@ if ENVIRONMENT == 'dev':
         }
     }
 else:
-    import dj_database_url
-    DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'app5068365',
+            'USER': 'app5068365',
+            'PASSWORD': 'HlEGJGlp',
+            'HOST': 'instance18026.db.xeround.com.',
+            'PORT': '11976',
+        }
+    }
+    #import dj_database_url
+    #DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
