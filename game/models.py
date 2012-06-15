@@ -133,7 +133,7 @@ class Player(models.Model):
             delta = 12
         else:
             delta = 8
-        self.score = self.score + delta * (1 / self.game.players.count())
+        self.score = self.score + delta * (1.0 / self.game.players.count())
         self.save()
 
     def do_check_in(self):
