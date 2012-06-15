@@ -138,6 +138,14 @@ def pre_save_callback(sender, instance, raw, using, **kwargs):
 class Bot(models.Model):
     has_played = models.BooleanField(default=False)
 
+    def take_turn(self):
+        """
+        Takes a turn.
+        """
+        print 'BOT PLAYING NOW'
+        self.has_played = True
+        self.save()
+
 class Game(models.Model):
     master               = models.OneToOneField(Player, related_name='mastered_game', null=True)
     bot                  = models.OneToOneField(Bot, related_name='game', null=True)
@@ -477,9 +485,7 @@ class Game(models.Model):
         if self.current_player_index == 0:
             # Bot
             if not self.bot.has_played:
-                print 'BOT PLAYING NOW'
-                self.bot.has_played = True
-                self.bot.save()
+                self.bot.take_turn()
 
             # Timeout after 3 seconds
             timeout_time = self.current_player_start + timedelta(seconds=3)
@@ -509,15 +515,17 @@ class Game(models.Model):
         """
         Ensures that it is the next player's turn now. Returns the next player.
         """
-        results = self.players.order_by('index').filter(index__gt=self.current_player_index)
+        results = self.players.order_by('index').filter(index__gt=self.current_player_index, alive=True)
         if results.exists():
             next_player = results[0]
         else:
             next_player = None
+
         if next_player:
             self.current_player_index = next_player.index
         else:
             self.current_player_index = 0
+
         self.current_player_start = datetime.now()
         if self.current_player_index == 0:
             self.bot.has_played = False
