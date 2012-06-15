@@ -128,12 +128,12 @@ class Player(models.Model):
         if action == 'Move':
             delta = 10 + (1 if self.carrying_ammo_box else 0)
         elif action == 'Shoot':
-            delta = 12
+            delta = 15
         elif action == 'Barricade':
-            delta = 11
+            delta = 12
         else:
-            delta = 10
-        self.score = self.score + delta * (1 + 1 / self.game.players.count())
+            delta = 8
+        self.score = self.score + delta * (1 / self.game.players.count())
         self.save()
 
     def do_check_in(self):
