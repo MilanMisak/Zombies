@@ -21,9 +21,9 @@ var executeMoves = function(data) {
         playersList.push('<li class="player' + (!v.alive ? ' dead' : '') +
             (data.currentPlayersPk == v.pk ? ' current' : '') + '"><span style="background-color: ' +
             playerColours[v.index - 1] + '">&nbsp;</span>&nbsp;' + v.name + '</li>');
-        playersList.push('<li class="player' + (data.currentPlayersPk == -1 ? ' current' : '') +
-            '"><span style="background-color: #eee">&nbsp;</span>&nbsp;Snails</li>');
     });
+    playersList.push('<li class="player' + (data.currentPlayersPk == -1 ? ' current' : '') +
+        '"><span style="background-color: #eee">&nbsp;</span>&nbsp;Snails</li>');
     $('#players_list').html(playersList.join(''));
 
     if (!initialisedPlayers && entityLoaded != undefined) {
