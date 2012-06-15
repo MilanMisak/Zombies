@@ -60,7 +60,7 @@ We used Gimp to create all of the artwork for the game. We had to balance the pe
 Animations were added for certain actions, such as player death, shooting, and the idle snail movements. These were simply added to make the game more interesting for players waiting for their turn; instead of simply watching a static screen, there would always be movement. However, it was decided early on that player and enemy movement should be fairly simple to implement, which was one of the reasons for choosing ghosts and snails (both using a gliding motion to move - no additional moving parts).
 
 \subsection{Front end}
-TODO: :O
+
 
 \subsection{Back end}
 As mentioned before, the back end of the application uses Python's Django framework. Django is used for keeping track of players and games, producing HTML page output and communicating with the Javascript framework using JSON responses. Sessions are used to associate website users with player entities.
@@ -68,6 +68,10 @@ As mentioned before, the back end of the application uses Python's Django framew
 The application is deployed on a cloud platform Heroku. Using Heroku (heroku.com) as a hosting is only a little bit harder than pushing into a remote Git repository. Data used by the backend is stored in a MySQL database which is provided by Xeround (xeround.com). Research suggests that using an external database solution as compared to Heroku's own PostgreSQL server. As this game is just a university assignment we are using free plans of both of these services which work well however their overall performance would not suffice to support a big number of users of our website.
 
 The game works quite well using just the web browser base front-end. However, to provide multiplayer version and ensuring that players don't cheat the server-side component of the game is needed. Clients poll the server for new data every second and synchronise their game states with the server. The whole game state as well as the latest action of the players is returned by the server. This way we can provide nice animations for only the things which changed while making sure the game state is consistent across all the players. In order to make the processing of server responses easy on the front end we are often sending JSON formatted Javascript objects back to clients.
+
+The server is also responsible for calculating players' scores. The scores depend on the number of turns players survive, number of players in the game and the actions the players take. For example, moving while carrying an ammo box gives a player higher score than when they are just moving. This is to support team play and planning.
+
+Another role of the server closely related to calculating scores is storing them in the form of leaderboards. Each player's score is saved to the database along with the player's name and available for viewing anytime.
 
 As mentioned before, the server validates all player actions and disconnects players who try to execute invalid actions. Invalid actions such as trying to reload when the ammo box is in a different room are not possible to do from the game interface which means that if a request comes from a player trying to do this it must be someone who is cheating.
 
