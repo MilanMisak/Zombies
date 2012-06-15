@@ -99,6 +99,7 @@ class Player(models.Model):
     ammo              = models.PositiveSmallIntegerField(default=5)
     carrying_ammo_box = models.BooleanField(default=False)
     alive             = models.BooleanField(default=True)
+    score             = models.PositiveSmallIntegerField(default=0)
     checkin           = models.OneToOneField(CheckIn, related_name='player', blank=True, null=True)
 
     @staticmethod
@@ -450,7 +451,8 @@ class Game(models.Model):
         """
         Returns a hash with players PKs and names.
         """
-        return self.get_list_of_players().values('pk', 'name', 'index', 'room', 'ammo', 'carrying_ammo_box', 'alive')
+        return self.get_list_of_players().values('pk', 'name', 'index', 'room',
+            'ammo', 'carrying_ammo_box', 'alive', 'score')
 
     def get_list_of_barricades(self):
         """
