@@ -13,11 +13,7 @@
 
 \section{Introduction}
 We set out from the beginning to make a game, and to make it original. In addition to being original, we wanted the game to be fun to play, and of course be online multiplayer. We also wanted the game to be lightweight in terms of connection demands, and in terms of demand placed on any server we might use. Our final objective was that the game must be visually pleasing, which would inevitably mean taking more time and care in the artwork than programmers usually do. \\ \\
-
-TODO: For some reason the first paragraph was not indented but this one is, it makes me very sad, I have become depressed. A depressed sea-lion if you will. \\ \\
-
 To meet our low networking demands, we decided to make a turn based game. This would make the latency requirements very low and would allow anyone in the world to play against each other, regardless of location. For example, if someone is playing a latency critical game such as Call of Duty, and the client and host are in England and Brazil respectively, then the latency will cause the game to be unplayable or at least have a severely degraded experience. This is something we wanted to be sure of avoiding. \\ \\
-
 Eventually we settled on making a game based on defending a certain location, and decided to force player co-operation in preventing a house from being invaded by enemies. 
 
 
@@ -36,8 +32,7 @@ To organise our team, we used a project management software called Pivotal Track
 \subsection{Other tools}
 
 \subsection{Implementation Languages}
-We chose to write the front end in Javascript and HTML5, obviously, and we chose to use this as a basis for the graphics also. Instead of using Flash or a Java applet. This is because unlike the previous 2 choices, a HTML5-based game will load faster and as a new technology standard it is gaining good webbrowser support. People are already talking about stopping flash support, on mobile devices in particular.
-
+We chose to write the front end in Javascript and HTML5, obviously, and we chose to use this as a basis for the graphics also. Instead of using Flash or a Java applet. This is because unlike the previous 2 choices, a HTML5-based game will load faster and as a new technology standard it is gaining good webbrowser support. People are already talking about stopping flash support, on mobile devices in particular. \\ \\
 We chose to use Django for the back end because some of us have previous experience using the platform and because of its many useful features. For example, Object-relational mapping (ORM) allows us to effectively deal with database queries while also having a good object-oriented design for the application's entities. With view templates we can easily create HTML parts of the website and with URL mapping we have full control over the URLs used by the website (so AJAX calls can be prefixed with 'ajax-' for example).
 
 \section{Program Description}
@@ -61,8 +56,7 @@ The ghosts 'die' (descend to hell) when they are in the same room as any number 
 
 \subsection{Aesthetics}
 TODO - JS symbols?, 'lost data'?
-We used Gimp to create all of the artwork for the game. We had to balance the performance issues of including large files (transfer time over the Internet), with the need for the game to look polished. Because the game includes variable zoom levels, we needed to make sure that the art looked acceptable from any distance. This has lead to some large image files needing to be loaded, though using javascript 'symbols' means that each only needs to be loaded once. To help reduce loading time, the largest image (the house background) was compressed, which has caused some lost data - though not enough to be easily noticed. \\
-
+We used Gimp to create all of the artwork for the game. We had to balance the performance issues of including large files (transfer time over the Internet), with the need for the game to look polished. Because the game includes variable zoom levels, we needed to make sure that the art looked acceptable from any distance. This has lead to some large image files needing to be loaded, though using javascript 'symbols' means that each only needs to be loaded once. To help reduce loading time, the largest image (the house background) was compressed, which has caused some lost data - though not enough to be easily noticed. \\ \\
 Animations were added for certain actions, such as player death, shooting, and the idle snail movements. These were simply added to make the game more interesting for players waiting for their turn; instead of simply watching a static screen, there would always be movement. However, it was decided early on that player and enemy movement should be fairly simple to implement, which was one of the reasons for choosing ghosts and snails (both using a gliding motion to move - no additional moving parts).
 
 \subsection{Front end}
@@ -76,6 +70,7 @@ We used Twitter Bootstrap CSS, Javascript, and glyphicons for the website layout
 
 \section{Conclusion}
 In conclusion, we are the best. Also talk about chat feature. :D
-TODO: done, not done, would do differently in future, learned from the project
-
+TODO: done, not done, would do differently in future, learned from the project \\ \\
+\textbf{What we have learned} \\
+We set out from the beginning to make a game, and to make it original. In addition to being original, we wanted the game to be fun to play, and of course be online multiplayer. We also wanted the game to be lightweight in terms of connection demands, and in terms of demand placed on any server we might use. Our final objective was that the game must be visually pleasing, which would inevitably mean taking more time and care in the artwork than programmers usually do. \\ \\
 \end{document}
