@@ -167,6 +167,7 @@ def ajax_game_state(request):
     snails = list(game.get_list_of_snails())
 
     json = simplejson.dumps({'yourTurn': this_players_turn, 'yourPk': player.pk,
+        'yourScore': player.score,
         'currentPlayersPk': current_player.pk if current_player else -1,
         'lastPlayersPk': last_players_pk, 'turnsPlayed': game.turns_played,
         'lastAction': last_action, 'lastDirection': last_direction, 'ammo_box': ammo_box,

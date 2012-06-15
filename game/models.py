@@ -99,6 +99,7 @@ class Player(models.Model):
     ammo              = models.PositiveSmallIntegerField(default=5)
     carrying_ammo_box = models.BooleanField(default=False)
     alive             = models.BooleanField(default=True)
+    score             = models.PositiveSmallIntegerField(default=0)
     checkin           = models.OneToOneField(CheckIn, related_name='player', blank=True, null=True)
 
     @staticmethod
@@ -119,6 +120,21 @@ class Player(models.Model):
         count2 = Player.objects.all().count()
         if count != count2:
             print 'DELETED {} PLAYERS'.format(count - count2)
+
+    def update_score(self, action):
+        """
+        Updates player's score based on the action.
+        """
+        if action == 'Move':
+            delta = 10 + (1 if self.carrying_ammo_box else 0)
+        elif action == 'Shoot':
+            delta = 12
+        elif action == 'Barricade':
+            delta = 11
+        else:
+            delta = 10
+        self.score = self.score + delta * (1 + 1 / self.game.players.count())
+        self.save()
 
     def do_check_in(self):
         """
@@ -253,6 +269,9 @@ class Game(models.Model):
             print 'INVALID ACTION {}'.format(action)
             player.delete()
             return
+
+        player.update_score(action)
+        print player.score
 
         self.last_player = player
         self.last_action = action
@@ -450,7 +469,8 @@ class Game(models.Model):
         """
         Returns a hash with players PKs and names.
         """
-        return self.get_list_of_players().values('pk', 'name', 'index', 'room', 'ammo', 'carrying_ammo_box', 'alive')
+        return self.get_list_of_players().values('pk', 'name', 'index', 'room',
+            'ammo', 'carrying_ammo_box', 'alive', 'score')
 
     def get_list_of_barricades(self):
         """
