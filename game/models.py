@@ -438,13 +438,13 @@ class Game(models.Model):
         """
         Returns a list of players' names.
         """
-        return [str(player) for player in self.get_list_of_players().filter(bot=False)]
+        return [str(player) for player in self.get_list_of_players()]
 
     def get_hash_of_players_names(self):
         """
         Returns a hash with players PKs and names.
         """
-        return self.players.values('pk', 'name', 'index', 'room', 'ammo', 'carrying_ammo_box')
+        return self.players.values('pk', 'name', 'index', 'room', 'ammo', 'carrying_ammo_box', 'alive')
 
     def get_list_of_barricades(self):
         """
