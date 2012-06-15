@@ -95,7 +95,7 @@ class Player(models.Model):
     room              = models.PositiveSmallIntegerField(default=3)
     ammo              = models.PositiveSmallIntegerField(default=5)
     carrying_ammo_box = models.BooleanField(default=False)
-    bot               = models.BooleanField(default=False)
+    alive             = models.BooleanField(default=True)
     checkin           = models.OneToOneField(CheckIn, related_name='player', blank=True, null=True)
 
     @staticmethod
@@ -111,9 +111,9 @@ class Player(models.Model):
         Deletes players not checked-in for 10 seconds or more.
         """
         time = datetime.now() - timedelta(seconds=10)
-        count = Player.objects.filter(bot=False).count()
-        Player.objects.filter(bot=False, checkin__time__lte=time).delete()
-        count2 = Player.objects.filter(bot=False).count()
+        count = Player.objects.all().count()
+        Player.objects.filter(checkin__time__lte=time).delete()
+        count2 = Player.objects.all().count()
         if count != count2:
             print 'DELETED {} PLAYERS'.format(count - count2)
 
@@ -135,8 +135,21 @@ class Player(models.Model):
 def pre_save_callback(sender, instance, raw, using, **kwargs):
     print 'SAVING PLAYER {} WITH ROOM {}'.format(instance, instance.room)
 
+class Bot(models.Model):
+    has_played = models.BooleanField(default=False)
+
+    def take_turn(self):
+        """
+        Takes a turn.
+        """
+        self.game.check_if_dead_players()
+
+        self.has_played = True
+        self.save()
+
 class Game(models.Model):
     master               = models.OneToOneField(Player, related_name='mastered_game', null=True)
+    bot                  = models.OneToOneField(Bot, related_name='game', null=True)
     status               = models.PositiveSmallIntegerField(default=0) # 0 = not started, 1 = started
     current_player_index = models.PositiveSmallIntegerField(null=True)
     current_player_start = models.DateTimeField(null=True)
@@ -146,7 +159,6 @@ class Game(models.Model):
     ammo_box_room        = models.PositiveSmallIntegerField(default=3)
     ammo_box_in_transit  = models.BooleanField(default=False)
     turns_played         = models.PositiveIntegerField(default=0)
-    bot_played           = models.BooleanField(default=False)
     checkin              = models.OneToOneField(CheckIn, related_name='game', blank=True, null=True)
    
     @staticmethod
@@ -189,11 +201,7 @@ class Game(models.Model):
                     player.save()
                     break
 
-        self.spawn_snails(5)
-
-        bot_player = Player(name='Bot', rand_id=Player.generate_rand_id(), game=self,
-            index=self.get_max_player_index() + 1, bot=True)
-        bot_player.save()
+        self.spawn_snails(1)
 
         self.current_player_index = 1
         self.current_player_start = datetime.now()
@@ -439,13 +447,13 @@ class Game(models.Model):
         """
         Returns a list of players' names.
         """
-        return [str(player) for player in self.get_list_of_players().filter(bot=False)]
+        return [str(player) for player in self.get_list_of_players()]
 
     def get_hash_of_players_names(self):
         """
         Returns a hash with players PKs and names.
         """
-        return self.players.values('pk', 'name', 'index', 'room', 'ammo', 'carrying_ammo_box')
+        return self.get_list_of_players().values('pk', 'name', 'index', 'room', 'ammo', 'carrying_ammo_box', 'alive')
 
     def get_list_of_barricades(self):
         """
@@ -475,50 +483,67 @@ class Game(models.Model):
         """
         Returns the player, whose turn it is.
         """
-        try:
-            # Try getting the current player
-            current_player = self.players.get(index=self.current_player_index)
+        if self.current_player_index == 0:
+            # Bot
+            if not self.bot.has_played:
+                self.bot.take_turn()
 
-            if not current_player.bot:
+            # Timeout after 3 seconds
+            timeout_time = self.current_player_start + timedelta(seconds=3)
+
+            if timeout_time < datetime.now():
+                # Timed out
+                return self.change_turns()
+            return None
+        else:
+            # Human player
+            try:
+                # Try getting the current player
+                current_player = self.players.get(index=self.current_player_index)
+
                 # Timeout after 15 seconds
                 timeout_time = self.current_player_start + timedelta(seconds=15)
-                self.bot_played = False
-                self.save()
-            else:
-                if not self.bot_played:
-                    self.bots_turn()
-                # Timeout after 3 seconds
-                timeout_time = self.current_player_start + timedelta(seconds=3)
+            except ObjectDoesNotExist:
+                # Current player got removed
+                return self.change_turns()
 
             if timeout_time < datetime.now():
                 # Timed out
                 return self.change_turns()
             return current_player
-        except ObjectDoesNotExist:
-            # Current player got removed
-            return self.change_turns()
-
-    def bots_turn(self):
-        """
-        Does the turn for bot.
-        """
-        print 'BOT PLAYING NOW'
-        self.bot_played = True
-        self.save()
 
     def change_turns(self):
         """
         Ensures that it is the next player's turn now. Returns the next player.
         """
-        results = self.players.order_by('index').filter(index__gt=self.current_player_index)
+        results = self.players.order_by('index').filter(index__gt=self.current_player_index, alive=True)
         if results.exists():
             next_player = results[0]
         else:
-            next_player = self.players.order_by('index')[0]
-        self.current_player_index = next_player.index
+            next_player = None
+
+        if next_player:
+            self.current_player_index = next_player.index
+        else:
+            self.current_player_index = 0
+
         self.current_player_start = datetime.now()
+        if self.current_player_index == 0:
+            self.bot.has_played = False
+            self.bot.save()
         self.save()
         return next_player
+
+    def check_if_dead_players(self):
+        """
+        Checks if there are any new dead players (in the same room as some snails).
+        """
+        live_players = self.players.filter(alive=True)
+        for player in live_players:
+            snails_in_the_room = self.snails.filter(room=player.room)
+            if player.alive and snails_in_the_room.exists():
+                player.alive = False
+                player.save()
 
     def __unicode__(self):
         if self.players.count() == 0:

@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import RequestContext
 from django.utils import simplejson
 
-from game.models import Player, Game, CheckIn
+from game.models import Player, Game, CheckIn, Bot
 from game.forms import LoginForm
 
 def index(request):
@@ -29,7 +29,9 @@ def index(request):
             if create_game:
                 checkin = CheckIn()
                 checkin.save()
-                game = Game(checkin=checkin)
+                bot = Bot()
+                bot.save()
+                game = Game(checkin=checkin, bot=bot)
                 game.save()
                 player.game = game
                 player.index = 1
@@ -146,8 +148,14 @@ def ajax_game_state(request):
         return HttpResponseBadRequest('NO-GAME')
 
     current_player = game.get_current_player()
-    this_players_turn = player.pk == current_player.pk
+    if current_player:
+        this_players_turn = player.pk == current_player.pk
+    else:
+        this_players_turn = False
     last_players_pk = game.last_player.pk if game.last_player else -1
+    if last_players_pk == 0:
+        # TODO - bot
+        last_players_pk = -1
     if last_players_pk == player.pk:
         # Set last player's PK to 0 if it was a move of the player sending the request
         last_players_pk = 0
@@ -159,6 +167,7 @@ def ajax_game_state(request):
     snails = list(game.get_list_of_snails())
 
     json = simplejson.dumps({'yourTurn': this_players_turn, 'yourPk': player.pk,
+        'currentPlayersPk': current_player.pk if current_player else -1,
         'lastPlayersPk': last_players_pk, 'turnsPlayed': game.turns_played,
         'lastAction': last_action, 'lastDirection': last_direction, 'ammo_box': ammo_box,
         'players': players, 'barricades': barricades, 'snails': snails})
