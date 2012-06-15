@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import pre_save, pre_delete
+from django.db.models.signals import pre_delete
 from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
 
@@ -10,9 +10,12 @@ def is_valid_direction(direction):
     """
     Checks if a given direction is a valid direction.
     """
-    return True if direction == 'Up' or direction == 'Right' or direction == 'Down' or direction == 'Left' else False
+    return direction == 'Up' or direction == 'Right' or direction == 'Down' or direction == 'Left'
 
 class Room(object):
+    """
+    Room object indicating its neighbouring rooms and possible places for barricades.
+    """
 
     def __init__(self, up_room, right_room, down_room, left_room,
         up_barricade, right_barricade, down_barricade, left_barricade):
@@ -48,7 +51,7 @@ class Room(object):
         return -1
 
     def __str__(self):
-        return 'Room with {} {} {} {}'.format(self.top, self.right, self.bottom, self.left)
+        return 'Room with {} {} {} {}'.format(self.up_room, self.right_room, self.down_room, self.left_room)
 
 # Up, right, bottom, left
 ROOMS = [
@@ -128,12 +131,6 @@ class Player(models.Model):
 
     def __unicode__(self):
         return self.name
-        #return '{} {}'.format(self.name, self.index)
-
-#TODO - remove
-@receiver(pre_save, sender=Player)
-def pre_save_callback(sender, instance, raw, using, **kwargs):
-    print 'SAVING PLAYER {} WITH ROOM {}'.format(instance, instance.room)
 
 class Bot(models.Model):
     has_played = models.BooleanField(default=False)
