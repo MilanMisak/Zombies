@@ -14,7 +14,7 @@
 \section{Introduction}
 We set out from the beginning to make a game, and to make it original. In addition to being original, we wanted the game to be fun to play, and of course be online multiplayer. We also wanted the game to be lightweight in terms of connection demands, and in terms of demand placed on any server we might use. Our final objective was that the game must be visually pleasing, which would inevitably mean taking more time and care in the artwork than programmers usually do. \\ \\
 
-For some reason the first paragraph was not indented but this one is, it makes me very sad, I have become depressed. A depressed sea-lion if you will. \\ \\
+TODO: For some reason the first paragraph was not indented but this one is, it makes me very sad, I have become depressed. A depressed sea-lion if you will. \\ \\
 
 To meet our low networking demands, we decided to make a turn based game. This would make the latency requirements very low and would allow anyone in the world to play against each other, regardless of location. For example, if someone is playing a latency critical game such as Call of Duty, and the client and host are in England and Brazil respectively, then the latency will cause the game to be unplayable or at least have a severely degraded experience. This is something we wanted to be sure of avoiding. \\ \\
 
@@ -24,32 +24,35 @@ Eventually we settled on making a game based on defending a certain location, an
 
 
 \section{Project Management}
+
 \subsection{Group Structure}
-We need to whack this report out quickly because england are playing.
+TODO: We need to whack this report out quickly because england are playing.
+
 \subsection{Git}
-We used git as the version control for our project; more specifically the online git hosting service, github. We did this because it has a nice web interface, git broke on us in labs before. I don't think that this section has been typed out entirely seriously. Github provides nice graphs, and you dont have to connect to the imperial vpn to use it.
+We used git as the version control for our project; more specifically the online git hosting service, github. Git is simple and easy to use, and we have become very familiar with it from previous group projects. It includes the ability to rollback to previous commits to correct mistakes, which is very useful when starting a project from scratch.
+
 \subsection{PivotalTracker}
 To organise our team, we used a website called Pivotal Tracker. This allowed us to create tasks, set a priority and a difficulty for each task, and to assign group members to complete each task. Pivotal Tracker automatically arranges tasks to maximise efficient time use, based on previous performance. A list of current tasks is maintained, along with a backlog. Tasks are made 'current' when it is predicted that there is enough free space (For example, if the group works quickly, there will be a larger capacity in 'current tasks'. If the group works slowly, Pivotal Tracker makes sure there are fewer current tasks to complete).
+
 \subsection{Other tools}
 
+
 \section{Program Description}
+
 \subsection{Outline}
 As mentioned in the introduction, the program is a turn based game. The players are Ghosts defending a haunted house. The aim of the game is to stay "alive" (they are ghosts) for as many turns as possible. The enemies are evil giant snails who will try to invade the house and attack you. Each player will take turns to move, then the AI will take its turn and all the snails will move.
-\subsection{Rules}
 
+\subsection{Rules}
 \textbf{Moving around the house} \\ 
 The house is split up in to 21 different rooms. Each room can have doors leading left or right, and stairs leading up or down. It takes one turn to move to a different room taking one of these paths, for ghosts and for snails. The ghosts cannot move through walls because they must wear magic hats (which cannot pass through walls). These hats are what allow them to interact with the real world and defend the house, though unfortunately they make the ghosts vulnerable to evil giant snails.\\ \\
 \textbf{Barricades} \\
 Ghosts have the choice of barricading stairs or doorways, it takes one turn to build or repair a barricade. With a barricade in place, neither ghosts nor snails can pass through it. Ghosts have the option of breaking down a barricade, which takes one turn. Snails can attack a barricade, which will decrease its health based on the strength of the snail group (the barricade will be destroyed when its health is 0). When ghosts repair a barricade, its health is restored to 100\%. However, barricades cannot be repaired when there are snails on the other side, for fear that the snails will attack the ghost if it gets too close. \\ \\
 \textbf{Shooting} \\
 Ghosts are equiped with pistols, which they may choose to shoot at snails in adjacent rooms (possibly through a barricade), taking one turn. Shooting at a group of snails will kill one of them, and also uses one of the ghost's ammo clips. Ghosts may carry up to 5 ammo clips, and must be carrying at least one in order to shoot. Ghosts may take one turn to replenish their ammo clips from the ammo box (see Ammo box). \\ \\
-
 \textbf{Ammo box} \\
 There is one ammo box in the house, which holds an infinite supply of ammo clips. Ghosts can only reload when in the same room as the ammo box, and only if the ammo box is on the floor. Ghosts can pick up the ammo box, consuming one turn, in order to move it to a different room. While holding the box ghosts can only move around or drop the box. Only one ghost can be holding the box at any one time, and if the box is being held by a player then nobody can use it to replenish their ammo. \\ \\
-
 \textbf{Snail behaviour} \\
 Snails spawn in groups of variable size outside the house. Groups of snails will attack and move as one, and snails can only move/spawn/attack when it is their turn.
-
 \textbf{Ghost death} \\
 The ghosts 'die' (descend to hell) when they are in the same room as any number of snails. The game is over when all ghosts are dead.
 
@@ -59,13 +62,15 @@ We used Gimp to create all of the art for the game. We had to balance the perfor
 Animations were added for certain actions, such as player death, shooting, and the idle snail movements. These were simply added to make the game more interesting for players waiting for their turn; instead of simply watching a static screen, there would always be movement. However, it was decided early on that player and enemy movement should be fairly simple to implement, which was one of the reasons for choosing ghosts and snails (both using a gliding motion to move - no additional moving parts).
 
 \subsection{Front end}
-:O
+TODO: :O
+
 \subsection{Back end}
-Lol, back end ;)
+TODO: Lol, back end ;)
+
 \subsection{Acknowledgements}
-We used twitter bootstrap CSS, Javascript and some glyph icons for the website layout. We also used the Javascript libraries: Jquery and Paper.js for simplification and for working with the HTML5 canvas. Do we acknowledge Django? All of the artwork within the canvas is original.
+We used twitter bootstrap CSS, Javascript, and some glyph icons for the website layout. We also used some Javascript libraries: Jquery and Paper.js, for simplification and for working with the HTML5 canvas. TODO: Do we acknowledge Django? All of the artwork within the canvas is original.
 
 \section{Conclusion}
-In conclusion, we are the best.
+TODO: In conclusion, we are the best.
 
 \end{document}
