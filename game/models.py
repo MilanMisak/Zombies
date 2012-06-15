@@ -142,7 +142,8 @@ class Bot(models.Model):
         """
         Takes a turn.
         """
-        print 'BOT PLAYING NOW'
+        self.game.check_if_dead_players()
+
         self.has_played = True
         self.save()
 
@@ -532,6 +533,17 @@ class Game(models.Model):
             self.bot.save()
         self.save()
         return next_player
+
+    def check_if_dead_players(self):
+        """
+        Checks if there are any new dead players (in the same room as some snails).
+        """
+        live_players = self.players.filter(alive=True)
+        for player in live_players:
+            snails_in_the_room = self.snails.filter(room=player.room)
+            if player.alive and snails_in_the_room.exists():
+                player.alive = False
+                player.save()
 
     def __unicode__(self):
         if self.players.count() == 0:
