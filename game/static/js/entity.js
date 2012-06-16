@@ -411,6 +411,7 @@ entitySetup = function() {
         this.deathDelayCounter = 0;
 	    this.destinations = new Array();
         this.origin = position;
+        this.hasLeftGame = false;
 
         this.die = function() {
             if (this.holdingBox)

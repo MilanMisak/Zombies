@@ -85,8 +85,6 @@ var executeMoves = function(data) {
 
         movingPlayer = getPlayer(data.lastPlayersPk);
 
-        console.log(movingPlayer.room);
-
         switch(data.lastAction) {
         case "Move":
             move(movingPlayer, data.lastDirection);
@@ -111,6 +109,23 @@ var executeMoves = function(data) {
             breakBarricade(movingPlayer, data.lastDirection);
             break;
         }
+    }
+
+    /*Kill players if they leave the game. */
+    for (var i = 0; i < playerList.length; i++) {
+        var stillInGame = false;
+        var ghost = playerList[i];
+        console.log(ghost);
+        for (var j = 0; j < data.players.length; j++) {
+            var player = data.players[i];
+            if (ghost.id == player.pk) {
+                stillInGame = true;
+                break;
+            }
+        }
+        
+        if (!stillInGame)
+            ghost.die();
     }
 };
 
