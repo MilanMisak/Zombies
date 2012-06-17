@@ -352,6 +352,7 @@ entitySetup = function() {
         this.rotation = 0;
         this.destination = this.item.position;
         this.deathCounter = 0;
+        this.destinations = new Array();
 
         this.pushDestination = function(destination) {
             this.destinations.push(destination.add(new Point(0, 70)));
