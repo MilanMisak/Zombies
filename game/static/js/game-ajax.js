@@ -118,10 +118,8 @@ var executeMoves = function(data) {
     for (var i = 0; i < playerList.length; i++) {
         var stillInGame = false;
         var ghost = playerList[i];
-        console.log(data.players.length);
         for (var j = 0; j < data.players.length; j++) {
             var player = data.players[j];
-            console.log(player);
             if (ghost.id == player.pk) {
                 stillInGame = true;
                 break;
