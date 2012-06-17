@@ -218,18 +218,18 @@ class Bot(models.Model):
             query = self.game.barricades.filter(index=barricade_index)
             if query.exists():
                 # There is a barricade
-                print 'DEBARRICADE {}'.format(barricade_index)
+                print 'ATTACK {}'.format(barricade_index)
                 barricade = query.all()[0]
                 barricade.health = barricade.health - math.floor(snail.health / 2.0)
                 barricade.save()
-                snail.action = 'DEBARRICADE'
+                snail.action = 'Attack'
                 snail.direction = direction
                 snail.save()
             else:
                 # There is no barricade - can just move
                 print 'SNAIL {} MOVING TO {}'.format(snail, path[0])
                 snail.room = path[0]
-                snail.action = 'MOVE'
+                snail.action = 'Move'
                 snail.direction = direction
                 snail.save()
 
@@ -664,7 +664,7 @@ class Snail(models.Model):
     game      = models.ForeignKey(Game, related_name='snails')
     room      = models.PositiveSmallIntegerField()
     health    = models.PositiveIntegerField(default=100)
-    action    = models.CharField(max_length=10, default='SPAWN')
+    action    = models.CharField(max_length=10, default='Spawn')
     direction = models.CharField(max_length=5, default='')
 
     def shortest_path_to_a_ghost(self):
