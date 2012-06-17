@@ -796,9 +796,9 @@ entitySetup = function() {
     }
 
     this.Barricade = function() {
-        this.healthBG = new Path.Rectangle(view.center.add(new Point(30,-105)),view.center.add(new Point(95,-95)));
+        this.healthBG = new Path.Rectangle(view.center.add(new Point(20,-120)),view.center.add(new Point(120,-100)));
         this.healthBG.fillColor = 'black';
-        this.healthFG = new Path.Rectangle(view.center.add(new Point(30,-105)),view.center.add(new Point(95,-95)));
+        this.healthFG = new Path.Rectangle(view.center.add(new Point(20,-120)),view.center.add(new Point(120,-100)));
         this.healthFG.fillColor = 'green';
         this.raster = doorBarricadeSymbol.place(view.center);
         this.item = new Group(this.raster, this.healthBG, this.healthFG);
@@ -807,8 +807,8 @@ entitySetup = function() {
 
         /* Repairs or makes the Barricade */
         this.make = function() {
-            this.health = 100;
             this.item.opacity = 1;
+            this.health = 100;
             this.exists = true;
             this.item.visible = true;
         }
@@ -817,7 +817,6 @@ entitySetup = function() {
             this.health -= damageDealt;
             if (this.health <= 0) {
                 this.destroy();
-                console.log("DESTROYING BARRICADE");
             } else {
                 this.item.opacity = (this.health/100);
             }
@@ -835,30 +834,73 @@ entitySetup = function() {
 
     this.StairBarricade = function(position) {
         this.item.remove();
-        this.healthBG = new Path.Rectangle(position.add(new Point(30,-105)),position.add(new Point(95,-95)));
+        this.healthBG = new Path.Rectangle(position.add(new Point(115,-35)),position.add(new Point(215,-55)));
         this.healthBG.fillColor = 'black';
-        this.healthFG = new Path.Rectangle(position.add(new Point(30,-105)),position.add(new Point(95,-95)));
+        this.healthFG = new Path.Rectangle(position.add(new Point(115,-35)),position.add(new Point(215,-55)));
         this.healthFG.fillColor = 'green';
         this.raster = stairBarricadeSymbol.place(position);
         this.item = new Group(this.raster, this.healthBG, this.healthFG);
         this.item.visible = false;
         this.exists = false;
         barricadeList.push(this);
+
+        this.damage = function(damageDealt) {
+            this.health -= damageDealt;
+            if (this.health <= 0) {
+                var destroy = this.item;
+                this.healthFG = new Path.Rectangle(position.add(new Point(115,-35)),position.add(new Point((115+this.health),-55)));
+                this.healthFG.fillColor = 'green';
+                this.item = new Group(this.raster, this.healthBG, this.healthFG);
+                this.item.opacity = 0;
+                destroy.remove();
+                this.destroy();
+            } else {
+                var destroy = this.item;
+                this.healthFG = new Path.Rectangle(position.add(new Point(115,-35)),position.add(new Point((115+this.health),-55)));
+                this.healthFG.fillColor = 'green';
+                this.item = new Group(this.raster, this.healthBG, this.healthFG);
+                this.item.opacity = (this.health/100);
+                destroy.remove();
+            }
+        }
+
     }
     StairBarricade.prototype = new Barricade(); 
 
 
     this.DoorBarricade = function(position) {
         this.item.remove();
-        this.healthBG = new Path.Rectangle(position.add(new Point(30,-130)),position.add(new Point(95,-95)));
+        this.healthBG = new Path.Rectangle(position.add(new Point(20,-120)),position.add(new Point(120,-100)));
         this.healthBG.fillColor = 'black';
-        this.healthFG = new Path.Rectangle(position.add(new Point(30,-130)),position.add(new Point(95,-95)));
+        this.healthFG = new Path.Rectangle(position.add(new Point(20,-120)),position.add(new Point(120,-100)));
         this.healthFG.fillColor = 'green';
         this.raster = doorBarricadeSymbol.place(position);
         this.item = new Group(this.raster, this.healthBG, this.healthFG);
         this.item.visible = false;
         this.exists = false;
         barricadeList.push(this);
+
+        this.damage = function(damageDealt) {
+            this.health -= damageDealt;
+            if (this.health <= 0) {
+                var destroy = this.item;
+                this.healthFG = new Path.Rectangle(position.add(new Point(20,-120)),position.add(new Point((20+this.health),-100)));
+                this.healthFG.fillColor = 'green';
+                this.item = new Group(this.raster, this.healthBG, this.healthFG);
+                this.item.opacity = 0;
+                destroy.remove();
+                this.destroy();
+            } else {
+                this.item.opacity = 0;
+                var destroy = this.item;
+                this.healthFG = new Path.Rectangle(position.add(new Point(20,-120)),position.add(new Point((20+this.health),-100)));
+                this.healthFG.fillColor = 'green';
+                this.item = new Group(this.raster, this.healthBG, this.healthFG);
+                this.item.opacity = (this.health/100);
+                destroy.remove();
+            }
+        }
+
     }
     DoorBarricade.prototype = new Barricade();
     
