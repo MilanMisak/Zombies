@@ -55,6 +55,7 @@ var executeMoves = function(data) {
             newBarricade.item.visible = true;
         }
 
+        /* Spawn Snails. */
         for (var i = 0; i < data.snails.length; i++) {
             var snails = data.snails[i];
             SnailGroup.spawn(snails.pk, (snails.health / 20), roomList[snails.room], snails.health);
