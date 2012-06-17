@@ -592,7 +592,7 @@ entitySetup = function() {
                 this.armGroup.rotate(-1);
             else if (shootMod>10)
                 this.armGroup.rotate(1);
-            if (this.shootCounter == 120) {
+            if (this.shootCounter ==80) {
                 if (this.shootDirection == "Up")
                     this.armGroup.rotate(60);
                 if (this.shootDirection == "Down")
