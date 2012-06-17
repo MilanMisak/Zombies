@@ -300,6 +300,13 @@ class Game(models.Model):
         print 'PLAYER {} MOVING TO {}'.format(player.name, new_room)
         # Assign a new room to the player
         player.room = new_room
+
+        # Check if the player becomes dead
+        snails_in_the_room = self.snails.filter(room=player.room)
+        if snails_in_the_room.exists():
+            player.alive = False
+
+        # Save the player
         player.save()
         return True
 
