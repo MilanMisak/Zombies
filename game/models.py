@@ -265,19 +265,11 @@ class Game(models.Model):
         """
         Spawns snails randomly.
         """
-        # Initialise the occupancy of rooms
-        rooms_busy = [False] * 22
-        for i in range(22):
-            rooms_busy[i] = self.players.filter(room=i).count() > 0
+        left_or_right = randint(0, 1)
+        room_no = 0 if left_or_right == 0 else 6
 
-        for n in range(how_many):
-            # Try spawning 100 times
-            for i in range(100):
-                room_no = randint(0, 21)
-                if not rooms_busy[room_no]:
-                    snail = Snail(game=self, room=room_no)
-                    snail.save()
-                    break
+        snail = Snail(game=self, room=room_no)
+        snail.save()
 
     def make_turn(self, player, action, direction):
         """
@@ -712,7 +704,7 @@ class Snail(models.Model):
                 else:
                     # Consider a path through the barricade
                     barricade = query.all()[0]
-                    turns_needed = math.ceil((2.0 * barricade.health) / self.health)
+                    turns_needed = math.ceil((4.0 * barricade.health) / self.health)
                 heappush(rooms_to_check, (path_cost + turns_needed, next_room, path + [next_room]))
 
         # Can't get to any ghosts
