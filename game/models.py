@@ -50,6 +50,21 @@ class Room(object):
             return self.left_barricade
         return -1
 
+    def get_neighbouring_rooms_and_barricades(self):
+        """
+        Returns indices of neighbouring rooms and barricades.
+        """
+        rooms = []
+        if self.up_room != -1:
+            rooms.append((self.up_room, self.up_barricade))
+        if self.right_room != -1:
+            rooms.append((self.right_room, self.right_barricade))
+        if self.down_room != -1:
+            rooms.append((self.down_room, self.down_barricade))
+        if self.left_room != -1:
+            rooms.append((self.left_room, self.left_barricade))
+        return rooms
+
     def __str__(self):
         return 'Room with {} {} {} {}'.format(self.up_room, self.right_room, self.down_room, self.left_room)
 
@@ -157,8 +172,38 @@ class Bot(models.Model):
         """
         self.game.check_if_dead_players()
 
+        self.move_snails()
+
         self.has_played = True
         self.save()
+
+    def move_snails(self):
+        """
+        Moves one group of snails towards some ghost.
+        """
+        shortest_path = None
+
+        for snail in self.game.snails.all():
+            path = snail.shortest_path_to_a_ghost()
+            if path is None:
+                # No path found
+                continue
+
+            # Possibly update the shortest path
+            if shortest_path is None:
+                shortest_path = (len(path), snail, path)
+            else:
+                shortest_path_length = shortest_path[0]
+                if len(path) < shortest_path_length:
+                    shortest_path = (len(path), snail, path)
+
+        if shortest_path is not None:
+            (length, snail, path) = shortest_path
+            print 'SNAIL {} MOVING TO {}'.format(snail, path[0])
+            snail.room = path[0]
+            snail.save()
+        else:
+            print 'NO SNAIL CAN MOVE'
 
 class Game(models.Model):
     master               = models.OneToOneField(Player, related_name='mastered_game', null=True)
@@ -591,6 +636,30 @@ class Snail(models.Model):
     game   = models.ForeignKey(Game, related_name='snails')
     room   = models.PositiveSmallIntegerField()
     health = models.PositiveIntegerField(default=100)
+
+    def shortest_path_to_a_ghost(self):
+        """
+        Returns the shortest path to some ghost.
+        """
+        rooms_to_check = [(self.room, [])]
+
+        while len(rooms_to_check) > 0:
+            # Get the next room to check
+            (room, path) = rooms_to_check.pop(0)
+
+            if self.game.players.filter(room=room, alive=True).exists():
+                # Found a ghost, return the path
+                print path
+                return path
+
+            # Check neighbouring rooms
+            for (next_room, barricade) in ROOMS[room].get_neighbouring_rooms_and_barricades():
+                if not self.game.barricades.filter(index=barricade).exists():
+                    # No barricade in the way, can check this room
+                    rooms_to_check.append((next_room, path + [next_room]))
+
+        # Can't get to any ghosts
+        return None
 
     def __unicode__(self):
         return 'Snail in room {} with health {}'.format(self.room, self.health)
