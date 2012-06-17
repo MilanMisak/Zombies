@@ -313,7 +313,7 @@ entitySetup = function() {
         }
         
         this.attack = function(barricade) {
-            barricade.damage(this.strength/2);
+            barricade.damage(this.strength/4);
         }
 
         this.setRoom = function(room) {
@@ -352,6 +352,7 @@ entitySetup = function() {
         this.rotation = 0;
         this.destination = this.item.position;
         this.deathCounter = 0;
+        this.destinations = new Array();
 
         this.pushDestination = function(destination) {
             this.destinations.push(destination.add(new Point(0, 70)));
