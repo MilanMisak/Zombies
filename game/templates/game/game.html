@@ -8,6 +8,8 @@
 <script type = "text/javascript">
 paper.install(window);
 $(window).load(function() {
+    $('#tooltip').tooltip({'placement': 'left'});
+
     paper.setup('canvas');
 
     $('#canvas').css('height', '600px');
@@ -135,7 +137,7 @@ $(window).load(function() {
 <div class="grid_3 alpha">
     <div style="padding: 10px; height: 390px">
         <p style="text-align: right; float: right; margin-top: 5px; margin-bottom: 10px">Ammo: <span id="ammo_display">5</span> / 5</p>
-        <a href="#" rel="tooltip" title="It is your turn now. Please choose an action below and click GO"><span id="your_turn_display">YOUR TURN</span></a>
+        <p><a href="#" id="tooltip" rel="tooltip" title="It is your turn now. Please choose an action below and click GO"><span id="your_turn_display">YOUR TURN</span></a></p>
         <!-- <p title="It is your turn now. Please choose an action below and click GO."><span id="your_turn_display">YOUR TURN</span></p> -->
         <p style="clear: both"></p>
         <p style="text-align: right; float: right; margin-top: 5px; margin-bottom: 10px">Current score: <span id="score_display">0</span></p>
