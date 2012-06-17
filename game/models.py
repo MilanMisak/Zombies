@@ -640,6 +640,7 @@ class Snail(models.Model):
     direction = models.CharField(max_length=5, default='')
 
     def take_turn(self):
+        print 'TURN'
         # Default values for is something goes wrong
         self.action = ''
         self.direction = ''
