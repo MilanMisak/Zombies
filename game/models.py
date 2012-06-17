@@ -245,15 +245,10 @@ class Game(models.Model):
         Starts the game.
         """
         # Spawn players randomly
-        rooms_busy = [False] * 22
         for player in self.get_list_of_players():
-            for i in range(20):
-                room_no = randint(0, 21)
-                if not rooms_busy[room_no] and room_no != 0 and room_no != 6:
-                    rooms_busy[room_no] = True
-                    player.room = room_no
-                    player.save()
-                    break
+            room_no = randint(1, 5)
+            player.room = room_no
+            player.save()
 
         self.spawn_snails(1)
 
@@ -261,6 +256,12 @@ class Game(models.Model):
         self.current_player_start = datetime.now()
         self.status = 1
         self.save()
+
+        # Initial barricades
+        barricade_left = Barricade(game=self, index=0)
+        barricade_left.save()
+        barricade_right = Barricade(game=self, index=5)
+        barricade_right.save()
 
     def spawn_snails(self, how_many=1):
         """
