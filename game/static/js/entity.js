@@ -794,9 +794,13 @@ entitySetup = function() {
         }
     }
 
-
     this.Barricade = function() {
-        this.item = doorBarricadeSymbol.place(view.center);
+        this.healthBG = new Path.Rectangle(view.center.add(new Point(30,-105)),view.center.add(new Point(95,-95)));
+        this.healthBG.fillColor = 'black';
+        this.healthFG = new Path.Rectangle(view.center.add(new Point(30,-105)),view.center.add(new Point(95,-95)));
+        this.healthFG.fillColor = 'green';
+        this.raster = doorBarricadeSymbol.place(view.center);
+        this.item = new Group(this.raster, this.healthBG, this.healthFG);
         this.exists = false;
         this.health = 0;
 
@@ -812,7 +816,7 @@ entitySetup = function() {
             this.health -= damageDealt;
             if (this.health <= 0) {
                 this.destroy();
-                console.log("DESTORYING BARRICADE");
+                console.log("DESTROYING BARRICADE");
             } else {
                 this.item.opacity = (this.health/100);
             }
@@ -830,9 +834,14 @@ entitySetup = function() {
 
     this.StairBarricade = function(position) {
         this.item.remove();
-        this.item = stairBarricadeSymbol.place(position);
+        this.healthBG = new Path.Rectangle(position.add(new Point(30,-105)),position.add(new Point(95,-95)));
+        this.healthBG.fillColor = 'black';
+        this.healthFG = new Path.Rectangle(position.add(new Point(30,-105)),position.add(new Point(95,-95)));
+        this.healthFG.fillColor = 'green';
+        this.raster = stairBarricadeSymbol.place(position);
+        this.item = new Group(this.raster, this.healthBG, this.healthFG);
         this.item.visible = false;
-        this.exsts = false;
+        this.exists = false;
         barricadeList.push(this);
     }
     StairBarricade.prototype = new Barricade(); 
@@ -840,7 +849,12 @@ entitySetup = function() {
 
     this.DoorBarricade = function(position) {
         this.item.remove();
-        this.item = doorBarricadeSymbol.place(position);
+        this.healthBG = new Path.Rectangle(position.add(new Point(30,-130)),position.add(new Point(95,-95)));
+        this.healthBG.fillColor = 'black';
+        this.healthFG = new Path.Rectangle(position.add(new Point(30,-130)),position.add(new Point(95,-95)));
+        this.healthFG.fillColor = 'green';
+        this.raster = doorBarricadeSymbol.place(position);
+        this.item = new Group(this.raster, this.healthBG, this.healthFG);
         this.item.visible = false;
         this.exists = false;
         barricadeList.push(this);
