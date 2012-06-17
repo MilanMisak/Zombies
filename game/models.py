@@ -3,8 +3,10 @@ from django.db.models.signals import pre_delete
 from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
 
+import math
 from datetime import datetime, timedelta
 from random import getrandbits, randint
+from heapq import *
 
 def is_valid_direction(direction):
     """
@@ -199,6 +201,7 @@ class Bot(models.Model):
 
         if shortest_path is not None:
             (length, snail, path) = shortest_path
+            #if 
             print 'SNAIL {} MOVING TO {}'.format(snail, path[0])
             snail.room = path[0]
             snail.save()
@@ -641,11 +644,12 @@ class Snail(models.Model):
         """
         Returns the shortest path to some ghost.
         """
-        rooms_to_check = [(self.room, [])]
+        rooms_to_check = []
+        heappush(rooms_to_check, (0, self.room, []))
 
         while len(rooms_to_check) > 0:
             # Get the next room to check
-            (room, path) = rooms_to_check.pop(0)
+            (path_cost, room, path) = heappop(rooms_to_check)
 
             if self.game.players.filter(room=room, alive=True).exists():
                 # Found a ghost, return the path
@@ -654,9 +658,15 @@ class Snail(models.Model):
 
             # Check neighbouring rooms
             for (next_room, barricade) in ROOMS[room].get_neighbouring_rooms_and_barricades():
-                if not self.game.barricades.filter(index=barricade).exists():
+                query = self.game.barricades.filter(index=barricade)
+                if not query.exists():
                     # No barricade in the way, can check this room
-                    rooms_to_check.append((next_room, path + [next_room]))
+                    turns_needed = 1
+                else:
+                    # Consider a path through the barricade
+                    barricade = query.all()[0]
+                    turns_needed = math.ceil((2.0 * barricade.health) / self.health)
+                heappush(rooms_to_check, (path_cost + turns_needed, next_room, path + [next_room]))
 
         # Can't get to any ghosts
         return None
