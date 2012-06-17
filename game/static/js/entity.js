@@ -224,27 +224,23 @@ entitySetup = function() {
 
         this.moveLeft = function() {
             this.setRoom(this.room.left);
-            this.lastAction = "Left";	
             this.pushDestination(this.room.position.add(new Point((Math.random()*100 - 50),0)));
         }
         
         this.moveRight = function() {
             this.setRoom(this.room.right);
-            this.lastAction = "Right";	
             this.pushDestination(this.room.position.add(new Point((Math.random()*100 - 50),0)));
         }
         
         this.moveUp = function() {
             this.moveUpStairs(this.room.upStairs);
             this.setRoom(this.room.up);
-            this.lastAction = "Up";	
             this.pushDestination(this.room.position.add(new Point((Math.random()*100 - 50),0)));
         }
         
         this.moveDown = function() {
             this.moveDownStairs(this.room.downStairs);
             this.setRoom(this.room.down);
-            this.lastAction = "Down";
             this.pushDestination(this.room.position.add(new Point((Math.random()*100 - 50),0)));
         }
 
@@ -415,7 +411,7 @@ entitySetup = function() {
         this.deathDelayCounter = 0;
 	    this.destinations = new Array();
         this.origin = position;
-	    this.lastAction = null;
+        this.hasLeftGame = false;
 
         this.die = function() {
             if (this.holdingBox)
@@ -436,20 +432,23 @@ entitySetup = function() {
             this.armGroup.opacity *= 0.9;
 
             var hatPositionTracker = this.item.position.subtract(this.origin);
-	        if (this.lastAction == "Left" || this.lastAction == "Down")	
+	        if (!this.facingRight)	
 		        hatPositionTracker = hatPositionTracker.add(new Point(142, 0));
 
             var deathMod = this.deathCounter % 60;
+
             if (this.deathCounter > 175) {
                 var rect2 = new Path.Rectangle(
                     this.hat.position.add(new Point(((this.deathCounter-170)*4),60)).add(hatPositionTracker),
                     this.hat.position.add(new Point(((170-this.deathCounter)*4),80)).add(hatPositionTracker));
+
                 rect2.fillColor = 'black';
             } else if (this.deathCounter > 160) {
                 this.hat.position = this.hat.position.add(new Point(0,-8));
                 var rect1 = new Path.Rectangle(
                     this.hat.position.add(new Point(10,30)).add(hatPositionTracker),
                     this.hat.position.add(new Point(-10, (((this.deathCounter-160)*8)+30))).add(hatPositionTracker));
+
                 rect1.fillColor = 'black';
             } else if (this.deathCounter > 140) {
                 this.hat.position = this.hat.position.add(new Point(-2,0));
