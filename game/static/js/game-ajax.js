@@ -62,7 +62,6 @@ var executeMoves = function(data) {
             SnailGroup.spawn(snails.pk, (snails.health / 20), roomList[snails.room], snails.health);
         }
 
-        console.log(data);
         ammoBox.room = roomList[data.ammo_box.room];
         ammoBox.position = ammoBox.room.position.add(new Point(0, 70));
         ammoBox.visible = !data.ammo_box.in_transit;
@@ -80,18 +79,20 @@ var executeMoves = function(data) {
         disableControls();
         isTurn = false;
     }
+
     if (turnNumber != data.turnsPlayed) {
+        console.log("MOOOSE");
         turnNumber = data.turnsPlayed;
         if (data.lastPlayersPk == 0)
             return;
-                
+               
+
         if (data.lastPlayersPk == -1) {
-            console.log("MOOOSE");
+            var localSnails;
             for (var i = 0; i < data.snails.length; i++) {
                 var snails = data.snails[i];
-                var localSnails;
                 var foundGroup = false;
-                for (var j = 0; j < snailGroupList; j++) {
+                for (var j = 0; j < snailGroupList.length; j++) {
                     localSnails = snailGroupList[j];
                     if (snails.pk == localSnails.id) {
                         foundGroup = true;
@@ -99,7 +100,7 @@ var executeMoves = function(data) {
                     }
                 }
                 if (!foundGroup) {
-                    SnailGroup.spawn(snails.pk, (snails.health / 20), roomList[snails.room], snails.health);
+                    localSnails = SnailGroup.spawn(snails.pk, (snails.health / 20), roomList[snails.room], snails.health);
                 } else {
                     switch (snails.action) {
                         case "Move":
@@ -139,6 +140,7 @@ var executeMoves = function(data) {
                 
                 
             }
+        return;
         }
 
         movingPlayer = getPlayer(data.lastPlayersPk);

@@ -338,6 +338,7 @@ entitySetup = function() {
         var snails =  new SnailGroup(id, noOfEntities, room, strength);
         snails.setRoom(room);
         snailGroupList.push(snails);
+        return snails;
     }
 
 
