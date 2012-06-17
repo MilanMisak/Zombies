@@ -192,7 +192,10 @@ class Bot(models.Model):
         self.game.check_if_dead_players()
 
         self.move_snails()
-        self.game.spawn_snails(1)
+
+        # Spawn more snails with 50% probability
+        if randint(0, 3) == 0:
+            self.game.spawn_snails(1)
 
     def move_snails(self):
         """
@@ -245,15 +248,10 @@ class Game(models.Model):
         Starts the game.
         """
         # Spawn players randomly
-        rooms_busy = [False] * 22
         for player in self.get_list_of_players():
-            for i in range(20):
-                room_no = randint(0, 21)
-                if not rooms_busy[room_no] and room_no != 0 and room_no != 6:
-                    rooms_busy[room_no] = True
-                    player.room = room_no
-                    player.save()
-                    break
+            room_no = randint(1, 5)
+            player.room = room_no
+            player.save()
 
         self.spawn_snails(1)
 
@@ -262,6 +260,12 @@ class Game(models.Model):
         self.status = 1
         self.save()
 
+        # Initial barricades
+        barricade_left = Barricade(game=self, index=0)
+        barricade_left.save()
+        barricade_right = Barricade(game=self, index=5)
+        barricade_right.save()
+
     def spawn_snails(self, how_many=1):
         """
         Spawns snails randomly.
@@ -269,7 +273,8 @@ class Game(models.Model):
         left_or_right = randint(0, 1)
         room_no = 0 if left_or_right == 0 else 6
 
-        snail = Snail(game=self, room=room_no)
+        health = 100 + self.turns_played * 5
+        snail = Snail(game=self, room=room_no, health=health)
         snail.save()
 
     def make_turn(self, player, action, direction):
@@ -625,6 +630,8 @@ class Barricade(models.Model):
     def __unicode__(self):
         return 'Barricade {} with health {}'.format(self.index, self.health)
 
+SNAIL_DAMAGE_RATE = 4.0
+
 class Snail(models.Model):
     game      = models.ForeignKey(Game, related_name='snails')
     room      = models.PositiveSmallIntegerField()
@@ -659,8 +666,8 @@ class Snail(models.Model):
             barricade = query.all()[0]
             print barricade.health
             print self.health
-            print math.floor(self.health / 2.0)
-            barricade.health = barricade.health - math.floor(self.health / 2.0)
+            print math.floor(self.health / SNAIL_DAMAGE_RATE)
+            barricade.health = barricade.health - math.floor(self.health / SNAIL_DAMAGE_RATE)
             if barricade.health <= 0:
                 # Barricade destroyed
                 barricade.delete()
@@ -705,7 +712,7 @@ class Snail(models.Model):
                 else:
                     # Consider a path through the barricade
                     barricade = query.all()[0]
-                    turns_needed = math.ceil((4.0 * barricade.health) / self.health)
+                    turns_needed = math.ceil((SNAIL_DAMAGE_RATE * barricade.health) / self.health)
                 heappush(rooms_to_check, (path_cost + turns_needed, next_room, path + [next_room]))
 
         # Can't get to any ghosts

@@ -795,7 +795,6 @@ entitySetup = function() {
         }
     }
 
-
     this.Barricade = function() {
         this.text = new PointText(view.center);
         this.background = raster1;;
@@ -805,8 +804,8 @@ entitySetup = function() {
 
         /* Repairs or makes the Barricade */
         this.make = function() {
-            this.health = 100;
             this.item.opacity = 1;
+            this.health = 100;
             this.exists = true;
             this.item.visible = true;
             this.text.visible = true;
@@ -847,7 +846,7 @@ entitySetup = function() {
         this.item.remove();
         this.item = stairBarricadeSymbol.place(position);
         this.item.visible = false;
-        this.exsts = false;
+        this.exists = false;
         barricadeList.push(this);
         this.background = new Path.Rectangle(this.item.position.add(new Point(105, -70)),
                                              this.item.position.add(new Point(28, -40)));
