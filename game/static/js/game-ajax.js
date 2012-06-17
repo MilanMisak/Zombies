@@ -54,6 +54,9 @@ var executeMoves = function(data) {
             newBarricade.health = data.barricades[i].health;
             newBarricade.exists = true;
             newBarricade.item.visible = true;
+            newBarricade.text.content = newBarricade.health + '%';
+            newBarricade.text.visible = true;
+            newBarricade.background.visible = true;
         }
 
         /* Spawn Snails. */

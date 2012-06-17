@@ -797,6 +797,8 @@ entitySetup = function() {
 
 
     this.Barricade = function() {
+        this.text = new PointText(view.center);
+        this.background = raster1;;
         this.item = doorBarricadeSymbol.place(view.center);
         this.exists = false;
         this.health = 0;
@@ -807,15 +809,18 @@ entitySetup = function() {
             this.item.opacity = 1;
             this.exists = true;
             this.item.visible = true;
+            this.text.visible = true;
+            this.background.visible = true;
+            this.text.content = this.health + '%';
         }
 
         this.damage = function(damageDealt) {
             this.health -= damageDealt;
             if (this.health <= 0) {
                 this.destroy();
-                console.log("DESTORYING BARRICADE");
             } else {
                 this.item.opacity = (this.health/100);
+                this.text.content = this.health + '%';
             }
         }
 
@@ -825,6 +830,8 @@ entitySetup = function() {
             this.health = 0;
             this.exists = false;
             this.item.visible = false;
+            this.text.visible = false;
+            this.background.visible = false;
         }
 
         this.flip = function() {
@@ -848,6 +855,8 @@ entitySetup = function() {
         this.text = new PointText(this.item.position.add(new Point (50, -50)));
         this.text.content = 100 + '%';
         this.text.scale(2.5);
+        this.text.visible = false;
+        this.background.visible = false;
     }
     StairBarricade.prototype = new Barricade(); 
 
@@ -864,6 +873,8 @@ entitySetup = function() {
         this.text = new PointText(this.item.position.add(new Point (50, -50)));
         this.text.content = 100 + '%';
         this.text.scale(2.5);
+        this.text.visible = false;
+        this.background.visible = false;
     }
     DoorBarricade.prototype = new Barricade();
     
