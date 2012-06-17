@@ -625,6 +625,8 @@ class Barricade(models.Model):
     def __unicode__(self):
         return 'Barricade {} with health {}'.format(self.index, self.health)
 
+SNAIL_DAMAGE_RATE = 4.0
+
 class Snail(models.Model):
     game      = models.ForeignKey(Game, related_name='snails')
     room      = models.PositiveSmallIntegerField()
@@ -659,8 +661,8 @@ class Snail(models.Model):
             barricade = query.all()[0]
             print barricade.health
             print self.health
-            print math.floor(self.health / 2.0)
-            barricade.health = barricade.health - math.floor(self.health / 2.0)
+            print math.floor(self.health / SNAIL_DAMAGE_RATE)
+            barricade.health = barricade.health - math.floor(self.health / SNAIL_DAMAGE_RATE)
             if barricade.health <= 0:
                 # Barricade destroyed
                 barricade.delete()
@@ -705,7 +707,7 @@ class Snail(models.Model):
                 else:
                     # Consider a path through the barricade
                     barricade = query.all()[0]
-                    turns_needed = math.ceil((4.0 * barricade.health) / self.health)
+                    turns_needed = math.ceil((SNAIL_DAMAGE_RATE * barricade.health) / self.health)
                 heappush(rooms_to_check, (path_cost + turns_needed, next_room, path + [next_room]))
 
         # Can't get to any ghosts
