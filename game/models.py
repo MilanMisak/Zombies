@@ -661,8 +661,16 @@ class Snail(models.Model):
             # There is a barricade
             print 'SNAIL {} ATTACKING {}'.format(self, barricade_index)
             barricade = query.all()[0]
+            print barricade.health
+            print self.health
+            print math.floor(self.health / 2.0)
             barricade.health = barricade.health - math.floor(self.health / 2.0)
-            barricade.save()
+            if barricade.health <= 0:
+                # Barricade destroyed
+                barricade.delete()
+                print 'BARRICADE GONE'
+            else:
+                barricade.save()
 
             self.action = 'Attack'
             self.direction = direction
