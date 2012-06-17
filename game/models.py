@@ -198,40 +198,7 @@ class Bot(models.Model):
         Moves one group of snails towards some ghost.
         """
         for snail in self.game.snails.all():
-            # Calculate the shortest path to a ghost
-            path = snail.shortest_path_to_a_ghost()
-            if path is None:
-                # No path found
-                snail.action = ''
-                snail.direction = ''
-                continue
-
-            # Find out if need to go through a barricade
-            (barricade_index, direction) = ROOMS[snail.room].get_barricade_to_room(path[0])
-            if barricade_index == -1:
-                # No barricade = no room, something's wrong
-                snail.action = ''
-                snail.direction = ''
-                continue
-
-            # Handle the barricade
-            query = self.game.barricades.filter(index=barricade_index)
-            if query.exists():
-                # There is a barricade
-                print 'ATTACK {}'.format(barricade_index)
-                barricade = query.all()[0]
-                barricade.health = barricade.health - math.floor(snail.health / 2.0)
-                barricade.save()
-                snail.action = 'Attack'
-                snail.direction = direction
-                snail.save()
-            else:
-                # There is no barricade - can just move
-                print 'SNAIL {} MOVING TO {}'.format(snail, path[0])
-                snail.room = path[0]
-                snail.action = 'Move'
-                snail.direction = direction
-                snail.save()
+            snail.take_turn()
 
 class Game(models.Model):
     master               = models.OneToOneField(Player, related_name='mastered_game', null=True)
@@ -585,6 +552,7 @@ class Game(models.Model):
             if not self.bot.has_played:
                 self.bot.take_turn()
                 self.turns_played = self.turns_played + 1
+                self.last_player = None
                 self.save()
 
             # Timeout after 3 seconds
@@ -668,6 +636,45 @@ class Snail(models.Model):
     health    = models.PositiveIntegerField(default=100)
     action    = models.CharField(max_length=10, default='Spawn')
     direction = models.CharField(max_length=5, default='')
+
+    def take_turn(self):
+        # Default values for is something goes wrong
+        self.action = ''
+        self.direction = ''
+        self.save()
+
+        # Calculate the shortest path to a ghost
+        path = self.shortest_path_to_a_ghost()
+        if path is None:
+            # No path found
+            return
+
+        # Find out if need to go through a barricade
+        barricade_index, direction = ROOMS[self.room].get_barricade_to_room(path[0])
+        if barricade_index == -1:
+            # No barricade = no room, something's wrong
+            return
+
+        # Handle the barricade
+        query = self.game.barricades.filter(index=barricade_index)
+        if query.exists():
+            # There is a barricade
+            print 'SNAIL {} ATTACKING {}'.format(self, barricade_index)
+            barricade = query.all()[0]
+            barricade.health = barricade.health - math.floor(self.health / 2.0)
+            barricade.save()
+
+            self.action = 'Attack'
+            self.direction = direction
+        else:
+            # There is no barricade - can just move
+            print 'SNAIL {} MOVING TO {}'.format(self, path[0])
+            self.room = path[0]
+            self.action = 'Move'
+            self.direction = direction
+
+        # Save the changes
+        self.save()
 
     def shortest_path_to_a_ghost(self):
         """
