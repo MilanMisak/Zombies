@@ -80,8 +80,11 @@ var executeMoves = function(data) {
     }
     if (turnNumber != data.turnsPlayed) {
         turnNumber = data.turnsPlayed;
-        if (data.lastPlayersPk <= 0)
+        if (data.lastPlayersPk == 0)
             return;
+                
+        if (data.lastPlayersPk == -1) {
+        }
 
         movingPlayer = getPlayer(data.lastPlayersPk);
 
@@ -115,9 +118,8 @@ var executeMoves = function(data) {
     for (var i = 0; i < playerList.length; i++) {
         var stillInGame = false;
         var ghost = playerList[i];
-        console.log(ghost);
         for (var j = 0; j < data.players.length; j++) {
-            var player = data.players[i];
+            var player = data.players[j];
             if (ghost.id == player.pk) {
                 stillInGame = true;
                 break;
