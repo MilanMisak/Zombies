@@ -1,6 +1,7 @@
 {% extends 'game/base.html' %}
 
 {% block extra_js %}
+    <script type="text/javascript" src="/static/js/tooltip.js"></script>
     <script type="text/javascript" src="/static/js/paper.js"></script>
     <script type="text/javascript" src="/static/js/entity.js"></script>
     <script type="text/javascript" src="/static/js/game-controls.js"></script>
@@ -134,7 +135,8 @@ $(window).load(function() {
 <div class="grid_3 alpha">
     <div style="padding: 10px; height: 390px">
         <p style="text-align: right; float: right; margin-top: 5px; margin-bottom: 10px">Ammo: <span id="ammo_display">5</span> / 5</p>
-        <p title="It is your turn now. Please choose an action below and click GO."><span id="your_turn_display">YOUR TURN</span></p>
+        <a href="#" rel="tooltip" title="It is your turn now. Please choose an action below and click GO"><span id="your_turn_display">YOUR TURN</span></a>
+        <!-- <p title="It is your turn now. Please choose an action below and click GO."><span id="your_turn_display">YOUR TURN</span></p> -->
         <p style="clear: both"></p>
         <p style="text-align: right; float: right; margin-top: 5px; margin-bottom: 10px">Current score: <span id="score_display">0</span></p>
         <p style="clear: both"></p>
