@@ -52,6 +52,20 @@ class Room(object):
             return self.left_barricade
         return -1
 
+    def get_barricade_to_room(self, room):
+        """
+        Returns an index of a barricade separating this and the given room.
+        """
+        if self.up_room == room:
+            return self.up_barricade
+        elif self.right_room == room:
+            return self.right_barricade
+        elif self.down_room == room:
+            return self.down_barricade
+        elif self.left_room == room:
+            return self.left_barricade
+        return -1
+
     def get_neighbouring_rooms_and_barricades(self):
         """
         Returns indices of neighbouring rooms and barricades.
@@ -199,14 +213,29 @@ class Bot(models.Model):
                 if len(path) < shortest_path_length:
                     shortest_path = (len(path), snail, path)
 
-        if shortest_path is not None:
-            (length, snail, path) = shortest_path
-            #if 
+        if shortest_path is None:
+            print 'NO SNAIL CAN MOVE'
+            return
+
+        # Parse the shortest path
+        (length, snail, path) = shortest_path
+
+        # Find out if need to go through a barricade
+        barricade_index = ROOMS[snail.room].get_barricade_to_room(path[0])
+        if barricade_index == -1:
+            # No barricade = no room, something's wrong
+            return
+        query = self.game.barricades.filter(index=barricade_index)
+        if query.exists():
+            # There is a barricade
+            print 'DEBARICCADE {}'.format(barricade_index)
+            barricade = query.all()[0]
+            barricade.health = barricade.health - math.floor(snail.health / 2.0)
+        else:
+            # There is no barricade - can just move
             print 'SNAIL {} MOVING TO {}'.format(snail, path[0])
             snail.room = path[0]
             snail.save()
-        else:
-            print 'NO SNAIL CAN MOVE'
 
 class Game(models.Model):
     master               = models.OneToOneField(Player, related_name='mastered_game', null=True)
