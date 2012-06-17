@@ -154,7 +154,7 @@ def ajax_game_state(request):
         this_players_turn = False
     last_players_pk = game.last_player.pk if game.last_player else -1
     if last_players_pk == 0:
-        # TODO - bot
+        # TODO - bot - what?
         last_players_pk = -1
     if last_players_pk == player.pk:
         # Set last player's PK to 0 if it was a move of the player sending the request

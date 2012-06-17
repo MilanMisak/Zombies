@@ -188,32 +188,30 @@ class Bot(models.Model):
         """
         self.game.check_if_dead_players()
 
-        plan = self.move_snails()
+        self.move_snails()
 
         self.has_played = True
         self.save()
-
-        return plan
 
     def move_snails(self):
         """
         Moves one group of snails towards some ghost.
         """
-        plan = []
-
         for snail in self.game.snails.all():
             # Calculate the shortest path to a ghost
             path = snail.shortest_path_to_a_ghost()
             if path is None:
                 # No path found
-                plan[snail.pk] = ('NULL', '')
+                snail.action = ''
+                snail.direction = ''
                 continue
 
             # Find out if need to go through a barricade
             (barricade_index, direction) = ROOMS[snail.room].get_barricade_to_room(path[0])
             if barricade_index == -1:
                 # No barricade = no room, something's wrong
-                plan[snail.pk] = ('NULL', '')
+                snail.action = ''
+                snail.direction = ''
                 continue
 
             # Handle the barricade
@@ -224,16 +222,16 @@ class Bot(models.Model):
                 barricade = query.all()[0]
                 barricade.health = barricade.health - math.floor(snail.health / 2.0)
                 barricade.save()
-                plan[snail.pk] = ('DEBARRICADE', direction)
+                snail.action = 'DEBARRICADE'
+                snail.direction = direction
+                snail.save()
             else:
                 # There is no barricade - can just move
                 print 'SNAIL {} MOVING TO {}'.format(snail, path[0])
                 snail.room = path[0]
+                snail.action = 'MOVE'
+                snail.direction = direction
                 snail.save()
-                plan[snail.pk] = ('MOVE', direction)
-
-        # Return the plan of actions
-        return plan
 
 class Game(models.Model):
     master               = models.OneToOneField(Player, related_name='mastered_game', null=True)
@@ -564,7 +562,7 @@ class Game(models.Model):
         """
         Returns a list of snails with their PKs, rooms and health.
         """
-        return self.snails.values('pk', 'room', 'health')
+        return self.snails.values('pk', 'room', 'health', 'action', 'direction')
 
     def get_max_player_index(self):
         """
