@@ -803,18 +803,19 @@ entitySetup = function() {
         /* Repairs or makes the Barricade */
         this.make = function() {
             this.health = 100;
+            this.opacity = 1;
             this.exists = true;
             this.item.visible = true;
         }
-   
+
         this.damage = function(damageDealt) {
             this.health -= damageDealt;
-            if (this.health < 1)
+            if (this.health <= 0)
                 this.destroy();
             else
                 this.item.opacity = (this.health/100);
         }
-    
+
         /* Destroys the barricade image, the object still exists with 0 health. */
         this.destroy = function() {
             this.item.opacity = 1;
