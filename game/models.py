@@ -3,8 +3,10 @@ from django.db.models.signals import pre_delete
 from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
 
+import math
 from datetime import datetime, timedelta
 from random import getrandbits, randint
+from heapq import *
 
 def is_valid_direction(direction):
     """
@@ -49,6 +51,20 @@ class Room(object):
         elif direction == 'Left':
             return self.left_barricade
         return -1
+
+    def get_barricade_to_room(self, room):
+        """
+        Returns an index of a barricade separating this and the given room.
+        """
+        if self.up_room == room:
+            return (self.up_barricade, 'Up')
+        elif self.right_room == room:
+            return (self.right_barricade, 'Right')
+        elif self.down_room == room:
+            return (self.down_barricade, 'Down')
+        elif self.left_room == room:
+            return (self.left_barricade, 'Left')
+        return (-1, '')
 
     def get_neighbouring_rooms_and_barricades(self):
         """
@@ -181,29 +197,41 @@ class Bot(models.Model):
         """
         Moves one group of snails towards some ghost.
         """
-        shortest_path = None
-
         for snail in self.game.snails.all():
+            # Calculate the shortest path to a ghost
             path = snail.shortest_path_to_a_ghost()
             if path is None:
                 # No path found
+                snail.action = ''
+                snail.direction = ''
                 continue
 
-            # Possibly update the shortest path
-            if shortest_path is None:
-                shortest_path = (len(path), snail, path)
-            else:
-                shortest_path_length = shortest_path[0]
-                if len(path) < shortest_path_length:
-                    shortest_path = (len(path), snail, path)
+            # Find out if need to go through a barricade
+            (barricade_index, direction) = ROOMS[snail.room].get_barricade_to_room(path[0])
+            if barricade_index == -1:
+                # No barricade = no room, something's wrong
+                snail.action = ''
+                snail.direction = ''
+                continue
 
-        if shortest_path is not None:
-            (length, snail, path) = shortest_path
-            print 'SNAIL {} MOVING TO {}'.format(snail, path[0])
-            snail.room = path[0]
-            snail.save()
-        else:
-            print 'NO SNAIL CAN MOVE'
+            # Handle the barricade
+            query = self.game.barricades.filter(index=barricade_index)
+            if query.exists():
+                # There is a barricade
+                print 'ATTACK {}'.format(barricade_index)
+                barricade = query.all()[0]
+                barricade.health = barricade.health - math.floor(snail.health / 2.0)
+                barricade.save()
+                snail.action = 'Attack'
+                snail.direction = direction
+                snail.save()
+            else:
+                # There is no barricade - can just move
+                print 'SNAIL {} MOVING TO {}'.format(snail, path[0])
+                snail.room = path[0]
+                snail.action = 'Move'
+                snail.direction = direction
+                snail.save()
 
 class Game(models.Model):
     master               = models.OneToOneField(Player, related_name='mastered_game', null=True)
@@ -534,7 +562,7 @@ class Game(models.Model):
         """
         Returns a list of snails with their PKs, rooms and health.
         """
-        return self.snails.values('pk', 'room', 'health')
+        return self.snails.values('pk', 'room', 'health', 'action', 'direction')
 
     def get_max_player_index(self):
         """
@@ -633,19 +661,22 @@ class Barricade(models.Model):
         return 'Barricade {} with health {}'.format(self.index, self.health)
 
 class Snail(models.Model):
-    game   = models.ForeignKey(Game, related_name='snails')
-    room   = models.PositiveSmallIntegerField()
-    health = models.PositiveIntegerField(default=100)
+    game      = models.ForeignKey(Game, related_name='snails')
+    room      = models.PositiveSmallIntegerField()
+    health    = models.PositiveIntegerField(default=100)
+    action    = models.CharField(max_length=10, default='Spawn')
+    direction = models.CharField(max_length=5, default='')
 
     def shortest_path_to_a_ghost(self):
         """
         Returns the shortest path to some ghost.
         """
-        rooms_to_check = [(self.room, [])]
+        rooms_to_check = []
+        heappush(rooms_to_check, (0, self.room, []))
 
         while len(rooms_to_check) > 0:
             # Get the next room to check
-            (room, path) = rooms_to_check.pop(0)
+            (path_cost, room, path) = heappop(rooms_to_check)
 
             if self.game.players.filter(room=room, alive=True).exists():
                 # Found a ghost, return the path
@@ -654,9 +685,15 @@ class Snail(models.Model):
 
             # Check neighbouring rooms
             for (next_room, barricade) in ROOMS[room].get_neighbouring_rooms_and_barricades():
-                if not self.game.barricades.filter(index=barricade).exists():
+                query = self.game.barricades.filter(index=barricade)
+                if not query.exists():
                     # No barricade in the way, can check this room
-                    rooms_to_check.append((next_room, path + [next_room]))
+                    turns_needed = 1
+                else:
+                    # Consider a path through the barricade
+                    barricade = query.all()[0]
+                    turns_needed = math.ceil((2.0 * barricade.health) / self.health)
+                heappush(rooms_to_check, (path_cost + turns_needed, next_room, path + [next_room]))
 
         # Can't get to any ghosts
         return None
