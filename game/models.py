@@ -194,7 +194,7 @@ class Bot(models.Model):
         self.move_snails()
 
         # Spawn more snails with 50% probability
-        if randint(0, 1) == 1:
+        if randint(0, 3) == 0:
             self.game.spawn_snails(1)
 
     def move_snails(self):
@@ -273,7 +273,8 @@ class Game(models.Model):
         left_or_right = randint(0, 1)
         room_no = 0 if left_or_right == 0 else 6
 
-        snail = Snail(game=self, room=room_no)
+        health = 100 + self.turns_played * 5
+        snail = Snail(game=self, room=room_no, health=health)
         snail.save()
 
     def make_turn(self, player, action, direction):
