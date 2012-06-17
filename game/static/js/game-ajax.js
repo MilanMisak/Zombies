@@ -48,6 +48,7 @@ var executeMoves = function(data) {
         }
         turnNumber = data.turnsPlayed;
 
+        /* Make barricades */
         for (var i = 0; i < data.barricades.length; i++) {
             newBarricade = barricadeList[data.barricades[i].index];
             newBarricade.health = data.barricades[i].health;
@@ -85,6 +86,59 @@ var executeMoves = function(data) {
             return;
                 
         if (data.lastPlayersPk == -1) {
+            console.log("MOOOSE");
+            for (var i = 0; i < data.snails.length; i++) {
+                var snails = data.snails[i];
+                var localSnails;
+                var foundGroup = false;
+                for (var j = 0; j < snailGroupList; j++) {
+                    localSnails = snailGroupList[j];
+                    if (snails.pk == localSnails.id) {
+                        foundGroup = true;
+                        break;
+                    }
+                }
+                if (!foundGroup) {
+                    SnailGroup.spawn(snails.pk, (snails.health / 20), roomList[snails.room], snails.health);
+                } else {
+                    switch (snails.action) {
+                        case "Move":
+                            switch (snails.direction) {
+                                case "Up":
+                                    localSnails.moveUp();
+                                    break;
+                                case "Down":
+                                    localSnails.moveDown();
+                                    break;
+                                case "Right":
+                                    localSnails.moveRight();
+                                    break;
+                                case "Left":
+                                    localSnails.moveLeft();
+                                    break;
+                            }
+                            break;
+                        case "Attack":
+                            switch (snails.direction) {
+                                case "Up":
+                                    localSnails.attack(localSnails.room.upStairs.barricade);
+                                    break;
+                                case "Down":
+                                    localSnails.attack(localSnails.room.downStairs.barricade);
+                                    break;
+                                case "Right":
+                                    localSnails.attack(localSnails.room.rightBarricade);
+                                    break;
+                                case "Left":
+                                    localSnails.attack(localSnails.room.leftBarricade);
+                                    break;
+                            }
+                            break;
+                    }
+                }
+                
+                
+            }
         }
 
         movingPlayer = getPlayer(data.lastPlayersPk);
