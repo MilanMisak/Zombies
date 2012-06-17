@@ -826,8 +826,15 @@ entitySetup = function() {
             this.exists = false;
             this.item.visible = false;
         }
+
+        this.flip = function() {
+            position = this.item.position;
+            var flipMatrix = Matrix.getTranslateInstance(position);
+            flipMatrix.concatenate(flipHorizontalMatrix);
+            flipMatrix.translate(position.multiply(-1));
+            this.item.transform(flipMatrix);
+        }
     }
-    Barricade.prototype = new Entity();
 
     this.StairBarricade = function(position) {
         this.item.remove();
@@ -835,6 +842,12 @@ entitySetup = function() {
         this.item.visible = false;
         this.exsts = false;
         barricadeList.push(this);
+        this.background = new Path.Rectangle(this.item.position.add(new Point(105, -70)),
+                                             this.item.position.add(new Point(28, -40)));
+        this.background.fillColor = 'white';
+        this.text = new PointText(this.item.position.add(new Point (50, -50)));
+        this.text.content = 100 + '%';
+        this.text.scale(2.5);
     }
     StairBarricade.prototype = new Barricade(); 
 
@@ -845,6 +858,12 @@ entitySetup = function() {
         this.item.visible = false;
         this.exists = false;
         barricadeList.push(this);
+        this.background = new Path.Rectangle(this.item.position.add(new Point(105, -70)),
+                                             this.item.position.add(new Point(28, -40)));
+        this.background.fillColor = 'white';
+        this.text = new PointText(this.item.position.add(new Point (50, -50)));
+        this.text.content = 100 + '%';
+        this.text.scale(2.5);
     }
     DoorBarricade.prototype = new Barricade();
     
