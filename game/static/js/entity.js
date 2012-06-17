@@ -276,7 +276,7 @@ entitySetup = function() {
 
         /* Adds a new destination for the snails to move to. */
         this.pushDestination = function(destination) {
-            for (var i = 0; i < noOfEntities; i++) {
+            for (var i = 0; i < this.item.children.length; i++) {
                 var snail = this.item.children[i].Parent;
                 snail.pushDestination(destination);
             }
@@ -327,6 +327,8 @@ entitySetup = function() {
                 if (player.room == this.room)
                     player.die();
             }
+            if (localPlayer.room == this.room)
+                localPlayer.die();
         }
 
 
@@ -800,10 +802,7 @@ entitySetup = function() {
 
         /* Repairs or makes the Barricade */
         this.make = function() {
-            if (this.health > 0) {
-                this.health = 100;
-                return;
-            }
+            this.health = 100;
             this.exists = true;
             this.item.visible = true;
         }
@@ -813,12 +812,12 @@ entitySetup = function() {
             if (this.health < 1)
                 this.destroy();
             else
-                this.opacity = (this.health/100);
+                this.item.opacity = (this.health/100);
         }
     
         /* Destroys the barricade image, the object still exists with 0 health. */
         this.destroy = function() {
-            this.opacity = 1;
+            this.item.opacity = 1;
             this.health = 0;
             this.exists = false;
             this.item.visible = false;
