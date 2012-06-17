@@ -551,7 +551,6 @@ class Game(models.Model):
             # Bot
             if not self.bot.has_played:
                 self.bot.take_turn()
-                #self.turns_played = self.turns_played + 1
                 self.save()
 
             # Timeout after 3 seconds
@@ -560,6 +559,7 @@ class Game(models.Model):
             if timeout_time < datetime.now():
                 # Timed out
                 self.last_player = None
+                self.turns_played = self.turns_played + 1
                 return self.change_turns()
             return None
         else:
