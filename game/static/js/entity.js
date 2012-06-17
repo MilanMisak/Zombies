@@ -313,7 +313,7 @@ entitySetup = function() {
         }
         
         this.attack = function(barricade) {
-            barricade.damage(this.strength/2);
+            barricade.damage(this.strength/4);
         }
 
         this.setRoom = function(room) {
