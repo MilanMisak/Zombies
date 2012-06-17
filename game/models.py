@@ -186,12 +186,12 @@ class Bot(models.Model):
         """
         Takes a turn.
         """
+        self.has_played = True
+        self.save()
+
         self.game.check_if_dead_players()
 
         self.move_snails()
-
-        self.has_played = True
-        self.save()
 
     def move_snails(self):
         """
