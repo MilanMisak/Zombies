@@ -338,6 +338,7 @@ entitySetup = function() {
         var snails =  new SnailGroup(id, noOfEntities, room, strength);
         snails.setRoom(room);
         snailGroupList.push(snails);
+        return snails;
     }
 
 
@@ -815,7 +816,7 @@ entitySetup = function() {
                 this.opacity = (this.health/100);
         }
     
-        /* Destroys the barricade image, the object still exits with 0 health. */
+        /* Destroys the barricade image, the object still exists with 0 health. */
         this.destroy = function() {
             this.opacity = 1;
             this.health = 0;

@@ -48,6 +48,7 @@ var executeMoves = function(data) {
         }
         turnNumber = data.turnsPlayed;
 
+        /* Make barricades */
         for (var i = 0; i < data.barricades.length; i++) {
             newBarricade = barricadeList[data.barricades[i].index];
             newBarricade.health = data.barricades[i].health;
@@ -55,12 +56,12 @@ var executeMoves = function(data) {
             newBarricade.item.visible = true;
         }
 
+        /* Spawn Snails. */
         for (var i = 0; i < data.snails.length; i++) {
             var snails = data.snails[i];
             SnailGroup.spawn(snails.pk, (snails.health / 20), roomList[snails.room], snails.health);
         }
 
-        console.log(data);
         ammoBox.room = roomList[data.ammo_box.room];
         ammoBox.position = ammoBox.room.position.add(new Point(0, 70));
         ammoBox.visible = !data.ammo_box.in_transit;
@@ -78,12 +79,67 @@ var executeMoves = function(data) {
         disableControls();
         isTurn = false;
     }
+
     if (turnNumber != data.turnsPlayed) {
         turnNumber = data.turnsPlayed;
         if (data.lastPlayersPk == 0)
             return;
-                
+               
+
         if (data.lastPlayersPk == -1) {
+            var localSnails;
+            for (var i = 0; i < data.snails.length; i++) {
+                var snails = data.snails[i];
+                var foundGroup = false;
+                for (var j = 0; j < snailGroupList.length; j++) {
+                    localSnails = snailGroupList[j];
+                    if (snails.pk == localSnails.id) {
+                        foundGroup = true;
+                        break;
+                    }
+                }
+                if (!foundGroup) {
+                    localSnails = SnailGroup.spawn(snails.pk, (snails.health / 20), roomList[snails.room], snails.health);
+                } else {
+                    switch (snails.action) {
+                        case "Move":
+                            switch (snails.direction) {
+                                case "Up":
+                                    localSnails.moveUp();
+                                    break;
+                                case "Down":
+                                    localSnails.moveDown();
+                                    break;
+                                case "Right":
+                                    localSnails.moveRight();
+                                    break;
+                                case "Left":
+                                    localSnails.moveLeft();
+                                    break;
+                            }
+                            break;
+                        case "Attack":
+                            switch (snails.direction) {
+                                case "Up":
+                                    localSnails.attack(localSnails.room.upStairs.barricade);
+                                    break;
+                                case "Down":
+                                    localSnails.attack(localSnails.room.downStairs.barricade);
+                                    break;
+                                case "Right":
+                                    localSnails.attack(localSnails.room.rightBarricade);
+                                    break;
+                                case "Left":
+                                    localSnails.attack(localSnails.room.leftBarricade);
+                                    break;
+                            }
+                            break;
+                    }
+                }
+                
+                
+            }
+        return;
         }
 
         movingPlayer = getPlayer(data.lastPlayersPk);
