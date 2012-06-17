@@ -81,7 +81,6 @@ var executeMoves = function(data) {
     }
 
     if (turnNumber != data.turnsPlayed) {
-        console.log("MOOOSE");
         turnNumber = data.turnsPlayed;
         if (data.lastPlayersPk == 0)
             return;
