@@ -192,6 +192,7 @@ class Bot(models.Model):
         self.game.check_if_dead_players()
 
         self.move_snails()
+        self.game.spawn_snails(1)
 
     def move_snails(self):
         """
