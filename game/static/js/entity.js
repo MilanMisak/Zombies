@@ -801,6 +801,8 @@ entitySetup = function() {
         this.item = doorBarricadeSymbol.place(view.center);
         this.exists = false;
         this.health = 0;
+        this.indentFlag1 = false;
+        this.indentFlag2 = false;
 
         /* Repairs or makes the Barricade */
         this.make = function() {
@@ -818,6 +820,14 @@ entitySetup = function() {
             if (this.health <= 0) {
                 this.destroy();
             } else {
+                if (this.health < 100 && !this.indentFlag1) {
+                    this.text.position = this.text.position.add(new Point(10, 0));
+                    this.indentFlag1 = true;
+                } else if (this.health < 10 && !this.indentFlag2) {
+                    this.text.position = this.text.position.add(new Point(10, 0));
+                    this.indentFlag2 = true;
+                }
+
                 this.item.opacity = (this.health/100);
                 this.text.content = this.health + '%';
             }
@@ -830,6 +840,14 @@ entitySetup = function() {
             this.exists = false;
             this.item.visible = false;
             this.text.visible = false;
+            if (this.indentFlag1) {
+                this.text.position = this.text.position.add(new Point(-10, 0));
+                this.indentFlag1 = false;
+            }
+            if (this.indentFlag2) {
+                this.text.position = this.text.position.add(new Point(-10, 0));
+                this.indentFlag2 = false;
+            }
             this.background.visible = false;
         }
 
@@ -856,6 +874,8 @@ entitySetup = function() {
         this.text.scale(2.5);
         this.text.visible = false;
         this.background.visible = false;
+        this.indentFlag1 = false;
+        this.indentFlag2 = false;
     }
     StairBarricade.prototype = new Barricade(); 
 
@@ -874,6 +894,8 @@ entitySetup = function() {
         this.text.scale(2.5);
         this.text.visible = false;
         this.background.visible = false;
+        this.indentFlag1 = false;
+        this.indentFlag2 = false;
     }
     DoorBarricade.prototype = new Barricade();
     
