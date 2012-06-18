@@ -792,3 +792,10 @@ class Snail(models.Model):
 class LeaderboardEntry(models.Model):
     name  = models.CharField(max_length=20)
     score = models.PositiveSmallIntegerField()
+
+    @staticmethod
+    def entries():
+        return LeaderboardEntry.objects.order_by('-score')
+
+    def __unicode__(self):
+        return 'Player: {}, score: {}'.format(self.name, self.score)

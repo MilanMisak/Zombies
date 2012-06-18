@@ -1,0 +1,32 @@
+{% extends 'game/base.html' %}
+
+{% block content %}
+    <div class="grid_4 push_4" style="text-align: center; padding-top: 10px">
+        <h3>Leaderboard</h3>
+
+        {% if entries|length > 0 %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Player Name</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in entries %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ entry.name }}</td>
+                        <td>{{ entry.score }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No entries</p>
+        {% endif %}
+
+        <p><a href="{% url index %}">Back to the main page</a></p>
+    </div>
+{% endblock %}

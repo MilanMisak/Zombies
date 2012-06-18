@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import RequestContext
 from django.utils import simplejson
 
-from game.models import Player, Game, CheckIn, Bot
+from game.models import Player, Game, CheckIn, Bot, LeaderboardEntry
 from game.forms import LoginForm
 
 def index(request):
@@ -93,6 +93,10 @@ def game(request):
         return redirect('/')
 
     return render(request, 'game/game.html', {'game': game})
+
+def leaderboard(request):
+    entries = LeaderboardEntry.entries()
+    return render(request, 'game/leaderboard.html', {'entries': entries})
 
 # AJAX calls
 
