@@ -31,6 +31,7 @@ var executeMoves = function(data) {
     // Update the score
     if ($('#score_display').length && data.lastPlayersPk == 0) {
         $('#score_display').html(data.yourScore);
+        $('#final_score_display').html(data.yourScore);
     }
 
     if (!initialisedPlayers && entityLoaded != undefined) {
