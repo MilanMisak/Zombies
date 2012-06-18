@@ -175,6 +175,19 @@ class Player(models.Model):
         """
         LeaderboardEntry(name=self.name, score=self.score).save()
 
+    def timeout_soon(self):
+        """
+        Returns True if the player is going to timeout in 2 seconds.
+        """
+        if self.game.turns_played == 0:
+            # Timeout after 30 seconds
+            timeout_time = self.game.current_player_start + timedelta(seconds=28)
+        else:
+            # Timeout after 15 seconds
+            timeout_time = self.game.current_player_start + timedelta(seconds=13)
+
+        return timeout_time < datetime.now()
+
     def do_check_in(self):
         """
         Checks-in a player informing the system that the player is still online.
@@ -585,8 +598,8 @@ class Game(models.Model):
                 self.bot.take_turn()
                 self.save() # TODO - why
 
-            # Timeout after 10 seconds
-            timeout_time = self.current_player_start + timedelta(seconds=10)
+            # Timeout after 5 seconds
+            timeout_time = self.current_player_start + timedelta(seconds=5)
 
             if timeout_time < datetime.now():
                 # Timed out
