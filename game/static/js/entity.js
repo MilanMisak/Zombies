@@ -421,6 +421,8 @@ entitySetup = function() {
             if (this.holdingBox)
                 this.drop();
             this.isDead = true;
+            if (this == localPlayer)
+                $('#modal_score').html($('#score_display').html());
         }
 
         this.animateDeath = function() {
@@ -478,6 +480,9 @@ entitySetup = function() {
                 this.hat.rotate(1);
                 this.hat.position = this.hat.position.add(new Point(-2,1));
             }
+            if (this.deathCounter == 180 && this == localPlayer)
+                $('#score_modal').modal();
+            
             this.deathCounter++;
             return;
         }
