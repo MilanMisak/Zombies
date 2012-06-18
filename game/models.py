@@ -201,6 +201,7 @@ class Bot(models.Model):
         """
         Moves one group of snails towards some ghost.
         """
+        print 'THIS MANY {}'.format(self.game.snails.all().count())
         for snail in self.game.snails.all():
             snail.take_turn()
 
@@ -691,15 +692,16 @@ class Snail(models.Model):
         Returns the shortest path to some ghost.
         """
         rooms_to_check = []
-        heappush(rooms_to_check, (0, self.room, []))
+        heappush(rooms_to_check, (0, 0, self.room, []))
 
         while len(rooms_to_check) > 0:
             # Get the next room to check
-            (path_cost, room, path) = heappop(rooms_to_check)
+            path_cost, depth, room, path = heappop(rooms_to_check)
 
             if self.game.players.filter(room=room, alive=True).exists():
                 # Found a ghost, return the path
                 print path
+                print 'DEPTH {}'.format(depth)
                 return path
 
             # Check neighbouring rooms
@@ -712,7 +714,7 @@ class Snail(models.Model):
                     # Consider a path through the barricade
                     barricade = query.all()[0]
                     turns_needed = math.ceil((SNAIL_DAMAGE_RATE * barricade.health) / self.health)
-                heappush(rooms_to_check, (path_cost + turns_needed, next_room, path + [next_room]))
+                heappush(rooms_to_check, (path_cost + turns_needed, depth + 1, next_room, path + [next_room]))
 
         # Can't get to any ghosts
         return None
