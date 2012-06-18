@@ -216,16 +216,16 @@ class Bot(models.Model):
         # 15 groups of snails at most
         if self.game.snails.all().count() < 15:
             if self.game.turns_played < 10:
+                # Spawn more snails with 70% probability
+                if random() <= 0.7:
+                    self.game.spawn_snails(1)
+            elif self.game.turns_played < 20:
                 # Spawn more snails with 50% probability
                 if random() <= 0.5:
                     self.game.spawn_snails(1)
-            elif self.game.turns_played < 20:
+            else:
                 # Spawn more snails with 30% probability
                 if random() <= 0.3:
-                    self.game.spawn_snails(1)
-            else:
-                # Spawn more snails with 15% probability
-                if random() <= 0.15:
                     self.game.spawn_snails(1)
 
     def move_snails(self):
@@ -319,7 +319,7 @@ class Game(models.Model):
         left_or_right = randint(0, 1)
         room_no = 0 if left_or_right == 0 else 6
 
-        health = 100 + self.turns_played
+        health = 100 + self.turns_played * 0.2
         snail = Snail(game=self, room=room_no, health=health)
         snail.save()
 
