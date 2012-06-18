@@ -234,7 +234,7 @@ class Bot(models.Model):
         """
         best_moves = {}
 
-        for snail in self.game.snails.all():
+        for snail in self.game.snails.order_by('pk').all():
             # From time to time (5% probability) do a random move
             if random() <= 0.2:
                snail.take_turn(snail.random_move)
@@ -576,7 +576,7 @@ class Game(models.Model):
         """
         Returns a list of snails with their PKs, rooms and health.
         """
-        return self.snails.values('pk', 'room', 'health', 'action', 'direction')
+        return self.snails.order_by('pk').values('pk', 'room', 'health', 'action', 'direction')
 
     def get_max_player_index(self):
         """
