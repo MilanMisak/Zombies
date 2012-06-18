@@ -177,14 +177,14 @@ class Player(models.Model):
 
     def timeout_soon(self):
         """
-        Returns True if the player is going to timeout in 2 seconds.
+        Returns True if the player is going to timeout in 5 seconds.
         """
         if self.game.turns_played == 0:
             # Timeout after 30 seconds
-            timeout_time = self.game.current_player_start + timedelta(seconds=28)
+            timeout_time = self.game.current_player_start + timedelta(seconds=25)
         else:
             # Timeout after 15 seconds
-            timeout_time = self.game.current_player_start + timedelta(seconds=13)
+            timeout_time = self.game.current_player_start + timedelta(seconds=10)
 
         return timeout_time < datetime.now()
 
@@ -216,16 +216,16 @@ class Bot(models.Model):
         # 15 groups of snails at most
         if self.game.snails.all().count() < 15:
             if self.game.turns_played < 10:
-                # Spawn more snails with 70% probability
-                if random() <= 0.7:
+                # Spawn more snails with 60% probability
+                if random() <= 0.6:
                     self.game.spawn_snails(1)
             elif self.game.turns_played < 20:
-                # Spawn more snails with 50% probability
-                if random() <= 0.5:
+                # Spawn more snails with 40% probability
+                if random() <= 0.4:
                     self.game.spawn_snails(1)
             else:
-                # Spawn more snails with 30% probability
-                if random() <= 0.3:
+                # Spawn more snails with 20% probability
+                if random() <= 0.2:
                     self.game.spawn_snails(1)
 
     def move_snails(self):
@@ -328,6 +328,7 @@ class Game(models.Model):
         Makes the turn with the given player.
         """
         if self.current_player_index != player.index:
+            print 'NACK'
             return
 
         if action == 'Move':
