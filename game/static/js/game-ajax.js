@@ -6,6 +6,7 @@ isTurn = false;
 initialisedPlayers = false;
 ALL_LOADED = false;
 turnNumber = 0;
+ajaxID = 0;
 
 var playerColours = ['#ff0000', '#0000ff', '#ffff00', '#00ff00',
     '#ff7f00', '#ff00ff', '#00ffff', '#7f00ff', '#005f00', '#000000'];
@@ -73,6 +74,10 @@ var executeMoves = function(data) {
         view.draw();
         initialisedPlayers = true;
     }
+
+    /* Stop polling server when the game is over. */
+    if (data.gameOver)
+        clearInterval(ajaxID);
 
     if (data.yourTurn && !isTurn) {
         $('#your_turn_display').fadeIn('fast');
@@ -232,7 +237,7 @@ var updateGameState = function() {
 };
 
 updateGameState();
-setInterval(updateGameState, 1000);
+ajaxID = setInterval(updateGameState, 1000);
 
 
 // Show a modal with instructions, other resources are loading in background
