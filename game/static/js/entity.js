@@ -724,17 +724,20 @@ entitySetup = function() {
     Ghost.prototype = new Entity();
 
 
-    this.frameCount = 0;
+    this.frameCount = new Array();
+    this.frameCount[0] = 0;
+    this.frameCount[1] = 0;
+    this.frameCount[2] = 0;
 
-    /* Animates the snail's eyes, called every frame */
+    /* Animates the snail's eyes every third frame, called every frame */
     this.snailUpdate = function(set) {
-        if (this.frameCount == 3)
-            this.frameCount = 0;
-        if (this.frameCount != 0) {
-            this.frameCount++;
+        if (this.frameCount[set] == 3)
+            this.frameCount[set] = 0;
+        if (this.frameCount[set] != 0) {
+            this.frameCount[set]++;
             return;
         } else {
-            this.frameCount++;
+            this.frameCount[set]++;
             rightEye[set].segments[0].point = 
                 rightStart[set].add(new Point(Math.random() * -20 + 50, Math.random() * -150 + 10));
             for (var i = 0; i < size - 2; i++) {
