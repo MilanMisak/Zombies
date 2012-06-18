@@ -4,6 +4,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = patterns('game.views',
     url(r'^$',
         'index',
+        name='index'
     ),
     url(r'^create-game$',
         'create_game',
@@ -32,6 +33,10 @@ urlpatterns = patterns('game.views',
     ),
     url(r'^ajax-make-turn/(?P<action>\w+)/(?P<direction>\w*)$',
         'ajax_make_turn',
+    ),
+    url(r'^leaderboard$',
+        'leaderboard',
+        name='leaderboard'
     ),
 )
 urlpatterns += staticfiles_urlpatterns()

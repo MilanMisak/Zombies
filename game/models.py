@@ -216,16 +216,16 @@ class Bot(models.Model):
         # 15 groups of snails at most
         if self.game.snails.all().count() < 15:
             if self.game.turns_played < 10:
+                # Spawn more snails with 70% probability
+                if random() <= 0.7:
+                    self.game.spawn_snails(1)
+            elif self.game.turns_played < 20:
                 # Spawn more snails with 50% probability
                 if random() <= 0.5:
                     self.game.spawn_snails(1)
-            elif self.game.turns_played < 20:
+            else:
                 # Spawn more snails with 30% probability
                 if random() <= 0.3:
-                    self.game.spawn_snails(1)
-            else:
-                # Spawn more snails with 15% probability
-                if random() <= 0.15:
                     self.game.spawn_snails(1)
 
     def move_snails(self):
@@ -253,7 +253,7 @@ class Bot(models.Model):
 class Game(models.Model):
     master               = models.OneToOneField(Player, related_name='mastered_game', null=True)
     bot                  = models.OneToOneField(Bot, related_name='game', null=True)
-    status               = models.PositiveSmallIntegerField(default=0) # 0 = not started, 1 = started
+    status               = models.PositiveSmallIntegerField(default=0) # 0 = not started, 1 = started, 2 = over
     current_player_index = models.PositiveSmallIntegerField(null=True)
     current_player_start = models.DateTimeField(null=True)
     last_player          = models.OneToOneField(Player, related_name='last_game', null=True, on_delete=models.SET_NULL)
@@ -319,7 +319,7 @@ class Game(models.Model):
         left_or_right = randint(0, 1)
         room_no = 0 if left_or_right == 0 else 6
 
-        health = 100 + self.turns_played
+        health = 100 + self.turns_played * 0.2
         snail = Snail(game=self, room=room_no, health=health)
         snail.save()
 
@@ -390,6 +390,7 @@ class Game(models.Model):
             player.alive = False
             player.save_score()
             print 'DEAD'
+            self.check_if_game_over()
 
         # Save the player
         player.save()
@@ -666,6 +667,16 @@ class Game(models.Model):
                 player.save_score()
 
                 print 'DEAD'
+                self.check_if_game_over()
+
+    def check_if_game_over(self):
+        """
+        Checks if the game is over.
+        """
+        if self.players.filter(alive=True).count() == 0:
+            self.status = 2
+            self.save()
+
 
     def __unicode__(self):
         if self.players.count() == 0:
@@ -792,3 +803,10 @@ class Snail(models.Model):
 class LeaderboardEntry(models.Model):
     name  = models.CharField(max_length=20)
     score = models.PositiveSmallIntegerField()
+
+    @staticmethod
+    def entries():
+        return LeaderboardEntry.objects.order_by('-score')
+
+    def __unicode__(self):
+        return 'Player: {}, score: {}'.format(self.name, self.score)

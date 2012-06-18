@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import RequestContext
 from django.utils import simplejson
 
-from game.models import Player, Game, CheckIn, Bot
+from game.models import Player, Game, CheckIn, Bot, LeaderboardEntry
 from game.forms import LoginForm
 
 def index(request):
@@ -94,6 +94,10 @@ def game(request):
 
     return render(request, 'game/game.html', {'game': game})
 
+def leaderboard(request):
+    entries = LeaderboardEntry.entries()
+    return render(request, 'game/leaderboard.html', {'entries': entries})
+
 # AJAX calls
 
 def ajax_games(request):
@@ -164,7 +168,7 @@ def ajax_game_state(request):
     barricades = list(game.get_list_of_barricades())
     snails = list(game.get_list_of_snails())
 
-    json = simplejson.dumps({'yourTurn': this_players_turn, 'yourPk': player.pk,
+    json = simplejson.dumps({'gameOver': game.status == 2, 'yourTurn': this_players_turn, 'yourPk': player.pk,
         'yourScore': player.score, 'timeoutSoon': player.timeout_soon(),
         'currentPlayersPk': current_player.pk if current_player else -1,
         'lastPlayersPk': last_players_pk, 'turnsPlayed': game.turns_played,
