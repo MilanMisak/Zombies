@@ -460,7 +460,7 @@ class Game(models.Model):
             return False
 
         snails_room = ROOMS[player.room].get_room_in_direction(direction)
-        query = self.snails.filter(room=snails_room)
+        query = self.snails.filter(room=snails_room).order_by('entered_room')
         if query.count() == 0:
             # There are no snails in the neighbouring room to shoot at
             print 'NO SNAILS TO SHOOT AT'
@@ -679,6 +679,7 @@ class Snail(models.Model):
             # There is no barricade - can just move
             print 'SNAIL {} MOVING TO {}'.format(self, path[0])
             self.room = path[0]
+            self.entered_room = datetime.now()
             self.action = 'Move'
             self.direction = direction
 
