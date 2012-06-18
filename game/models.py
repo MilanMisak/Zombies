@@ -167,6 +167,12 @@ class Player(models.Model):
         self.score = self.score + delta * (1.0 / self.game.players.count())
         self.save()
 
+    def save_score(self):
+        """
+        Saves the score to the leaderboard.
+        """
+        LeaderboardEntry(name=self.name, score=self.score).save()
+
     def do_check_in(self):
         """
         Checks-in a player informing the system that the player is still online.
@@ -363,6 +369,7 @@ class Game(models.Model):
         snails_in_the_room = self.snails.filter(room=player.room)
         if snails_in_the_room.exists():
             player.alive = False
+            player.save_score()
             print 'DEAD'
 
         # Save the player
@@ -636,6 +643,9 @@ class Game(models.Model):
             if player.alive and snails_in_the_room.exists():
                 player.alive = False
                 player.save()
+
+                player.save_score()
+
                 print 'DEAD'
 
     def __unicode__(self):
