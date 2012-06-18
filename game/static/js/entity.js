@@ -724,30 +724,43 @@ entitySetup = function() {
     Ghost.prototype = new Entity();
 
 
-    /* Animates the snail's eyes, called every frame */
+    this.frameCount = new Array();
+    this.frameCount[0] = 0;
+    this.frameCount[1] = 0;
+    this.frameCount[2] = 0;
+
+    /* Animates the snail's eyes every third frame, called every frame */
     this.snailUpdate = function(set) {
-        rightEye[set].segments[0].point = 
-            rightStart[set].add(new Point(Math.random() * -20 + 50, Math.random() * -150 + 10));
-        for (var i = 0; i < size - 2; i++) {
-            var nextSegment = rightEye[set].segments[i + 1];
-            var position = rightEye[set].segments[i].point;
-            var angle = (position.subtract(nextSegment.point)).angle;
-            var vector = new Point({ angle: angle, length: 35 });
-            nextSegment.point = position.subtract(vector);
-        }
+        if (this.frameCount[set] == 3)
+            this.frameCount[set] = 0;
+        if (this.frameCount[set] != 0) {
+            this.frameCount[set]++;
+            return;
+        } else {
+            this.frameCount[set]++;
+            rightEye[set].segments[0].point = 
+                rightStart[set].add(new Point(Math.random() * -20 + 50, Math.random() * -150 + 10));
+            for (var i = 0; i < size - 2; i++) {
+                var nextSegment = rightEye[set].segments[i + 1];
+                var position = rightEye[set].segments[i].point;
+                var angle = (position.subtract(nextSegment.point)).angle;
+                var vector = new Point({ angle: angle, length: 35 });
+                nextSegment.point = position.subtract(vector);
+            }
 
-        leftEye[set].segments[0].point = 
-            leftStart[set].add(new Point(Math.random() * -50 + 20, Math.random() * -150 + 10));
-        for (var i = 0; i < size - 2; i++) {
-            var nextSegment = leftEye[set].segments[i + 1];
-            var position = leftEye[set].segments[i].point;
-            var angle = (position.subtract(nextSegment.point)).angle;
-            var vector = new Point({ angle: angle, length: 35 });
-            nextSegment.point = position.subtract(vector);
-        }
+            leftEye[set].segments[0].point = 
+                leftStart[set].add(new Point(Math.random() * -50 + 20, Math.random() * -150 + 10));
+            for (var i = 0; i < size - 2; i++) {
+                var nextSegment = leftEye[set].segments[i + 1];
+                var position = leftEye[set].segments[i].point;
+                var angle = (position.subtract(nextSegment.point)).angle;
+                var vector = new Point({ angle: angle, length: 35 });
+                nextSegment.point = position.subtract(vector);
+            }
 
-        rightEyeball[set].position = rightEye[set].segments[0].point;
-        leftEyeball[set].position = leftEye[set].segments[0].point;
+            rightEyeball[set].position = rightEye[set].segments[0].point;
+            leftEyeball[set].position = leftEye[set].segments[0].point;
+        }
     }
 
     this.triangle = function(colour) {
