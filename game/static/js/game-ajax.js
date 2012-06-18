@@ -89,8 +89,10 @@ var executeMoves = function(data) {
         isTurn = false;
     }
 
-    if (data.yourTurn && data.timeOutSoon)
+    if (data.yourTurn && data.timeOutSoon) {
         disableControls();
+        console.log("OH TEH NOES");
+    }
 
     if (turnNumber != data.turnsPlayed) {
         turnNumber = data.turnsPlayed;
