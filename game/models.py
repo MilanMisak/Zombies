@@ -733,11 +733,11 @@ class Snail(models.Model):
             current_room = ROOMS[self.room]
             if random() <= 0.4 and current_room.up_room != -1:
                 return [current_room.up_room]
-            elif random() <= 0.3 and current_room.right_room != -1:
+            elif random() <= 0.3 and current_room.right_room != -1 and current_room.right_room != 6:
                 return [current_room.right_room]
             elif random() <= 0.2 and current_room.down_room != -1:
                 return [current_room.down_room]
-            elif random() <= 0.3 and current_room.left_room != -1:
+            elif random() <= 0.3 and current_room.left_room != -1 and current_room.left_room != 0:
                 return [current_room.left_room]
 
         # Something is really wrong
