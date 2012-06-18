@@ -397,7 +397,7 @@ entitySetup = function() {
     Snail.prototype = new Entity();
 
     this.Ghost = function(colour, room, id, ammo, holdingBox) {
-        var position = room.position;
+        var position = room.position.add(new Point((Math.random()*100 - 50),0));
         this.hat = triangle(colour);
         this.hat.scale(0.6);
         this.raster = ghostSymbol.place(position);
