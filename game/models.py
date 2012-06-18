@@ -189,9 +189,8 @@ class Bot(models.Model):
         self.has_played = True
         self.save()
 
-        self.game.check_if_dead_players()
-
         self.move_snails()
+        self.game.check_if_dead_players()
 
         # Spawn more snails with 50% probability
         if randint(0, 3) == 0:
@@ -324,7 +323,6 @@ class Game(models.Model):
             return
 
         player.update_score(action)
-        print player.score
 
         self.last_player = player
         self.last_action = action
@@ -358,6 +356,7 @@ class Game(models.Model):
         snails_in_the_room = self.snails.filter(room=player.room)
         if snails_in_the_room.exists():
             player.alive = False
+            print 'DEAD'
 
         # Save the player
         player.save()
@@ -630,6 +629,7 @@ class Game(models.Model):
             if player.alive and snails_in_the_room.exists():
                 player.alive = False
                 player.save()
+                print 'DEAD'
 
     def __unicode__(self):
         if self.players.count() == 0:
@@ -656,7 +656,6 @@ class Snail(models.Model):
     direction    = models.CharField(max_length=5, default='')
 
     def take_turn(self, move):
-        print 'TURN'
         # Default values for is something goes wrong
         self.action = ''
         self.direction = ''
