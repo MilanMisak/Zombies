@@ -253,7 +253,7 @@ class Bot(models.Model):
 class Game(models.Model):
     master               = models.OneToOneField(Player, related_name='mastered_game', null=True)
     bot                  = models.OneToOneField(Bot, related_name='game', null=True)
-    status               = models.PositiveSmallIntegerField(default=0) # 0 = not started, 1 = started
+    status               = models.PositiveSmallIntegerField(default=0) # 0 = not started, 1 = started, 2 = over
     current_player_index = models.PositiveSmallIntegerField(null=True)
     current_player_start = models.DateTimeField(null=True)
     last_player          = models.OneToOneField(Player, related_name='last_game', null=True, on_delete=models.SET_NULL)
@@ -390,6 +390,7 @@ class Game(models.Model):
             player.alive = False
             player.save_score()
             print 'DEAD'
+            self.check_if_game_over()
 
         # Save the player
         player.save()
@@ -666,6 +667,16 @@ class Game(models.Model):
                 player.save_score()
 
                 print 'DEAD'
+                self.check_if_game_over()
+
+    def check_if_game_over(self):
+        """
+        Checks if the game is over.
+        """
+        if self.players.filter(alive=True).count() == 0:
+            self.status = 2
+            self.save()
+
 
     def __unicode__(self):
         if self.players.count() == 0:

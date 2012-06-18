@@ -168,7 +168,7 @@ def ajax_game_state(request):
     barricades = list(game.get_list_of_barricades())
     snails = list(game.get_list_of_snails())
 
-    json = simplejson.dumps({'yourTurn': this_players_turn, 'yourPk': player.pk,
+    json = simplejson.dumps({'gameOver': game.status == 2, 'yourTurn': this_players_turn, 'yourPk': player.pk,
         'yourScore': player.score, 'timeoutSoon': player.timeout_soon(),
         'currentPlayersPk': current_player.pk if current_player else -1,
         'lastPlayersPk': last_players_pk, 'turnsPlayed': game.turns_played,
