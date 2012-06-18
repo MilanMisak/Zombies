@@ -204,10 +204,14 @@ class Bot(models.Model):
         best_moves = {}
 
         for snail in self.game.snails.all():
+            # From time to time (5% probability) do a random move
+            if random() <= 0.05:
+               snail.take_turn(snail.random_move)
+               continue
+
             if snail.room in best_moves:
                 # Re-use the best move
                 move = best_moves[snail.room]
-                print 'REUSE'
             else:
                 # Calculate and cache the best move
                 shortest_path = snail.shortest_path_to_a_ghost()
@@ -712,8 +716,6 @@ class Snail(models.Model):
 
             if self.game.players.filter(room=room, alive=True).exists():
                 # Found a ghost, return the path
-                print path
-                print 'DEPTH {}'.format(depth)
                 return path
 
             # Check neighbouring rooms
@@ -729,6 +731,12 @@ class Snail(models.Model):
                 heappush(rooms_to_check, (path_cost + turns_needed, depth + 1, next_room, path + [next_room]))
 
         # The search failed, try choosing a random movement direction
+        return self.random_move()
+
+    def random_move(self):
+        """
+        Does a random move. Returns an index of a room to move to or None.
+        """
         for i in range(10):
             current_room = ROOMS[self.room]
             if random() <= 0.4 and current_room.up_room != -1:
