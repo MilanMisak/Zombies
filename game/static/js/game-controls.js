@@ -233,7 +233,6 @@ $(document).ready(function() {
 
             disableControls();
             $('#your_turn_display').fadeOut('slow');
-            isTurn = false;
         }
 
         return false;
