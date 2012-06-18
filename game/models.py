@@ -572,8 +572,8 @@ class Game(models.Model):
                 self.bot.take_turn()
                 self.save() # TODO - why
 
-            # Timeout after 3 seconds
-            timeout_time = self.current_player_start + timedelta(seconds=3)
+            # Timeout after 5 seconds
+            timeout_time = self.current_player_start + timedelta(seconds=5)
 
             if timeout_time < datetime.now():
                 # Timed out
