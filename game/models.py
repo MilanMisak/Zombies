@@ -5,7 +5,7 @@ from django.dispatch import receiver
 
 import math
 from datetime import datetime, timedelta
-from random import getrandbits, randint
+from random import getrandbits, randint, random
 from heapq import *
 
 def is_valid_direction(direction):
@@ -698,6 +698,10 @@ class Snail(models.Model):
             # Get the next room to check
             path_cost, depth, room, path = heappop(rooms_to_check)
 
+            # Limit the depth of the search - genius
+            if depth > 5:
+                break
+
             if self.game.players.filter(room=room, alive=True).exists():
                 # Found a ghost, return the path
                 print path
@@ -716,7 +720,19 @@ class Snail(models.Model):
                     turns_needed = math.ceil((SNAIL_DAMAGE_RATE * barricade.health) / self.health)
                 heappush(rooms_to_check, (path_cost + turns_needed, depth + 1, next_room, path + [next_room]))
 
-        # Can't get to any ghosts
+        # The search failed, try choosing a random movement direction
+        for i in range(10):
+            current_room = ROOMS[self.room]
+            if random() <= 0.4 and current_room.up_room != -1:
+                return [current_room.up_room]
+            elif random() <= 0.3 and current_room.right_room != -1:
+                return [current_room.right_room]
+            elif random() <= 0.2 and current_room.down_room != -1:
+                return [current_room.down_room]
+            elif random() <= 0.3 and current_room.left_room != -1:
+                return [current_room.left_room]
+
+        # Something is really wrong
         return None
 
     def __unicode__(self):
