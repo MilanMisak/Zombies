@@ -879,8 +879,8 @@ entitySetup = function() {
         this.item.visible = false;
         this.exists = false;
         barricadeList.push(this);
-        this.background = new Path.Rectangle(this.item.position.add(new Point(105, -70)),
-                                             this.item.position.add(new Point(28, -40)));
+        this.background = new Path.Rectangle(this.item.position.add(new Point(108, -70)),
+                                             this.item.position.add(new Point(25, -40)));
         this.background.fillColor = 'white';
         this.background.strokeColor = 'black';
         this.text = new PointText(this.item.position.add(new Point (50, -50)));
@@ -900,8 +900,8 @@ entitySetup = function() {
         this.item.visible = false;
         this.exists = false;
         barricadeList.push(this);
-        this.background = new Path.Rectangle(this.item.position.add(new Point(105, -70)),
-                                             this.item.position.add(new Point(28, -40)));
+        this.background = new Path.Rectangle(this.item.position.add(new Point(108, -70)),
+                                             this.item.position.add(new Point(25, -40)));
         this.background.fillColor = 'white';
         this.background.strokeColor = 'black';
         this.text = new PointText(this.item.position.add(new Point (50, -50)));
