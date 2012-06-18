@@ -201,9 +201,19 @@ class Bot(models.Model):
         """
         Moves one group of snails towards some ghost.
         """
-        print 'THIS MANY {}'.format(self.game.snails.all().count())
+        best_moves = {}
+
         for snail in self.game.snails.all():
-            snail.take_turn()
+            if snail.room in best_moves:
+                # Re-use the best move
+                move = best_moves[snail.room]
+                print 'REUSE'
+            else:
+                # Calculate and cache the best move
+                shortest_path = snail.shortest_path_to_a_ghost()
+                move = shortest_path[0] if shortest_path else None
+                best_moves[snail.room] = move
+            snail.take_turn(move)
 
 class Game(models.Model):
     master               = models.OneToOneField(Player, related_name='mastered_game', null=True)
@@ -624,8 +634,8 @@ class Game(models.Model):
         return "{0!s}'s game".format(self.master)
 
 class Barricade(models.Model):
-    game = models.ForeignKey(Game, related_name='barricades')
-    index = models.PositiveIntegerField()
+    game   = models.ForeignKey(Game, related_name='barricades')
+    index  = models.PositiveIntegerField()
     health = models.PositiveIntegerField(default=100)
 
     def __unicode__(self):
@@ -641,21 +651,19 @@ class Snail(models.Model):
     action       = models.CharField(max_length=10, default='Spawn')
     direction    = models.CharField(max_length=5, default='')
 
-    def take_turn(self):
+    def take_turn(self, move):
         print 'TURN'
         # Default values for is something goes wrong
         self.action = ''
         self.direction = ''
         self.save()
 
-        # Calculate the shortest path to a ghost
-        path = self.shortest_path_to_a_ghost()
-        if path is None:
+        if move is None:
             # No path found
             return
 
         # Find out if need to go through a barricade
-        barricade_index, direction = ROOMS[self.room].get_barricade_to_room(path[0])
+        barricade_index, direction = ROOMS[self.room].get_barricade_to_room(move)
         if barricade_index == -1:
             # No barricade = no room, something's wrong
             return
@@ -678,8 +686,8 @@ class Snail(models.Model):
             self.direction = direction
         else:
             # There is no barricade - can just move
-            print 'SNAIL {} MOVING TO {}'.format(self, path[0])
-            self.room = path[0]
+            print 'SNAIL {} MOVING TO {}'.format(self, move)
+            self.room = move
             self.entered_room = datetime.now()
             self.action = 'Move'
             self.direction = direction
