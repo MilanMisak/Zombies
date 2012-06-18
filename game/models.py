@@ -122,7 +122,7 @@ class CheckIn(models.Model):
     
 class Player(models.Model):
     rand_id           = models.PositiveIntegerField()
-    name              = models.CharField(max_length=50)
+    name              = models.CharField(max_length=20)
     game              = models.ForeignKey('Game', related_name='players', null=True,
                             on_delete=models.SET_NULL)
     index             = models.PositiveSmallIntegerField(null=True)
@@ -759,3 +759,7 @@ class Snail(models.Model):
 
     def __unicode__(self):
         return 'Snail in room {} with health {}'.format(self.room, self.health)
+
+class LeaderboardEntry(models.Model):
+    name  = models.CharField(max_length=20)
+    score = models.PositiveSmallIntegerField()
