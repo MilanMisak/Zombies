@@ -5,7 +5,7 @@ from django.dispatch import receiver
 
 import math
 from datetime import datetime, timedelta
-from random import getrandbits, randint
+from random import getrandbits, randint, random
 from heapq import *
 
 def is_valid_direction(direction):
@@ -201,8 +201,23 @@ class Bot(models.Model):
         """
         Moves one group of snails towards some ghost.
         """
+        best_moves = {}
+
         for snail in self.game.snails.all():
-            snail.take_turn()
+            # From time to time (5% probability) do a random move
+            if random() <= 0.05:
+               snail.take_turn(snail.random_move)
+               continue
+
+            if snail.room in best_moves:
+                # Re-use the best move
+                move = best_moves[snail.room]
+            else:
+                # Calculate and cache the best move
+                shortest_path = snail.shortest_path_to_a_ghost()
+                move = shortest_path[0] if shortest_path else None
+                best_moves[snail.room] = move
+            snail.take_turn(move)
 
 class Game(models.Model):
     master               = models.OneToOneField(Player, related_name='mastered_game', null=True)
@@ -623,8 +638,8 @@ class Game(models.Model):
         return "{0!s}'s game".format(self.master)
 
 class Barricade(models.Model):
-    game = models.ForeignKey(Game, related_name='barricades')
-    index = models.PositiveIntegerField()
+    game   = models.ForeignKey(Game, related_name='barricades')
+    index  = models.PositiveIntegerField()
     health = models.PositiveIntegerField(default=100)
 
     def __unicode__(self):
@@ -640,21 +655,19 @@ class Snail(models.Model):
     action       = models.CharField(max_length=10, default='Spawn')
     direction    = models.CharField(max_length=5, default='')
 
-    def take_turn(self):
+    def take_turn(self, move):
         print 'TURN'
         # Default values for is something goes wrong
         self.action = ''
         self.direction = ''
         self.save()
 
-        # Calculate the shortest path to a ghost
-        path = self.shortest_path_to_a_ghost()
-        if path is None:
+        if move is None:
             # No path found
             return
 
         # Find out if need to go through a barricade
-        barricade_index, direction = ROOMS[self.room].get_barricade_to_room(path[0])
+        barricade_index, direction = ROOMS[self.room].get_barricade_to_room(move)
         if barricade_index == -1:
             # No barricade = no room, something's wrong
             return
@@ -677,8 +690,8 @@ class Snail(models.Model):
             self.direction = direction
         else:
             # There is no barricade - can just move
-            print 'SNAIL {} MOVING TO {}'.format(self, path[0])
-            self.room = path[0]
+            print 'SNAIL {} MOVING TO {}'.format(self, move)
+            self.room = move
             self.entered_room = datetime.now()
             self.action = 'Move'
             self.direction = direction
@@ -691,15 +704,18 @@ class Snail(models.Model):
         Returns the shortest path to some ghost.
         """
         rooms_to_check = []
-        heappush(rooms_to_check, (0, self.room, []))
+        heappush(rooms_to_check, (0, 0, self.room, []))
 
         while len(rooms_to_check) > 0:
             # Get the next room to check
-            (path_cost, room, path) = heappop(rooms_to_check)
+            path_cost, depth, room, path = heappop(rooms_to_check)
+
+            # Limit the depth of the search - genius
+            if depth > 5:
+                break
 
             if self.game.players.filter(room=room, alive=True).exists():
                 # Found a ghost, return the path
-                print path
                 return path
 
             # Check neighbouring rooms
@@ -712,9 +728,27 @@ class Snail(models.Model):
                     # Consider a path through the barricade
                     barricade = query.all()[0]
                     turns_needed = math.ceil((SNAIL_DAMAGE_RATE * barricade.health) / self.health)
-                heappush(rooms_to_check, (path_cost + turns_needed, next_room, path + [next_room]))
+                heappush(rooms_to_check, (path_cost + turns_needed, depth + 1, next_room, path + [next_room]))
 
-        # Can't get to any ghosts
+        # The search failed, try choosing a random movement direction
+        return self.random_move()
+
+    def random_move(self):
+        """
+        Does a random move. Returns an index of a room to move to or None.
+        """
+        for i in range(10):
+            current_room = ROOMS[self.room]
+            if random() <= 0.4 and current_room.up_room != -1:
+                return [current_room.up_room]
+            elif random() <= 0.3 and current_room.right_room != -1 and current_room.right_room != 6:
+                return [current_room.right_room]
+            elif random() <= 0.2 and current_room.down_room != -1:
+                return [current_room.down_room]
+            elif random() <= 0.3 and current_room.left_room != -1 and current_room.left_room != 0:
+                return [current_room.left_room]
+
+        # Something is really wrong
         return None
 
     def __unicode__(self):
