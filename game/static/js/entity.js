@@ -797,7 +797,7 @@ entitySetup = function() {
 
     this.Barricade = function() {
         this.text = new PointText(view.center);
-        this.background = raster1;;
+        this.background = raster1;
         this.item = doorBarricadeSymbol.place(view.center);
         this.exists = false;
         this.health = 0;
@@ -869,6 +869,7 @@ entitySetup = function() {
         this.background = new Path.Rectangle(this.item.position.add(new Point(105, -70)),
                                              this.item.position.add(new Point(28, -40)));
         this.background.fillColor = 'white';
+        this.background.strokeColor = 'black';
         this.text = new PointText(this.item.position.add(new Point (50, -50)));
         this.text.content = 100 + '%';
         this.text.scale(2.5);
@@ -889,6 +890,7 @@ entitySetup = function() {
         this.background = new Path.Rectangle(this.item.position.add(new Point(105, -70)),
                                              this.item.position.add(new Point(28, -40)));
         this.background.fillColor = 'white';
+        this.background.strokeColor = 'black';
         this.text = new PointText(this.item.position.add(new Point (50, -50)));
         this.text.content = 100 + '%';
         this.text.scale(2.5);
