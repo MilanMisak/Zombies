@@ -223,6 +223,8 @@ var updateGameState = function() {
         }
 
         showErrorModal(reason, '', '/');
+        //TODO - remove alert
+        alert(xhr.responseText);
     });
 };
 
