@@ -201,12 +201,16 @@ class Bot(models.Model):
         # 15 groups of snails at most
         if self.game.snails.all().count() < 15:
             if self.game.turns_played < 10:
-                # Spawn more snails with 33% probability
-                if randint(0, 2) == 0:
+                # Spawn more snails with 50% probability
+                if random() <= 0.5:
+                    self.game.spawn_snails(1)
+            elif self.game.turns_played < 20:
+                # Spawn more snails with 30% probability
+                if random() <= 0.3:
                     self.game.spawn_snails(1)
             else:
-                # Spawn more snails with 25% probability
-                if randint(0, 3) == 0:
+                # Spawn more snails with 15% probability
+                if random() <= 0.15:
                     self.game.spawn_snails(1)
 
     def move_snails(self):
@@ -217,7 +221,7 @@ class Bot(models.Model):
 
         for snail in self.game.snails.all():
             # From time to time (5% probability) do a random move
-            if random() <= 0.05:
+            if random() <= 0.2:
                snail.take_turn(snail.random_move)
                continue
 
@@ -300,7 +304,7 @@ class Game(models.Model):
         left_or_right = randint(0, 1)
         room_no = 0 if left_or_right == 0 else 6
 
-        health = 100 + self.turns_played * 5
+        health = 100 + self.turns_played
         snail = Snail(game=self, room=room_no, health=health)
         snail.save()
 
@@ -579,8 +583,8 @@ class Game(models.Model):
                 self.bot.take_turn()
                 self.save() # TODO - why
 
-            # Timeout after 5 seconds
-            timeout_time = self.current_player_start + timedelta(seconds=5)
+            # Timeout after 10 seconds
+            timeout_time = self.current_player_start + timedelta(seconds=10)
 
             if timeout_time < datetime.now():
                 # Timed out
