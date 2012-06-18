@@ -162,6 +162,8 @@ class Player(models.Model):
             delta = 15
         elif action == 'Barricade':
             delta = 12
+        elif action == 'Ammo':
+            delta = 10
         else:
             delta = 8
         self.score = self.score + delta * (1.0 / self.game.players.count())
