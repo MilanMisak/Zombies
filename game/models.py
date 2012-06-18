@@ -633,11 +633,12 @@ class Barricade(models.Model):
 SNAIL_DAMAGE_RATE = 4.0
 
 class Snail(models.Model):
-    game      = models.ForeignKey(Game, related_name='snails')
-    room      = models.PositiveSmallIntegerField()
-    health    = models.PositiveIntegerField(default=100)
-    action    = models.CharField(max_length=10, default='Spawn')
-    direction = models.CharField(max_length=5, default='')
+    game         = models.ForeignKey(Game, related_name='snails')
+    room         = models.PositiveSmallIntegerField()
+    entered_room = models.DateTimeField(auto_now_add=True)
+    health       = models.PositiveIntegerField(default=100)
+    action       = models.CharField(max_length=10, default='Spawn')
+    direction    = models.CharField(max_length=5, default='')
 
     def take_turn(self):
         print 'TURN'
