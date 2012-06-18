@@ -664,9 +664,6 @@ class Snail(models.Model):
             # There is a barricade
             print 'SNAIL {} ATTACKING {}'.format(self, barricade_index)
             barricade = query.all()[0]
-            print barricade.health
-            print self.health
-            print math.floor(self.health / SNAIL_DAMAGE_RATE)
             barricade.health = barricade.health - math.floor(self.health / SNAIL_DAMAGE_RATE)
             if barricade.health <= 0:
                 # Barricade destroyed
