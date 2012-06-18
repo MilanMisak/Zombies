@@ -838,6 +838,13 @@ entitySetup = function() {
             this.text.visible = true;
             this.background.visible = true;
             this.text.content = this.health + '%';
+            if (this.health < 100 && !this.indentFlag1) {
+                this.text.position = this.text.position.add(new Point(10, 0));
+                this.indentFlag1 = true;
+            } else if (this.health < 10 && !this.indentFlag2) {
+                this.text.position = this.text.position.add(new Point(10, 0));
+                this.indentFlag2 = true;
+            }
         }
 
         this.damage = function(damageDealt) {
