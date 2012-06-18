@@ -162,6 +162,8 @@ class Player(models.Model):
             delta = 15
         elif action == 'Barricade':
             delta = 12
+        elif action == 'Ammo':
+            delta = 10
         else:
             delta = 8
         self.score = self.score + delta * (1.0 / self.game.players.count())
@@ -172,6 +174,19 @@ class Player(models.Model):
         Saves the score to the leaderboard.
         """
         LeaderboardEntry(name=self.name, score=self.score).save()
+
+    def timeout_soon(self):
+        """
+        Returns True if the player is going to timeout in 2 seconds.
+        """
+        if self.game.turns_played == 0:
+            # Timeout after 30 seconds
+            timeout_time = self.game.current_player_start + timedelta(seconds=28)
+        else:
+            # Timeout after 15 seconds
+            timeout_time = self.game.current_player_start + timedelta(seconds=13)
+
+        return timeout_time < datetime.now()
 
     def do_check_in(self):
         """
@@ -201,12 +216,16 @@ class Bot(models.Model):
         # 15 groups of snails at most
         if self.game.snails.all().count() < 15:
             if self.game.turns_played < 10:
-                # Spawn more snails with 33% probability
-                if randint(0, 2) == 0:
+                # Spawn more snails with 50% probability
+                if random() <= 0.5:
+                    self.game.spawn_snails(1)
+            elif self.game.turns_played < 20:
+                # Spawn more snails with 30% probability
+                if random() <= 0.3:
                     self.game.spawn_snails(1)
             else:
-                # Spawn more snails with 25% probability
-                if randint(0, 3) == 0:
+                # Spawn more snails with 15% probability
+                if random() <= 0.15:
                     self.game.spawn_snails(1)
 
     def move_snails(self):
@@ -217,7 +236,7 @@ class Bot(models.Model):
 
         for snail in self.game.snails.all():
             # From time to time (5% probability) do a random move
-            if random() <= 0.05:
+            if random() <= 0.2:
                snail.take_turn(snail.random_move)
                continue
 
@@ -300,7 +319,7 @@ class Game(models.Model):
         left_or_right = randint(0, 1)
         room_no = 0 if left_or_right == 0 else 6
 
-        health = 100 + self.turns_played * 5
+        health = 100 + self.turns_played
         snail = Snail(game=self, room=room_no, health=health)
         snail.save()
 

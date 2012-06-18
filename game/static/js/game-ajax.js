@@ -84,6 +84,9 @@ var executeMoves = function(data) {
         isTurn = false;
     }
 
+    if (data.yourTurn && data.timeOutSoon)
+        disableControls();
+
     if (turnNumber != data.turnsPlayed) {
         turnNumber = data.turnsPlayed;
         if (data.lastPlayersPk == 0)
