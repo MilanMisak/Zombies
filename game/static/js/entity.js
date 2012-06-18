@@ -155,6 +155,8 @@ entitySetup = function() {
   
         this.moving = true;
 
+        this.randomMove = true;
+
         this.faceTarget = function() {
         }
 
@@ -172,6 +174,7 @@ entitySetup = function() {
 		        this.faceTarget();
                 } else {
                     this.moving = false;
+                    this.randomMove = true;
                 }
             }
             
@@ -286,10 +289,14 @@ entitySetup = function() {
         this.move = function() {
             for (var i = 0; i < this.item.children.length; i++) {
                 var snail = this.item.children[i].Parent;
-                if (!snail.moving && snail.deathCounter == 0)
+                if (snail.randomMove && !snail.moving && snail.deathCounter == 0 && Math.random() > 0.1) {
                     snail.pushDestination(snail.room.position.add(
                         new Point(Math.random() * 300 - 150, 0)));
+                } else {
+                    snail.randomMove = false;
+                }
                 snail.move();
+                    
             }
         }
         
@@ -882,8 +889,8 @@ entitySetup = function() {
         this.item.visible = false;
         this.exists = false;
         barricadeList.push(this);
-        this.background = new Path.Rectangle(this.item.position.add(new Point(105, -70)),
-                                             this.item.position.add(new Point(28, -40)));
+        this.background = new Path.Rectangle(this.item.position.add(new Point(108, -70)),
+                                             this.item.position.add(new Point(25, -40)));
         this.background.fillColor = 'white';
         this.background.strokeColor = 'black';
         this.text = new PointText(this.item.position.add(new Point (50, -50)));
@@ -903,8 +910,8 @@ entitySetup = function() {
         this.item.visible = false;
         this.exists = false;
         barricadeList.push(this);
-        this.background = new Path.Rectangle(this.item.position.add(new Point(105, -70)),
-                                             this.item.position.add(new Point(28, -40)));
+        this.background = new Path.Rectangle(this.item.position.add(new Point(108, -70)),
+                                             this.item.position.add(new Point(25, -40)));
         this.background.fillColor = 'white';
         this.background.strokeColor = 'black';
         this.text = new PointText(this.item.position.add(new Point (50, -50)));
