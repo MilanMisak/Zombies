@@ -192,9 +192,16 @@ class Bot(models.Model):
         self.move_snails()
         self.game.check_if_dead_players()
 
-        # Spawn more snails with 50% probability
-        if randint(0, 3) == 0:
-            self.game.spawn_snails(1)
+        # 15 groups of snails at most
+        if self.game.snails.all().count() < 15:
+            if self.game.turns_played < 10:
+                # Spawn more snails with 33% probability
+                if randint(0, 2) == 0:
+                    self.game.spawn_snails(1)
+            else:
+                # Spawn more snails with 25% probability
+                if randint(0, 3) == 0:
+                    self.game.spawn_snails(1)
 
     def move_snails(self):
         """
