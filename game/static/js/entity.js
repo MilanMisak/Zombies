@@ -817,6 +817,7 @@ entitySetup = function() {
 
         this.damage = function(damageDealt) {
             this.health -= damageDealt;
+            this.health = Math.ceil(this.health);
             if (this.health <= 0) {
                 this.destroy();
             } else {
