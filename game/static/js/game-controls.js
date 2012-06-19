@@ -192,7 +192,11 @@ $(document).ready(function() {
                 $('#ammo_display').html(localPlayer.ammo);
                 actionAccepted = true;
             } else {
-                invalidSelection("You can't shoot there"); 
+                if (localPlayer.ammo > 0) {
+                    invalidSelection("You can't shoot there"); 
+                } else {
+                    invalidSelection("Out of ammo");
+                }
             }
             break;
         case 'Reload':
