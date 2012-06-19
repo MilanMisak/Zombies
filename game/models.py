@@ -131,6 +131,7 @@ class Player(models.Model):
     carrying_ammo_box = models.BooleanField(default=False)
     alive             = models.BooleanField(default=True)
     score             = models.PositiveSmallIntegerField(default=0)
+    cheating          = models.BooleanField(default=False)
     checkin           = models.OneToOneField(CheckIn, related_name='player', blank=True, null=True)
 
     @staticmethod
@@ -331,31 +332,32 @@ class Game(models.Model):
         """
         if self.current_player_index != player.index:
             print 'NACK'
-            return
+            return True
 
         if action == 'Move':
             if not self.action_move(player, direction):
-                return
+                return False
         elif action == 'Barricade':
             if not self.action_barricade(player, direction):
-                return
+                return False
         elif action == 'Debarricade':
             if not self.action_debarricade(player, direction):
-                return
+                return False
         elif action == 'Ammo':
             if not self.action_ammo(player):
-                return
+                return False
         elif action == 'Shoot':
             if not self.action_shoot(player, direction):
-                return
+                return False
         elif action == 'Reload':
             if not self.action_reload(player):
-                return
+                return False
         else:
             # Action is not supported
             print 'INVALID ACTION {}'.format(action)
-            player.delete()
-            return
+            player.cheating = True
+            player.save()
+            return False
 
         player.update_score(action)
 
@@ -364,6 +366,7 @@ class Game(models.Model):
         self.last_direction = direction
         self.turns_played = self.turns_played + 1
         self.change_turns() # This does the save()
+        return True
 
     def action_move(self, player, direction):
         """
@@ -373,14 +376,16 @@ class Game(models.Model):
         if new_room == -1:
             # Destination room does not exist
             print 'INVALID ROOM: from {} going {}'.format(player.room, direction)
-            player.delete()
+            player.cheating = True
+            player.save()
             return False
 
         barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
         if barricade_index != -1 and self.barricades.filter(index=barricade_index).count() > 0:
             # There's a barricade in the way
             print 'BARRICADE IN THE WAY'
-            player.delete()
+            player.cheating = True
+            player.save()
             return False
 
         print 'PLAYER {} MOVING TO {}'.format(player.name, new_room)
@@ -406,20 +411,23 @@ class Game(models.Model):
         if not is_valid_direction(direction):
             # Invalid direction
             print 'INVALID DIRECTION {} FROM {}'.format(direction, player.room)
-            player.delete()
+            player.cheating = True
+            player.save()
             return False
 
         if player.carrying_ammo_box:
             # Can't barricade while carrying the ammo box
             print 'CANT BARRICADE WITH AMMO BOX'
-            player.delete()
+            player.cheating = True
+            player.save()
             return False
 
         barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
         if barricade_index == -1:
             # Can't barricade in this direction
             print 'INVALID DIRECTION {} FROM {}'.format(direction, player.room)
-            player.delete()
+            player.cheating = True
+            player.save()
             return False
 
         query = self.barricades.filter(index=barricade_index)
@@ -442,27 +450,31 @@ class Game(models.Model):
         if not is_valid_direction(direction):
             # Invalid direction
             print 'INVALID DIRECTION'
-            player.delete()
+            player.cheating = True
+            player.save()
             return False
 
         if player.carrying_ammo_box:
             # Can't debarricade while carrying the ammo box
             print 'CANT DEBARRICADE WITH AMMO BOX'
-            player.delete()
+            player.cheating = True
+            player.save()
             return False
 
         barricade_index = ROOMS[player.room].get_barricade_in_direction(direction)
         if barricade_index == -1:
             # Can't debarricade in this direction
             print 'INVALID DIRECTION'
-            player.delete()
+            player.cheating = True
+            player.save()
             return False
 
         query = self.barricades.filter(index=barricade_index)
         if query.count() == 0:
             # Barricade does not exist
             print 'BARRICADE DOES NOT EXIST'
-            player.delete()
+            player.cheating = True
+            player.save()
             return False
 
         # Delete the barricade
@@ -482,7 +494,8 @@ class Game(models.Model):
         elif self.ammo_box_in_transit or self.ammo_box_room != player.room:
             # Ammo box in transit or in a different room than the player
             print 'AMMO BOX IN TRANSIT OR IN A DIFFERENT ROOM'
-            player.delete()
+            player.cheating = True
+            player.save()
             return False
         else:
             # Pick up the ammo box
@@ -501,13 +514,15 @@ class Game(models.Model):
         if not is_valid_direction(direction):
             # Invalid direction
             print 'INVALID DIRECTION'
-            player.delete()
+            player.cheating = True
+            player.save()
             return False
 
         if player.ammo <= 0:
             # Player has no ammo
             print 'PLAYER HAS NO AMMO'
-            player.delete()
+            player.cheating = True
+            player.save()
             return False
 
         snails_room = ROOMS[player.room].get_room_in_direction(direction)
@@ -515,7 +530,8 @@ class Game(models.Model):
         if query.count() == 0:
             # There are no snails in the neighbouring room to shoot at
             print 'NO SNAILS TO SHOOT AT'
-            player.delete()
+            player.cheating = True
+            player.save()
             return False
 
         # Shoot at snails
@@ -536,12 +552,14 @@ class Game(models.Model):
         """
         if self.ammo_box_in_transit or self.ammo_box_room != player.room:
             print 'AMMO BOX NOT AVAILABLE FOR RELOADING'
-            player.delete()
+            player.cheating = True
+            player.save()
             return False
 
         if player.ammo == 5:
             print 'CANT RELOAD WITH FULL AMMO'
-            player.delete()
+            player.cheating = True
+            player.save()
             return False
 
         # Reload

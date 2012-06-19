@@ -144,6 +144,11 @@ def ajax_game_state(request):
         print 'NO-PLAYER'
         return HttpResponseBadRequest('NO-PLAYER')
 
+    if player.cheating:
+        player.delete()
+        print 'DELETING AFTER CHEATING'
+        return HttpResponseBadRequest('CHEATING')
+
     game = player.game
     if game is None:
         print 'NO-GAME FOR {}'.format(player)
@@ -190,9 +195,13 @@ def ajax_make_turn(request, action, direction=''):
         return HttpResponseBadRequest('NO-GAME')
 
     # Make the turn
-    game.make_turn(player, action, direction)
+    all_ok = game.make_turn(player, action, direction)
 
-    return HttpResponse()
+    if all_ok:
+        return HttpResponse()
+    else:
+        print 'CHEATING BY {}'.format(player)
+        return HttpResponseBadRequest('CHEATING')
 
 # Utility functions
 
