@@ -234,8 +234,8 @@ var executeMoves = function(data) {
         }
         if (!foundGroup) {
             SnailGroup.spawn(snails.pk, (snails.health / 20), roomList[snails.room], snails.health);
-        } */
-    }
+        } 
+    }*/
 
     /*    for (var i = 0; i < data.players.length; i++) {
             var newPlayer = data.players[i];
