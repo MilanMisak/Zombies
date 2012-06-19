@@ -203,7 +203,7 @@ var executeMoves = function(data) {
    /* Make game state same as server. */
 
    /* Barricades. */
-    for (var i = 0; i < data.barricades.length; i++) {
+    /* for (var i = 0; i < data.barricades.length; i++) {
         newBarricade = barricadeList[data.barricades[i].index];
         newBarricade.health = data.barricades[i].health
         newBarricade.exists = true;
@@ -211,7 +211,7 @@ var executeMoves = function(data) {
         newBarricade.text.content = newBarricade.health + '%';
         newBarricade.text.visible = true;
         newBarricade.background.visible = true;
-    }
+    }*/
 
     /* Snails. */
     for (var i = 0; i < data.snails.length; i++) {
