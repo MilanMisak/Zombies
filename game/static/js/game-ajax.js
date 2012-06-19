@@ -15,6 +15,7 @@ var playerColours = ['#ff0000', '#0000ff', '#ffff00', '#00ff00',
 var executeMoves = function(data) {
     if (!ALL_LOADED)
         return;
+    console.log(data);
 
     // Update the list of players
     if ($('#players_list').length) {
