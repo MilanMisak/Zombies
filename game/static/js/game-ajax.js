@@ -226,7 +226,8 @@ var executeMoves = function(data) {
                     /*localSnails.setRoom(roomList[snails.room]);
                     localSnails.position = localSnails.room.position;
                     localSnails.resetDestination();*/
-                    console.log("Group " + localSnails.id + "In wrong position");
+                    console.log("Group " + localSnails.id + " In wrong position");
+                    console.log("Should be: " + snails.room);
                 }
                 break;
             }
