@@ -179,14 +179,14 @@ class Player(models.Model):
 
     def timeout_soon(self):
         """
-        Returns True if the player is going to timeout in 2 seconds.
+        Returns True if the player is going to timeout in 3 seconds.
         """
         if self.game.turns_played == 0:
             # Timeout after 30 seconds
-            timeout_time = self.game.current_player_start + timedelta(seconds=28)
+            timeout_time = self.game.current_player_start + timedelta(seconds=27)
         else:
             # Timeout after 15 seconds
-            timeout_time = self.game.current_player_start + timedelta(seconds=13)
+            timeout_time = self.game.current_player_start + timedelta(seconds=12)
 
         return timeout_time < datetime.now()
 
