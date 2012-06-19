@@ -173,7 +173,9 @@ class Player(models.Model):
         """
         Saves the score to the leaderboard.
         """
-        LeaderboardEntry(name=self.name, score=self.score).save()
+        # Only save the score when it's bigger than 0
+        if self.score > 0:
+            LeaderboardEntry(name=self.name, score=self.score).save()
 
     def timeout_soon(self):
         """
