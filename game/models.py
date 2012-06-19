@@ -801,7 +801,7 @@ class Snail(models.Model):
         return None
 
     def __unicode__(self):
-        return 'Snail in room {} with health {}'.format(self.room, self.health)
+        return 'Snail {} in room {} with health {}'.format(self.pk, self.room, self.health)
 
 class LeaderboardEntry(models.Model):
     name  = models.CharField(max_length=20)
