@@ -216,16 +216,16 @@ class Bot(models.Model):
         # 15 groups of snails at most
         if self.game.snails.all().count() < 15:
             if self.game.turns_played < 10:
-                # Spawn more snails with 70% probability
-                if random() <= 0.7:
+                # Spawn more snails with 60% probability
+                if random() <= 0.6:
                     self.game.spawn_snails(1)
             elif self.game.turns_played < 20:
-                # Spawn more snails with 50% probability
-                if random() <= 0.5:
+                # Spawn more snails with 40% probability
+                if random() <= 0.4:
                     self.game.spawn_snails(1)
             else:
-                # Spawn more snails with 30% probability
-                if random() <= 0.3:
+                # Spawn more snails with 20% probability
+                if random() <= 0.2:
                     self.game.spawn_snails(1)
 
     def move_snails(self):
@@ -234,7 +234,7 @@ class Bot(models.Model):
         """
         best_moves = {}
 
-        for snail in self.game.snails.all():
+        for snail in self.game.snails.order_by('pk').all():
             # From time to time (5% probability) do a random move
             if random() <= 0.2:
                snail.take_turn(snail.random_move)
@@ -328,6 +328,7 @@ class Game(models.Model):
         Makes the turn with the given player.
         """
         if self.current_player_index != player.index:
+            print 'NACK'
             return
 
         if action == 'Move':
@@ -575,7 +576,7 @@ class Game(models.Model):
         """
         Returns a list of snails with their PKs, rooms and health.
         """
-        return self.snails.values('pk', 'room', 'health', 'action', 'direction')
+        return self.snails.order_by('pk').values('pk', 'room', 'health', 'action', 'direction')
 
     def get_max_player_index(self):
         """
