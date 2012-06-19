@@ -214,7 +214,7 @@ var executeMoves = function(data) {
     }*/
 
     /* Snails. */
-    for (var i = 0; i < data.snails.length; i++) {
+    /*for (var i = 0; i < data.snails.length; i++) {
         var snails = data.snails[i];
         var foundGroup = false;
         for (var j = 0; j < snailGroupList.length; j++) {
@@ -223,9 +223,9 @@ var executeMoves = function(data) {
                 foundGroup = true;
                 localSnails.strength = snails.health;
                 if (localSnails.room != roomList[snails.room]) {
-                    /*localSnails.setRoom(roomList[snails.room]);
+                    localSnails.setRoom(roomList[snails.room]);
                     localSnails.position = localSnails.room.position;
-                    localSnails.resetDestination();*/
+                    localSnails.resetDestination();
                     console.log("Group " + localSnails.id + " In wrong position");
                     console.log("Should be: " + snails.room);
                 }
@@ -234,7 +234,7 @@ var executeMoves = function(data) {
         }
         if (!foundGroup) {
             SnailGroup.spawn(snails.pk, (snails.health / 20), roomList[snails.room], snails.health);
-        }
+        } */
     }
 
     /*    for (var i = 0; i < data.players.length; i++) {
