@@ -967,7 +967,7 @@ entitySetup = function() {
     floor4Room1 = new Room(view.center.add(new Point(-680, -150)));
     floor4Room2 = new Room(view.center.add(new Point(-230, -150)));
     floor4Room3 = new Room(view.center.add(new Point(230, -150)));
-    floor4Room4 = new Room(view.center.add(new Point(830, -150)));
+    floor4Room4 = new Room(view.center.add(new Point(770, -150)));
     floor5Room1 = new Room(view.center.add(new Point(-250, -450)));
     floor5Room2 = new Room(view.center.add(new Point(430, -450)));
     floor6Room1 = new Room(view.center.add(new Point(-100, -750)));
@@ -986,7 +986,7 @@ entitySetup = function() {
     stairs5 = new Stairs(floor3Room1.position.add(new Point(110, 0)),
                          floor4Room1.position.add(new Point(-175, 0)));
     stairs6 = new Stairs(floor3Room4.position.add(new Point(-110, 0)),
-                         floor4Room4.position.add(new Point(35, 0)));
+                         floor4Room4.position.add(new Point(80, 0)));
     stairs7 = new Stairs(floor4Room1.position.add(new Point(120, 0)),
                          floor5Room1.position.add(new Point(-615, 0)));
     stairs8 = new Stairs(floor4Room3.position.add(new Point(100, 0)),
