@@ -143,9 +143,9 @@ class Player(models.Model):
     @staticmethod
     def clean_up():
         """
-        Deletes players not checked-in for 10 seconds or more.
+        Deletes players not checked-in for 60 seconds or more.
         """
-        time = datetime.now() - timedelta(seconds=10)
+        time = datetime.now() - timedelta(seconds=60)
         count = Player.objects.all().count()
         Player.objects.filter(checkin__time__lte=time).delete()
         count2 = Player.objects.all().count()
@@ -173,7 +173,9 @@ class Player(models.Model):
         """
         Saves the score to the leaderboard.
         """
-        LeaderboardEntry(name=self.name, score=self.score).save()
+        # Only save the score when it's bigger than 0
+        if self.score > 0:
+            LeaderboardEntry(name=self.name, score=self.score).save()
 
     def timeout_soon(self):
         """
@@ -267,9 +269,9 @@ class Game(models.Model):
     @staticmethod
     def clean_up():
         """
-        Deletes games not checked-in for 10 seconds or more.
+        Deletes games not checked-in for 60 seconds or more.
         """
-        time = datetime.now() - timedelta(seconds=10)
+        time = datetime.now() - timedelta(seconds=60)
         Player.objects.filter(checkin__time__lte=time).delete()
 
     @staticmethod

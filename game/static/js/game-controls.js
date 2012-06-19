@@ -249,4 +249,8 @@ $(document).ready(function() {
         $.each(actionIDs, enable);
     };	
 
+    // Initialise game over modal controls
+    $('#btn_show_leaderboard, #btn_play_new_game').click(function() {
+        window.location.replace($(this).attr('data-href'));
+    });
 });
