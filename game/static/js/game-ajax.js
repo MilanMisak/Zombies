@@ -223,9 +223,10 @@ var executeMoves = function(data) {
                 foundGroup = true;
                 localSnails.strength = snails.health;
                 if (localSnails.room != roomList[snails.room]) {
-                    localSnails.setRoom(roomList[snails.room]);
+                    /*localSnails.setRoom(roomList[snails.room]);
                     localSnails.position = localSnails.room.position;
-                    localSnails.resetDestination();
+                    localSnails.resetDestination();*/
+                    console.log("Group " + localSnails.id + "In wrong position");
                 }
                 break;
             }
