@@ -10,4 +10,7 @@
 *.toc
 *.docx#
 *.gz
+*.nav
+*.out
+*.snm
 *.DS_Store

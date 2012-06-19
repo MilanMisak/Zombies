@@ -13,6 +13,23 @@
   \end{frame}
 }
 
+\defbeamertemplate*{footline}{my infolines theme}
+{
+    \leavevmode%
+        \hbox{%
+            \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+                \usebeamerfont{author in head/foot}\insertshortauthor~~\insertshortinstitute
+                \end{beamercolorbox}%
+                \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+                \usebeamerfont{title in head/foot}\insertshorttitle
+                \end{beamercolorbox}%
+                \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+                \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+            \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+            \end{beamercolorbox}}%
+                \vskip0pt%
+}
+
 \begin{document}
 
 \begin{frame}
@@ -116,17 +133,16 @@
 \section{Group Management}
 
 \begin{frame}{Git}
-  TODO:
+  We love Git
 \end{frame}
 
 \begin{frame}{Pivotal Tracker}
   TODO:\\
   Clear structure.\\
-  \begin{figure}[hb]
-    \centering
-    \includegraphics[scale=0.2]{pivotal.png}
-    \caption{Pivotal Tracker main screen}
-  \end{figure}
+  \begin{center}
+    \includegraphics[scale=0.25]{pivotal.png} \\
+    Pivotal Tracker main screen
+  \end{center}
 \end{frame}
 
 \begin{frame}{Pivotal Tracker}
@@ -147,10 +163,9 @@
   TODO:
   [insert map of components and interactions.]
   \begin{itemize}
-    \item Suitable for purpose
-    \item It's nice
-    \item We like it
-    \item Also paper.js
+    \item Only client side script supported by all browsers
+    \item More stable than using plugins
+    \item HTML5 graphics libraries available (we used paper.js)
   \end{itemize}
 \end{frame}
 
@@ -158,9 +173,9 @@
   TODO:
   [insert map of components and interactions.]
   \begin{itemize}
-    \item Suitable for purpose
-    \item It's nice
-    \item We like it
+    \item Technology for the future.
+    \item No need to install plugins with modern broswers.
+    \item Faster, less likely to crash than plugins.
   \end{itemize}
 \end{frame}
 
@@ -170,7 +185,7 @@
   TODO:
   [insert map of components and interactions.]
   \begin{itemize}
-    \item Suitable for purpose
+    \item Easy ajax.
     \item It's nice
     \item We like it
   \end{itemize}
@@ -180,9 +195,9 @@
   TODO:
   [insert map of components and interactions.]
   \begin{itemize}
-    \item Suitable for purpose
-    \item It's nice
-    \item We like it
+    \item Free hosting service available.
+    \item Supports Django, unlike doc.
+    \item Easy deployment - just push to a git repository.
   \end{itemize}
 \end{frame}
 
