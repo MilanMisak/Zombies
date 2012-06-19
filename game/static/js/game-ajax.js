@@ -1,4 +1,5 @@
 var instructionsModalShown = false;
+var cheatModalShown = false;
 
 var ajaxErrorCount = 0;
 
@@ -264,7 +265,7 @@ var executeMoves = function(data) {
 
 var updateGameState = function() {
     if (!ALL_LOADED)
-	return;
+        return;
 
     $.getJSON('/ajax-game-state', function(data) {
         ajaxErrorCount = 0;
@@ -272,9 +273,12 @@ var updateGameState = function() {
         executeMoves(data);
     }).error(function(xhr, status, data) {
         ajaxErrorCount++;
-        if (ajaxErrorCount < AJAX_ERROR_ALLOWANCE)
+        if (ajaxErrorCount < AJAX_ERROR_ALLOWANCE && xhr.responseText !== 'CHEATING')
             return;
         ajaxErrorCount = 0;
+
+        if (cheatModalShown)
+            return;
 
         if (instructionsModalShown) {
             $('#instructions_modal').modal('hide');
@@ -283,12 +287,18 @@ var updateGameState = function() {
         var reason = '';
         if ('NO-GAME' === xhr.responseText) {
             reason = 'the game was cancelled.';
-        } else {
+            showErrorModal(reason, '', '/');
+        } else if ('NO-PLAYER' === xhr.responseText) {
             reason = 'your player has been wiped off the server. ' +
                 'Are you experiencing any internet connection issues?';
+            showErrorModal(reason, '', '/');
+        } else {
+            $('#cheat_modal').on('hide', function() {
+                window.location.replace('/');
+            });
+            $('#cheat_modal').modal('show');
+            cheatModalShown = true;
         }
-
-        showErrorModal(reason, '', '/');
     });
 };
 
