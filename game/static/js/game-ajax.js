@@ -222,10 +222,11 @@ var executeMoves = function(data) {
             if (snails.pk == localSnails.id) {
                 foundGroup = true;
                 localSnails.strength = snails.health;
-                if (localSnails.room != roomList[snails.room])
-                localSnails.setRoom(roomList[snails.room]);
-                localSnails.position = localSnails.room.position;
-                localSnails.resetDestination();
+                if (localSnails.room != roomList[snails.room]) {
+                    localSnails.setRoom(roomList[snails.room]);
+                    localSnails.position = localSnails.room.position;
+                    localSnails.resetDestination();
+                }
                 break;
             }
         }
