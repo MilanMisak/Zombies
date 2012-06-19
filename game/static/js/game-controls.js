@@ -229,7 +229,10 @@ $(document).ready(function() {
         // TODO - Signal end of turn
         if (actionAccepted) {
             selectedDirection = selectedDirection || '';
-            $.getJSON('/ajax-make-turn/' + selectedAction + '/' + selectedDirection, function(data) {});
+            $.getJSON('/ajax-make-turn/' + selectedAction + '/' + selectedDirection, function(data) {
+            }).error(function(xhr, status, data) {
+                alert('AJAX request error');
+            });
 
             disableControls();
         }
