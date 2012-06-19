@@ -35,9 +35,9 @@
 \begin{frame}
   \titlepage
   \vspace{\baselineskip}
-  \begin{figure}
+  \begin{center}
     \includegraphics[scale=0.15]{snail_teeth.png}
-  \end{figure}
+  \end{center}
 \end{frame}
 
 \section{Introduction}
@@ -76,6 +76,11 @@
         \item Create or fix a barricade
         \item Destroy a barricade
       \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Game Rules}
+  \begin{itemize}
     \item Players have limited ammo, and may not shoot when they have none left
     \item Players carrying the ammo box may only either move or drop the ammo box on their turn
     \item Players may not reload from a carried ammo box
@@ -88,13 +93,13 @@
 \subsection{Aesthetics}
 
 \begin{frame}{Art and Animation}
-  \begin{figure}
-    \centering
+  \begin{center}
+    \includegraphics[scale=0.15]{snail_teeth.png}
     \includegraphics[scale=0.1]{../game/static/img/barricade_stairs.png}
     \includegraphics[scale=0.1]{../game/static/img/ghost_ammobox.png}
-    \includegraphics[scale=0.15]{snail_teeth.png}
-    \caption{Various graphics created for the game}
-  \end{figure}
+    \includegraphics[scale=0.15]{snail_teeth.png} \\
+    Various graphics created for the game
+  \end{center}
   \begin{itemize}
     \item Art - GIMP
       \hfill
@@ -164,11 +169,14 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{JavaScript/HTML5 interaction}
+  \begin{center}
+    \includegraphics[scale=0.4]{game_html_structure.png} \\
+    game.html structure
+  \end{center}
+\end{frame}
+
 \begin{frame}{HTML5}
-  \begin{figure}[HTML5]
-    \centering
-    \includegraphics[scale=0.25]{HTML5_Logo_512.png}
-  \end{figure}
   \begin{itemize}
     \item Technology for the future.
     \vspace{\baselineskip}
@@ -176,6 +184,14 @@
     \vspace{\baselineskip}
     \item Faster, less likely to crash than plugins.
   \end{itemize}
+  \vspace{\baselineskip}
+  \begin{center}
+    \includegraphics[scale=0.1]{HTML5_Logo_512.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Other useful things}
+  jQuery, Twitter Bootstrap, 960.gs
 \end{frame}
 
 \begin{frame}{Graphics Optimisation}
@@ -197,10 +213,13 @@
 \end{frame}
 
 \begin{frame}{Django}
-  Web framework for Python
+  Web framework for Python \\
+  \vspace{\baselineskip}
   \begin{itemize}
     \item Powerful ORM (object relational mapping)
+    \vspace{\baselineskip}
     \item Template system
+    \vspace{\baselineskip}
     \item Rapid development
   \end{itemize}
   \vspace{\baselineskip}
@@ -210,10 +229,13 @@
 \end{frame}
 
 \begin{frame}{Heroku}
-  Webhosting solution
+  Webhosting solution \\
+  \vspace{\baselineskip}
   \begin{itemize}
     \item Supports Python/Django + many other frameworks, unlike DoC\ldots
-    \item Easy deployment - just push to a git repository
+    \vspace{\baselineskip}
+    \item Easy deployment -- just push to a git repository
+    \vspace{\baselineskip}
     \item Free plan available
   \end{itemize}
   \vspace{\baselineskip}
@@ -230,6 +252,16 @@
   \begin{center}
     \includegraphics[scale=0.25]{xeround.png} \\
   \end{center}
+\end{frame}
+
+\begin{frame}{Snail AI}
+  \begin{itemize}
+    \item Searching for ghosts: breadth-first search limited to depth of 5
+    \vspace{\baselineskip}
+    \item Random moves from time to time
+    \vspace{\baselineskip}
+    \item Caching of best actions for use by other snails in the same room
+  \end{itemize}
 \end{frame}
 
 \section{Possible Extensions}
