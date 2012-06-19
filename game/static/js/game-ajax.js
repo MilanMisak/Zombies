@@ -198,6 +198,60 @@ var executeMoves = function(data) {
         if (!stillInGame)
             ghost.die();
     }
+
+
+   /* Make game state same as server. */
+
+   /* Barricades. */
+    for (var i = 0; i < data.barricades.length; i++) {
+        newBarricade = barricadeList[data.barricades[i].index];
+        newBarricade.health = data.barricades[i].health
+        newBarricade.exists = true;
+        newBarricade.item.visible = true;
+        newBarricade.text.content = newBarricade.health + '%';
+        newBarricade.text.visible = true;
+        newBarricade.background.visible = true;
+    }
+
+    /* Snails. */
+    for (var i = 0; i < data.snails.length; i++) {
+        var snails = data.snails[i];
+        var foundGroup = false;
+        for (var j = 0; j < snailGroupList.length; j++) {
+            localSnails = snailGroupList[j];
+            if (snails.pk == localSnails.id) {
+                foundGroup = true;
+                localSnails.strength = snails.health;
+                if (localSnails.room != roomList[snails.room]) {
+                    localSnails.setRoom(roomList[snails.room]);
+                    localSnails.position = localSnails.room.position;
+                    localSnails.resetDestination();
+                }
+                break;
+            }
+        }
+        if (!foundGroup) {
+            SnailGroup.spawn(snails.pk, (snails.health / 20), roomList[snails.room], snails.health);
+        }
+    }
+
+    /*    for (var i = 0; i < data.players.length; i++) {
+            var newPlayer = data.players[i];
+            if (newPlayer.pk != data.yourPk) {
+                addPlayer(playerColours[newPlayer.index - 1], roomList[newPlayer.room], newPlayer.pk, newPlayer.ammo, newPlayer.carrying_ammo_box);
+                pla
+            } else {
+                localPlayer.remove();
+                localPlayer = new Ghost(playerColours[newPlayer.index - 1], roomList[newPlayer.room], 0, newPlayer.ammo, newPlayer.carrying_ammo_box);
+                if (localPlayer.holdingBox) {
+                    localPlayer.pickUp();
+                    $('#btn_ammo').html('Drop Box');
+                }
+            }
+        } */
+
+
+
 };
 
 /* Check the game state is the same as on the server. */

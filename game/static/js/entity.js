@@ -284,6 +284,14 @@ entitySetup = function() {
                 snail.pushDestination(destination);
             }
         }
+
+        this.resetDestination = function() {
+            for (var i = 0; i < this.item.children.length; i++) {
+                var snail = this.item.children[i].Parent;
+                snail.destinations = [];
+                snail.randomMove = true;
+            }
+        }
         
         /* Animates the snails, should be called every frame. */
         this.move = function() {
@@ -423,6 +431,11 @@ entitySetup = function() {
 	    this.destinations = new Array();
         this.origin = position;
         this.hasLeftGame = false;
+
+        this.remove = function() {
+            this.item.remove();
+        }
+
 
         this.die = function() {
             if (this.holdingBox)
