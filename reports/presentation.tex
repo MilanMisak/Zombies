@@ -17,6 +17,10 @@
 
 \begin{frame}
   \titlepage
+  \vspace{\baselineskip}
+  \begin{figure}
+    \includegraphics[scale=0.15]{snail_teeth.png}
+  \end{figure}
 \end{frame}
 
 \section{Introduction}
@@ -29,32 +33,77 @@
 
 
 \section{The Game}
-\subsection{Aesthetics}
-
-\begin{frame}{Art and Animation}
-\end{frame}
-
-\begin{frame}{User Interface}
-\end{frame}
-
 \subsection{Game Background}
 
 \begin{frame}{Background Story}
-  So, right, basically, what you have, right, is these ghosts and stuff. \\
+  Players are ghosts, in a haunted house which is under attack from evil giant snails.\\
+  Ghosts must wear their magic hats at all times to 'live'. The hats magically allow them to interact with the physical world (hold guns, ammo, etc), which also means that the ghosts cannot pass through walls. The hats also magically tie the ghosts to the house - they must haunt the same place forever.\\
+  The snails are slightly magical, and are the only things that can kill the ghosts.\\
   \vspace{\baselineskip}
-  Also, there's all these, like, snails and stuff. \\
-  \vspace{\baselineskip}
-  They are not friends. \\
-  \vspace{\baselineskip}
-  :(
+  \begin{figure}
+    \hfill
+    \includegraphics[scale=0.15]{snail_teeth_flip.png}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{Game Rules}
   \begin{itemize}
-    \item Rule 1
-    \item Rule 2
-    \item We don't need more than 2 rules
+    \item Ghosts may chose one action to do per turn:
+      \begin{itemize}
+        \item Move
+        \item Shoot
+        \item Reload
+        \item Pick up or drop the ammo box
+        \item Create or fix a barricade
+        \item Destroy a barricade
+      \end{itemize}
+    \item Players have limited ammo, and may not shoot when they have none left
+    \item Players carrying the ammo box may only either move or drop the ammo box on their turn
+    \item Players may not reload from a carried ammo box
+    \item Players may not create or repair a barricade when there are snails in the adjacent room
+    \item After each player has had their turn, snails will either chose to chase the nearest player, or move randomly
+    \item Ghosts will die when in a room with any number of snails
   \end{itemize}
+\end{frame}
+
+\subsection{Aesthetics}
+
+\begin{frame}{Art and Animation}
+  \begin{figure}
+    \centering
+    \includegraphics[scale=0.1]{../game/static/img/barricade_stairs.png}
+    \includegraphics[scale=0.1]{../game/static/img/ghost_ammobox.png}
+    \includegraphics[scale=0.15]{../game/static/img/snail_teeth.png}
+    \caption{Various graphics created for the game}
+  \end{figure}
+  \begin{itemize}
+    \item Art - GIMP
+    \item Animation - JavaScript/paper.js
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{User Interface}
+  \begin{figure}[hb]
+    \centering
+    \includegraphics[scale=0.3]{index.jpg}
+    \caption{Main screen}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{User Interface}
+  \begin{figure}[hb]
+    \centering
+    \includegraphics[scale=0.3]{join.jpg}
+    \caption{Joining a game}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{User Interface}
+  \begin{figure}[hb]
+    \centering
+    \includegraphics[scale=0.3]{create.jpg}
+    \caption{Creating a new game}
+  \end{figure}
 \end{frame}
 
 
@@ -68,7 +117,16 @@
   \begin{figure}[hb]
     \centering
     \includegraphics[scale=0.2]{pivotal.png}
-    \caption{Look at the nice tracker}
+    \caption{Pivotal Tracker main screen}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Pivotal Tracker}
+  Clear structure.\\
+  \begin{figure}[hb]
+    \centering
+    \includegraphics[scale=0.25]{pivotal_new_story.png}
+    \caption{Creating a new story}
   \end{figure}
 \end{frame}
 
